@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,12 +14,18 @@ public class Gun : MonoBehaviour
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
 
+    public bool IsShooting => _isShooting;
+
+
+    private bool _isShooting;
+    private float _timeOfLastShot;
+
     // variables to hold for the gun
     private int _currentAmmo;
-
+    
 
     private Camera _playerCam;
-
+    private float _secondsBetweenShots => 1 / _rateOfFire;
 
 
     private Ray _debugRay;
@@ -28,8 +35,18 @@ public class Gun : MonoBehaviour
     {
         _playerCam = Camera.main;
     }
+
+    private void Update()
+    {
+        if (_isShooting && _timeOfLastShot + _secondsBetweenShots <= Time.timeSinceLevelLoad)
+        {
+            //Debug.Log("Time of shot" + Time.timeSinceLevelLoad);
+            ShootRayCast();
+        }
+        //Debug.Log(_timeOfLastShot + _secondsBetweenShots);
+    }
     // Update is called once per frame
-    public virtual void ShootRayCast()
+    protected virtual void ShootRayCast()
     {
         RaycastHit hit;
         _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
@@ -40,11 +57,20 @@ public class Gun : MonoBehaviour
         {
             //Debug.Log("Nope");
         }
+
+        _timeOfLastShot = Time.timeSinceLevelLoad;
+        Debug.Log("Shots fired");
+        
     }
 
     public virtual void ShootProjectile()
     {
 
+    }
+
+    public void SetIsShooting(bool isShooting)
+    {
+        _isShooting = isShooting;
     }
 
     private void OnDrawGizmos()

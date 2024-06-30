@@ -64,7 +64,7 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.AddForce(acceleration);
 
 
-        Debug.Log(IsFudgeGrounded);
+
 
     }
 
@@ -109,9 +109,6 @@ public class CharacterMovement : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = IsGrounded ? Color.green : Color.red;
-        Gizmos.DrawRay(_groundCheckStart, -transform.up * _groundCheckDistance);
 
-        Gizmos.DrawSphere(_groundCheckStart, 0.5f);
     }
 }

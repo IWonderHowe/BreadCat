@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputValue value)
     {
-        _gun.ShootRayCast();
+        _gun.SetIsShooting(value.isPressed);
         Debug.Log(value.isPressed);
     }
 
