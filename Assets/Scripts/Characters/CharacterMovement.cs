@@ -6,6 +6,9 @@ public class CharacterMovement : MonoBehaviour
 {
     private Rigidbody _rigidbody;
 
+    public Vector3 MoveInput { get; private set; }
+    public Vector3 GroundNormal { get; private set; } = Vector3.up;
+    public Vector3 Velocity { get => _rigidbody.velocity; protected set => _rigidbody.velocity = value; }
 
 
     // ground movement
@@ -32,14 +35,40 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        //SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
+
+        Vector3 input = MoveInput;
+        Vector3 right = Vector3.Cross(transform.up, input);
+        Vector3 forward = Vector3.Cross(right, GroundNormal);
+
+        Vector3 targetVelocity = forward * (_speed);
+
+        Vector3 velocityDiff = targetVelocity - Velocity;
+        velocityDiff.y = 0f;
+
+        Vector3 acceleration = velocityDiff * _acceleration;
+
+        acceleration += GroundNormal * _gravity;
+
+
+        _rigidbody.AddForce(acceleration);
+
     }
 
     public void SetCharacterFacing(float direction)
     {
         transform.rotation = Quaternion.Euler(0, direction, 0);
+    }
+
+    public void SetMoveInput(Vector3 input)
+    {
+        input = Vector3.ClampMagnitude(input, 1f);
+
+        Vector3 flattened = new Vector3(input.x, 0f, input.z);
+        flattened = flattened.normalized * input.magnitude;
+
+        MoveInput = flattened;
     }
 }

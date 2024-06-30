@@ -11,21 +11,17 @@ public class PlayerController : MonoBehaviour
     private Gun _gun;
     private CharacterMovement _movement;
 
+    private Vector2 _moveInput;
+
     private void Awake()
     {
         _gun = GetComponent<Gun>();
         _movement = GetComponent<CharacterMovement>();
         Cursor.lockState = _cursorMode;
     }
-
-    private void Update()
-    {
-        _movement.SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
-    }
-
     public void OnMove(InputValue value)
     {
-        
+        _moveInput = value.Get<Vector2>();
     }
 
     public void OnFire(InputValue value)
@@ -34,5 +30,16 @@ public class PlayerController : MonoBehaviour
         Debug.Log(value.isPressed);
     }
 
+
+    private void Update()
+    {
+        Vector3 up = Vector3.up;
+        Vector3 right = Camera.main.transform.right;
+        Vector3 forward = Vector3.Cross(right, up);
+        Vector3 moveInput = forward * _moveInput.y + right * _moveInput.x;
+
+
+        _movement.SetMoveInput(moveInput);
+    }
 
 }
