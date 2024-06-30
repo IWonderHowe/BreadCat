@@ -30,6 +30,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log(value.isPressed);
     }
 
+    public void OnJump(InputValue value)
+    {
+        _movement.Jump();
+    }
 
     private void Update()
     {

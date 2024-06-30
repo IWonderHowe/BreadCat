@@ -38,7 +38,7 @@ public class Gun : MonoBehaviour
         }
         else
         {
-            Debug.Log("Nope");
+            //Debug.Log("Nope");
         }
     }
 

@@ -1346,9 +1346,9 @@ MonoBehaviour:
   _gravity: -20
   _jumpHeight: 2
   _airControl: 0.1
-  _groundCheckOffset: 0.1
+  _groundCheckOffset: -0.75
   _groundCheckDistance: 0.4
-  _groundedFudgeTime: 0.25
+  _groundedFudgeTime: 0.1
   _groundMask:
     serializedVersion: 2
     m_Bits: 1

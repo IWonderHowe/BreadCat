@@ -5,10 +5,14 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     private Rigidbody _rigidbody;
+    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
+    private float _lastGroundedTime;
 
     public Vector3 MoveInput { get; private set; }
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
-    public Vector3 Velocity { get => _rigidbody.velocity; protected set => _rigidbody.velocity = value; }
+    public Vector3 Velocity { get => _rigidbody.velocity; private set => _rigidbody.velocity = value; }
+    public bool IsFudgeGrounded => Time.timeSinceLevelLoad < _lastGroundedTime + _groundedFudgeTime;
+    public bool IsGrounded { get; private set; }
 
 
     // ground movement
@@ -37,6 +41,10 @@ public class CharacterMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Check to see if the character is grounded
+        IsGrounded = CheckGrounded();
+
+
         //SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
 
         Vector3 input = MoveInput;
@@ -55,6 +63,9 @@ public class CharacterMovement : MonoBehaviour
 
         _rigidbody.AddForce(acceleration);
 
+
+        Debug.Log(IsFudgeGrounded);
+
     }
 
     public void SetCharacterFacing(float direction)
@@ -70,5 +81,37 @@ public class CharacterMovement : MonoBehaviour
         flattened = flattened.normalized * input.magnitude;
 
         MoveInput = flattened;
+    }
+
+    private bool CheckGrounded()
+    {
+        bool hit = Physics.Raycast(_groundCheckStart, -transform.up, out RaycastHit hitInfo, _groundCheckDistance, _groundMask);
+
+        GroundNormal = Vector3.up;
+
+        if(!hit) return false;
+
+        if (hit)
+        {
+            _lastGroundedTime = Time.timeSinceLevelLoad;
+            return true;
+        }
+
+        return false;
+    }
+
+    public void Jump()
+    {
+        if (!IsFudgeGrounded) return;
+        float jumpVelocity = Mathf.Sqrt(2f * -_gravity * _jumpHeight);
+        Velocity = new Vector3(Velocity.x, jumpVelocity, Velocity.z);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = IsGrounded ? Color.green : Color.red;
+        Gizmos.DrawRay(_groundCheckStart, -transform.up * _groundCheckDistance);
+
+        Gizmos.DrawSphere(_groundCheckStart, 0.5f);
     }
 }
