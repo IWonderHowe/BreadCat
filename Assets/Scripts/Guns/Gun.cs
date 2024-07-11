@@ -29,6 +29,7 @@ public class Gun : MonoBehaviour
 
 
     private Ray _debugRay;
+    [SerializeField] private TrailRenderer _trailRenderer;
 
 
     private void Awake()
@@ -52,6 +53,8 @@ public class Gun : MonoBehaviour
         _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
         if (Physics.Raycast(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward, out hit, _range)){
             if (hit.collider.gameObject.tag == "Enemy") Debug.Log("hit");
+            TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
+            StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
         }
         else
         {
@@ -59,8 +62,27 @@ public class Gun : MonoBehaviour
         }
 
         _timeOfLastShot = Time.timeSinceLevelLoad;
+        
         Debug.Log("Shots fired");
         
+    }
+
+    private IEnumerator SpawnBulletTrail(TrailRenderer trail, RaycastHit hit)
+    {
+        float time = 0;
+        Vector3 startPosition = trail.transform.position;
+
+        while (time < 1)
+        {
+            trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
+            time += Time.deltaTime / trail.time;
+
+            yield return null;
+        }
+
+        trail.transform.position = hit.point;
+
+        Destroy(trail.gameObject, trail.time);
     }
 
     public virtual void ShootProjectile()
