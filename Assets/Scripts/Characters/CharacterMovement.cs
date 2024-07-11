@@ -16,8 +16,9 @@ public class CharacterMovement : MonoBehaviour
 
 
     // ground movement
-    [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _baseSpeed = 5f;
     [SerializeField] private float _acceleration = 10f;
+    [SerializeField] private float _sprintSpeedMultiplier = 2f;
 
     // jump variables
     [SerializeField] private float _gravity = -20f;
@@ -30,20 +31,22 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _groundedFudgeTime = 0.25f;
     [SerializeField] private LayerMask _groundMask = 1 << 0;
 
-    
+    private bool _isSprinting = false;
+    private float _speed = 0f;
+
 
 
     // Start is called before the first frame update
     void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
+        _speed = _baseSpeed;
     }
 
     private void FixedUpdate()
     {
         // Check to see if the character is grounded
         IsGrounded = CheckGrounded();
-
 
         //SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
 
@@ -68,11 +71,13 @@ public class CharacterMovement : MonoBehaviour
 
     }
 
+    // Set the player to face a certain direction (most often the direction they are aiming
     public void SetCharacterFacing(float direction)
     {
         transform.rotation = Quaternion.Euler(0, direction, 0);
     }
 
+    // Take the movement input and adjusut it so that it is normalized and flattened
     public void SetMoveInput(Vector3 input)
     {
         input = Vector3.ClampMagnitude(input, 1f);
@@ -83,6 +88,7 @@ public class CharacterMovement : MonoBehaviour
         MoveInput = flattened;
     }
 
+    // Check to see if the player is on the ground by raycasting downwards
     private bool CheckGrounded()
     {
         bool hit = Physics.Raycast(_groundCheckStart, -transform.up, out RaycastHit hitInfo, _groundCheckDistance, _groundMask);
@@ -100,11 +106,19 @@ public class CharacterMovement : MonoBehaviour
         return false;
     }
 
+    // Jump if the player is able to
     public void Jump()
     {
         if (!IsFudgeGrounded) return;
         float jumpVelocity = Mathf.Sqrt(2f * -_gravity * _jumpHeight);
         Velocity = new Vector3(Velocity.x, jumpVelocity, Velocity.z);
+    }
+
+    // Apply sprint speed multiplier if the player is sprinting
+    public void SetSprint(bool isSprinting)
+    {
+        if (isSprinting) { _speed = _baseSpeed * _sprintSpeedMultiplier; }
+        else _speed = _baseSpeed;
     }
 
     private void OnDrawGizmos()

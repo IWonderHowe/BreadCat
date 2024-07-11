@@ -32,6 +32,11 @@ public class PlayerController : MonoBehaviour
         Debug.Log(value.isPressed);
     }
 
+    public void OnSprint(InputValue value)
+    {
+        _movement.SetSprint(value.isPressed);
+    }
+
     public void OnJump(InputValue value)
     {
         _movement.Jump();
