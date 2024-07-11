@@ -13,6 +13,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private int _magSize = 20;
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
+    [SerializeField] private float _bulletSpread = 15;
 
     public bool IsShooting => _isShooting;
 
@@ -50,12 +51,14 @@ public class Gun : MonoBehaviour
     protected virtual void ShootRayCast()
     {
         RaycastHit hit;
+        Vector3 shotDirection = GetShotDirection();
+
         _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
-        if (Physics.Raycast(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward, out hit, _range)){
+        if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range)){
             if (hit.collider.gameObject.tag == "Enemy") Debug.Log("hit");
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
             StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
-        }
+        } 
         else
         {
             //Debug.Log("Nope");
@@ -88,6 +91,15 @@ public class Gun : MonoBehaviour
     public virtual void ShootProjectile()
     {
 
+    }
+
+    private Vector3 GetShotDirection()
+    {
+        Vector3 direction = _playerCam.transform.forward;
+
+        direction += new Vector3(Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread));
+
+        return direction;
     }
 
     public void SetIsShooting(bool isShooting)

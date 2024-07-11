@@ -8,14 +8,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CursorLockMode _cursorMode = CursorLockMode.Locked;
 
 
-    private Gun _gun;
+    [SerializeField] private GameObject _equippedGun;
+    private Gun _currentGun;
     private CharacterMovement _movement;
 
     private Vector2 _moveInput;
 
     private void Awake()
     {
-        _gun = GetComponent<Gun>();
+
+        _currentGun = _equippedGun.GetComponent<Gun>();
         _movement = GetComponent<CharacterMovement>();
         Cursor.lockState = _cursorMode;
     }
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnFire(InputValue value)
     {
-        _gun.SetIsShooting(value.isPressed);
+        _currentGun.SetIsShooting(value.isPressed);
         Debug.Log(value.isPressed);
     }
 
