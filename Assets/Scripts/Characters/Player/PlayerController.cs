@@ -8,8 +8,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CursorLockMode _cursorMode = CursorLockMode.Locked;
 
 
-    [SerializeField] private GameObject _equippedGun;
-    private Gun _currentGun;
+    [SerializeField] private GameObject _gunObject1;
+    [SerializeField] private GameObject _gunObject2;
+    private Gun _gun1;
+    private Gun _gun2;
+    [SerializeField] private Gun _currentGun;
     private CharacterMovement _movement;
 
     private Vector2 _moveInput;
@@ -17,8 +20,9 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-
-        _currentGun = _equippedGun.GetComponent<Gun>();
+        _gun1 = _gunObject1.GetComponent<Gun>();
+        _gun2 = _gunObject2.GetComponent<Gun>();
+        _currentGun = _gun1.GetComponent<Gun>();
         _movement = GetComponent<CharacterMovement>();
         Cursor.lockState = _cursorMode;
     }
@@ -51,6 +55,14 @@ public class PlayerController : MonoBehaviour
     public void OnAbility1(InputValue value)
     {
         _ability1.UseAbility();
+    }
+
+    public void OnSwapWeapon(InputValue value)
+    {
+        if (!value.isPressed) return;
+        Debug.Log(value.isPressed);
+        if (_currentGun == _gun1) _currentGun = _gun2;
+        else _currentGun = _gun1;
     }
 
     private void Update()
