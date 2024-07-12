@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 public class Gun : MonoBehaviour
 {
     // inspector editable gun properties
-    [SerializeField] private float _damage = 15f;
+    [SerializeField] private int _damage = 15;
     [SerializeField] private float _range = 15f;
     [SerializeField] private float _reloadSpeed = 1.5f;
     [SerializeField] private float _rateOfFire = 1f;
@@ -81,7 +81,7 @@ public class Gun : MonoBehaviour
 
         _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range)){
-            if (hit.collider.gameObject.tag == "Enemy") Debug.Log("hit");
+            if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponent<Enemy>().TakeDamage(_damage);
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
             StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
         } 

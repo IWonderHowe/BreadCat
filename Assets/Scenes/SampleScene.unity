@@ -515,8 +515,9 @@ GameObject:
   - component: {fileID: 1227453911}
   - component: {fileID: 1227453910}
   - component: {fileID: 1227453909}
+  - component: {fileID: 1227453913}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Evil cube
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -608,6 +609,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1227453913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227453908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0209d3e21430fe4418b96c2fef83b920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 15
+  _isDead: 0
 --- !u!1 &1237776305
 GameObject:
   m_ObjectHideFlags: 0
@@ -620,6 +635,7 @@ GameObject:
   - component: {fileID: 1237776309}
   - component: {fileID: 1237776308}
   - component: {fileID: 1237776307}
+  - component: {fileID: 1237776310}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -713,6 +729,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1237776305}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1237776310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1237776305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0209d3e21430fe4418b96c2fef83b920, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 0
+  _isDead: 0
 --- !u!1 &1301605192
 GameObject:
   m_ObjectHideFlags: 3
