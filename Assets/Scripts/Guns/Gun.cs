@@ -2,6 +2,7 @@ using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class Gun : MonoBehaviour
 {
@@ -16,9 +17,12 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _bulletSpread = 15;
 
     public bool IsShooting => _isShooting;
-
+    public bool IsReloading => _isReloading;
 
     private bool _isShooting;
+    private bool _isReloading;
+
+
     private float _timeOfLastShot;
 
     // variables to hold for the gun
@@ -42,12 +46,22 @@ public class Gun : MonoBehaviour
     {
         if (_isShooting && _timeOfLastShot + _secondsBetweenShots <= Time.timeSinceLevelLoad)
         {
-            //Debug.Log("Time of shot" + Time.timeSinceLevelLoad);
-            ShootRayCast();
+            Shoot();
         }
         //Debug.Log(_timeOfLastShot + _secondsBetweenShots);
     }
-    // Update is called once per frame
+    
+    public void Shoot()
+    {
+        if (_usesProjectile)
+        {
+            ShootProjectile();
+            return;
+        }
+        ShootRayCast();
+    }
+
+
     protected virtual void ShootRayCast()
     {
         RaycastHit hit;
@@ -93,6 +107,11 @@ public class Gun : MonoBehaviour
 
     }
 
+
+
+    //
+    // Area for universal methods
+    //
     private Vector3 GetShotDirection()
     {
         Vector3 direction = _playerCam.transform.forward;
@@ -105,6 +124,11 @@ public class Gun : MonoBehaviour
     public void SetIsShooting(bool isShooting)
     {
         _isShooting = isShooting;
+    }
+
+    public void SetIsReloading(bool isReloading)
+    {
+        _isReloading = isReloading;
     }
 
     private void OnDrawGizmos()
