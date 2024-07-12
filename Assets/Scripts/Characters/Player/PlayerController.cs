@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private CharacterMovement _movement;
 
     private Vector2 _moveInput;
+    [SerializeField] private CharacterAbility _ability1;
 
     private void Awake()
     {
@@ -45,6 +46,11 @@ public class PlayerController : MonoBehaviour
     public void OnReload(InputValue value)
     {
         _currentGun.TriggerReload();
+    }
+
+    public void OnAbility1(InputValue value)
+    {
+        _ability1.UseAbility();
     }
 
     private void Update()
