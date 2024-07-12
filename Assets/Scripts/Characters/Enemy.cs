@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    // Variables that define the enemy
     [SerializeField] private float _maxHealth;
     
+    // space to store varaibles regarding enemy status
     [SerializeField] private float _currentHealth;
-
     [SerializeField] private bool _isDead;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        // set the enemy to be alive and at full health
         _currentHealth = _maxHealth;
         _isDead = false;
     }
@@ -24,10 +26,11 @@ public class Enemy : MonoBehaviour
         
     }
 
+
     public void TakeDamage(float damage)
     {
+        // take damage if the enemy isn't dead. Set the enemy to dead if the current health drops to 0
         if (!_isDead) _currentHealth -= damage;
-
         if (_currentHealth <= 0) _isDead = true;
     }
 }

@@ -2,12 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
-{
-    private Rigidbody _rigidbody;
-    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
-    private float _lastGroundedTime;
 
+// Note: Base architecture of this class is reliant on scripts from VFS tutors Scott and Quinn
+public class CharacterMovement : MonoBehaviour
+{ 
+    // make some information pbulic
     public Vector3 MoveInput { get; private set; }
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
     public Vector3 Velocity { get => _rigidbody.velocity; private set => _rigidbody.velocity = value; }
@@ -30,10 +29,15 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private float _groundCheckDistance = 0.4f;
     [SerializeField] private float _groundedFudgeTime = 0.25f;
     [SerializeField] private LayerMask _groundMask = 1 << 0;
+    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
+    private float _lastGroundedTime;
 
+    // store information about movement
     private bool _isSprinting = false;
     private float _speed = 0f;
 
+    // necessary classes for applying force
+    private Rigidbody _rigidbody;
 
 
     // Start is called before the first frame update
@@ -50,20 +54,21 @@ public class CharacterMovement : MonoBehaviour
 
         //SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
 
+        // take the movement input and calculate what is forward in relation to input and player
         Vector3 input = MoveInput;
         Vector3 right = Vector3.Cross(transform.up, input);
         Vector3 forward = Vector3.Cross(right, GroundNormal);
 
+        // find a target velocity on calculated forward vector
         Vector3 targetVelocity = forward * (_speed);
 
+        // Find the difference in velocity between the current and target velocity (flattened)
         Vector3 velocityDiff = targetVelocity - Velocity;
         velocityDiff.y = 0f;
 
+        // Calculate the acceleration and apply to character
         Vector3 acceleration = velocityDiff * _acceleration;
-
         acceleration += GroundNormal * _gravity;
-
-
         _rigidbody.AddForce(acceleration);
 
 
@@ -91,12 +96,14 @@ public class CharacterMovement : MonoBehaviour
     // Check to see if the player is on the ground by raycasting downwards
     private bool CheckGrounded()
     {
+        // shoot a ray downwards and store hit information
         bool hit = Physics.Raycast(_groundCheckStart, -transform.up, out RaycastHit hitInfo, _groundCheckDistance, _groundMask);
-
         GroundNormal = Vector3.up;
 
+        // if there is no ray hit, return the player isnt grounded
         if(!hit) return false;
 
+        // if the raycast hits the ground, return the player is grounded (and the most recent time they were grounded for coyote time)
         if (hit)
         {
             _lastGroundedTime = Time.timeSinceLevelLoad;

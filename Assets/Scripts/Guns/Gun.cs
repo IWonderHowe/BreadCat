@@ -17,31 +17,35 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _bulletSpread = 15;
     [SerializeField] private float _critMultiplier = 2f;
 
+    // expose info in relation to gun and shooting
     public bool IsShooting => _isShooting;
     public bool IsReloading => _isReloading;
     public bool CanShoot => _canShoot;
 
+    // private spaces to store shooting info (serialized for debugging)
     [SerializeField] private bool _isShooting;
     [SerializeField] private bool _isReloading;
     [SerializeField] private bool _canShoot;
-
     private float _timeOfLastShot;
 
     // variables to hold for the gun
     [SerializeField] private int _currentAmmo;
-    
-
-    private Camera _playerCam;
     private float _secondsBetweenShots => 1 / _rateOfFire;
-
-
-    private Ray _debugRay;
+    
+    // space for the bullet tracers
     [SerializeField] private TrailRenderer _trailRenderer;
+    private Camera _playerCam;
+
+    // debug ray
+    //private Ray _debugRay;
 
 
     private void Awake()
     {
+        // get the players camera
         _playerCam = Camera.main;
+
+        // fill gun to max ammo and allow the player to be able to shoot
         _currentAmmo = _magSize;
         _canShoot = true;
     }
@@ -58,10 +62,13 @@ public class Gun : MonoBehaviour
         }
     }
     
+    // shoot one ammo from gun
     public void Shoot()
     {
+        // if the player is able to shoot, interrupt the reload
         _isReloading = false;
 
+        // shoot a projectile or raycast, based on weapon
         if (_usesProjectile)
         {
             ShootProjectile();
@@ -71,19 +78,27 @@ public class Gun : MonoBehaviour
             ShootRayCast();
         }
 
+        // reduce current ammo by 1
         _currentAmmo--;
     }
 
 
     protected virtual void ShootRayCast()
     {
+        // spaces to store potential hits as well as the shot direction
         RaycastHit hit;
         Vector3 shotDirection = GetShotDirection();
 
-        _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
-        if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range)){
+        //_debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
+        
+        // check to see if the player hits anything with a raycast based on gun properties
+        if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range))
+        {
+            // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
             if (hit.collider.gameObject.tag == "EnemyCrit") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage * _critMultiplier);
             else if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage);
+
+            // Create a trail to show where the shot actually went (expose recoil)
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
             StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
         } 
@@ -92,18 +107,20 @@ public class Gun : MonoBehaviour
             
         }
 
+        // set the time of the last shot to now, for fire rate allowance
         _timeOfLastShot = Time.timeSinceLevelLoad;
         
-        Debug.Log("Shots fired");
-        
+        //Debug.Log("Shots fired");
     }
 
+    // create a bullet trail to show bullet spread variance due to recoil
     private IEnumerator SpawnBulletTrail(TrailRenderer trail, RaycastHit hit)
     {
+        // Set the initial variables for the bullet trail
         float time = 0;
         Vector3 startPosition = trail.transform.position;
 
-
+        // while the trail is up, adjust the trail position to go between where it was shot from and where it hits
         while(time < 1)
         {
             trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
@@ -111,8 +128,8 @@ public class Gun : MonoBehaviour
             yield return null;
         }
 
+        // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail
         trail.transform.position = hit.point;
-
         Destroy(trail.gameObject, trail.time);
     }
 
@@ -121,6 +138,7 @@ public class Gun : MonoBehaviour
 
     }
 
+    // start the reload coroutine
     public void TriggerReload()
     {
         StartCoroutine(Reload());
@@ -128,27 +146,30 @@ public class Gun : MonoBehaviour
 
     private IEnumerator Reload()
     {
+        // set the initial values for the reload
         float time = 0f;
         _isReloading = true;
+
         // begin reload animation
 
-        // Set player to be unable to shoot if there is no ammo in 
+
+        // Set player to be unable to shoot if there is no ammo left in mag
         if(_currentAmmo == 0)
         {
             _canShoot = false;
         }
 
+        // Wait for until the end of the reload timer (based on reload speed)
         while (time <= _reloadSpeed && _isReloading)
         {
             time += Time.deltaTime;
             yield return null;
         }
 
+        // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
+        // Debug.Log("Reloaded");
         _isReloading = false;
-
-        
         if(time > _reloadSpeed) _currentAmmo = _magSize;
-        Debug.Log("Reloaded");
         _canShoot = true;
     }
 
@@ -156,7 +177,7 @@ public class Gun : MonoBehaviour
     // Area for universal methods
     //
 
-    // add bullet spread to the an initial direction determined by where the player is looking
+    // add bullet spread to the look direction of the player to add recoil to a shot
     private Vector3 GetShotDirection()
     {
         Vector3 direction = _playerCam.transform.forward;
@@ -164,11 +185,13 @@ public class Gun : MonoBehaviour
         return direction;
     }
 
+    // set the player to be shooting (for automatic weapon functionality)
     public void SetIsShooting(bool isShooting)
     {
         _isShooting = isShooting;
     }
 
+    // set the player reload state
     public void SetIsReloading(bool isReloading)
     {
         _isReloading = isReloading;
@@ -177,6 +200,6 @@ public class Gun : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawRay(_debugRay);
+        //Gizmos.DrawRay(_debugRay);
     }
 }
