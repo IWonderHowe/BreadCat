@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private int _maxHealth;
-
-    private int _currentHealth;
+    [SerializeField] private float _maxHealth;
+    
+    [SerializeField] private float _currentHealth;
 
     [SerializeField] private bool _isDead;
 
@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (!_isDead) _currentHealth -= damage;
 

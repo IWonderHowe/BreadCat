@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 public class Gun : MonoBehaviour
 {
     // inspector editable gun properties
-    [SerializeField] private int _damage = 15;
+    [SerializeField] private float _damage = 15f;
     [SerializeField] private float _range = 15f;
     [SerializeField] private float _reloadSpeed = 1.5f;
     [SerializeField] private float _rateOfFire = 1f;
@@ -15,6 +15,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private float _bulletSpread = 15;
+    [SerializeField] private float _critMultiplier = 2f;
 
     public bool IsShooting => _isShooting;
     public bool IsReloading => _isReloading;
@@ -81,7 +82,8 @@ public class Gun : MonoBehaviour
 
         _debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range)){
-            if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponent<Enemy>().TakeDamage(_damage);
+            if (hit.collider.gameObject.tag == "EnemyCrit") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage * _critMultiplier);
+            else if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage);
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
             StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
         } 
