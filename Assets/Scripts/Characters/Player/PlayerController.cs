@@ -42,6 +42,11 @@ public class PlayerController : MonoBehaviour
         _movement.Jump();
     }
 
+    public void OnReload(InputValue value)
+    {
+        _currentGun.TriggerReload();
+    }
+
     private void Update()
     {
         Vector3 up = Vector3.up;

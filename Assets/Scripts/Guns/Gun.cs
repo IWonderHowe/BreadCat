@@ -18,15 +18,16 @@ public class Gun : MonoBehaviour
 
     public bool IsShooting => _isShooting;
     public bool IsReloading => _isReloading;
+    public bool CanShoot => _canShoot;
 
-    private bool _isShooting;
-    private bool _isReloading;
-
+    [SerializeField] private bool _isShooting;
+    [SerializeField] private bool _isReloading;
+    [SerializeField] private bool _canShoot;
 
     private float _timeOfLastShot;
 
     // variables to hold for the gun
-    private int _currentAmmo;
+    [SerializeField] private int _currentAmmo;
     
 
     private Camera _playerCam;
@@ -40,25 +41,36 @@ public class Gun : MonoBehaviour
     private void Awake()
     {
         _playerCam = Camera.main;
+        _currentAmmo = _magSize;
+        _canShoot = true;
     }
 
     private void Update()
     {
-        if (_isShooting && _timeOfLastShot + _secondsBetweenShots <= Time.timeSinceLevelLoad)
+        // Reload the gun if the player isnt currently and 
+        if(_currentAmmo == 0 && !_isReloading) TriggerReload();
+
+        // If the gun is able to shoot while shooting (i.e. time has passed to account for RoF), shoot
+        if (_isShooting && _timeOfLastShot + _secondsBetweenShots <= Time.timeSinceLevelLoad && _canShoot)
         {
             Shoot();
         }
-        //Debug.Log(_timeOfLastShot + _secondsBetweenShots);
     }
     
     public void Shoot()
     {
+        _isReloading = false;
+
         if (_usesProjectile)
         {
             ShootProjectile();
-            return;
         }
-        ShootRayCast();
+        else
+        {
+            ShootRayCast();
+        }
+
+        _currentAmmo--;
     }
 
 
@@ -75,7 +87,7 @@ public class Gun : MonoBehaviour
         } 
         else
         {
-            //Debug.Log("Nope");
+            
         }
 
         _timeOfLastShot = Time.timeSinceLevelLoad;
@@ -89,11 +101,11 @@ public class Gun : MonoBehaviour
         float time = 0;
         Vector3 startPosition = trail.transform.position;
 
-        while (time < 1)
+
+        while(time < 1)
         {
             trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
             time += Time.deltaTime / trail.time;
-
             yield return null;
         }
 
@@ -102,22 +114,51 @@ public class Gun : MonoBehaviour
         Destroy(trail.gameObject, trail.time);
     }
 
-    public virtual void ShootProjectile()
+    protected virtual void ShootProjectile()
     {
 
     }
 
+    public void TriggerReload()
+    {
+        StartCoroutine(Reload());
+    }
 
+    private IEnumerator Reload()
+    {
+        float time = 0f;
+        _isReloading = true;
+        // begin reload animation
+
+        // Set player to be unable to shoot if there is no ammo in 
+        if(_currentAmmo == 0)
+        {
+            _canShoot = false;
+        }
+
+        while (time <= _reloadSpeed && _isReloading)
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        _isReloading = false;
+
+        
+        if(time > _reloadSpeed) _currentAmmo = _magSize;
+        Debug.Log("Reloaded");
+        _canShoot = true;
+    }
 
     //
     // Area for universal methods
     //
+
+    // add bullet spread to the an initial direction determined by where the player is looking
     private Vector3 GetShotDirection()
     {
         Vector3 direction = _playerCam.transform.forward;
-
         direction += new Vector3(Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread));
-
         return direction;
     }
 
