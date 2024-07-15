@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GrenadeAbility : CharacterAbility
@@ -20,7 +21,6 @@ public class GrenadeAbility : CharacterAbility
     protected override void Start()
     {
         base.Start();
-        _throwOrigin = transform.Find("ThrowablesOrigin");
     }
 
 
@@ -31,7 +31,7 @@ public class GrenadeAbility : CharacterAbility
         base.UseAbility();
 
         // Spawn a grenade, throw it, then start the explosion timer
-        GameObject thrownGrenade = (GameObject)Instantiate(_grenadePrefab);
+        GameObject thrownGrenade = (GameObject)Instantiate(_grenadePrefab, _throwOrigin);
         thrownGrenade.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * _throwForce, ForceMode.Impulse);
         thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _damageableLayers);
     }
