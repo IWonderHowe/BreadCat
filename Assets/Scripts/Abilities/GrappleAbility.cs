@@ -6,7 +6,9 @@ using UnityEngine;
 public class GrappleAbility : CharacterAbility
 {
     // grappling hook variables
-    private Vector3 _grapplePoint;
+    private Vector3[] _grappleInfo = new Vector3[2];
+    private Vector3 _grapplePosition;
+    private Vector3 _grappleNormal;
     [SerializeField] private float _retractionStrengh = 1f;
     [SerializeField] private float _maxGrappleSpeed = 20f;
     [SerializeField] private float _grappleRange = 100f;
@@ -33,26 +35,32 @@ public class GrappleAbility : CharacterAbility
         if (_abilityOnCooldown) return;
         base.UseAbility();
 
-        _grapplePoint = FindGrapplePoint();
+        // get the grapple info and set the grapple normal and position to the point that was found
+        // exit the method if no grapple point is found
+        _grappleInfo = FindGrapplePoint();
+        if (_grappleInfo == null) return;
 
-        Debug.Log(_grapplePoint);
+        _grapplePosition = _grappleInfo[0];
+        _grappleNormal = _grappleInfo[1];
 
     }
 
     // get the grapple point via raycast
-    private Vector3 FindGrapplePoint()
+    private Vector3[] FindGrapplePoint()
     {
-        // set variables for raycast info and grapple point
-        Vector3 grapplePoint = Vector3.zero;
+        // set variables for raycast info and grapple point. Using an array to store and return both position and normal of the grapple point found
+        Vector3[] grappleInfo = new Vector3[2];
         RaycastHit hit;
 
         // if a raycast hits a valid object, set the grapple point to the transform of the hit
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _grappleRange, _grappleableLayers))
         {
-            grapplePoint = hit.point;
+            grappleInfo[0] = hit.point;
+            grappleInfo[1] = hit.normal;
+            return grappleInfo;
         }
 
         // return found transform, or null if none was found
-        return grapplePoint;
+        return null;
     }
 }
