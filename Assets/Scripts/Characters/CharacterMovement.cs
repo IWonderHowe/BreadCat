@@ -71,15 +71,17 @@ public class CharacterMovement : MonoBehaviour
         acceleration += GroundNormal * _gravity;
         _rigidbody.AddForce(acceleration);
 
-
+        SetCharacterFacing(Camera.main.transform.rotation.eulerAngles);
 
 
     }
 
     // Set the player to face a certain direction (most often the direction they are aiming
-    public void SetCharacterFacing(float direction)
+    public void SetCharacterFacing(Vector3 direction)
     {
-        transform.rotation = Quaternion.Euler(0, direction, 0);
+        direction.x = 0;
+        direction.z = 0;
+        transform.rotation = Quaternion.Euler(direction);
     }
 
     // Take the movement input and adjusut it so that it is normalized and flattened

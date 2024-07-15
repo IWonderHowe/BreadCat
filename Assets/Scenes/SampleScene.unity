@@ -1920,12 +1920,20 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1570626760}
     - target: {fileID: 5672730441921532949, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _retractionSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672730441921532949, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: _grappleOriginPoint
       value: 
       objectReference: {fileID: 840275863}
     - target: {fileID: 5847078042247244163, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.134
+      value: 0.028
+      objectReference: {fileID: 0}
+    - target: {fileID: 5847078042247244163, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.642
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
