@@ -74,6 +74,11 @@ public class GrappleAbility : CharacterAbility
         {
             RetractGrapple();
         }
+
+        else if(_isGrappling && _isRetracting)
+        {
+            CancelGrapple();
+        }
     }
 
     // get the grapple point via raycast
@@ -132,5 +137,12 @@ public class GrappleAbility : CharacterAbility
         // set the max and mind distance of the grapple hook based on the players distance to the grapple point
         _grappleJoint.maxDistance = _distanceToGrapplePoint * 0.8f;
         _grappleJoint.minDistance = _distanceToGrapplePoint * 0.25f;
+    }
+
+    private void CancelGrapple()
+    {
+        _isRetracting = false;
+        _isGrappling = false;
+        Destroy(_grappleJoint);
     }
 }
