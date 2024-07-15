@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour
     // attempt to use the secondary ability if button pressed
     public void OnAbility2(InputValue value)
     {
+        if (value.isPressed == false) return;
         _ability2.UseAbility();
         Debug.Log(value.isPressed);
     }

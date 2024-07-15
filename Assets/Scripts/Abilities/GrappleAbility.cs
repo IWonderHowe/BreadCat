@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using TMPro.EditorUtilities;
 using UnityEngine;
 
@@ -11,13 +12,20 @@ public class GrappleAbility : CharacterAbility
     private Vector3[] _grappleInfo = new Vector3[2];
     private Vector3 _grapplePosition;
     private Vector3 _grappleNormal;
-    [SerializeField] private float _retractionStrengh = 1f;
+    [SerializeField] private float _retractionSpeed = 5f;
     [SerializeField] private float _maxGrappleSpeed = 20f;
     [SerializeField] private float _grappleRange = 100f;
     [SerializeField] private LayerMask _grappleableLayers;
+    [SerializeField] private float _grappleRetractDistanceBuffer = 1f;
 
     private bool _isGrappling = false;
     public bool IsGrappling => _isGrappling;
+
+    private bool _isRetracting = false;
+    public bool IsRetracting => _isRetracting;
+
+    private float _distanceToGrapplePoint = 0;
+    private float _retractionTime => (_distanceToGrapplePoint - _grappleRetractDistanceBuffer) / _retractionSpeed;
 
     private SpringJoint _grappleJoint;
 
@@ -35,26 +43,37 @@ public class GrappleAbility : CharacterAbility
 
     public override void UseAbility()
     {
-        if (_abilityOnCooldown) return;
         base.UseAbility();
 
-        // get the grapple info and set the grapple normal and position to the point that was 
-        _grappleInfo = FindGrapplePoint();
-        
-        // if no grapple point is found, exit the method and dont put the ability on cooldown
-        if (_grappleInfo == null)
+
+        if(!_isGrappling && !_isRetracting)
         {
-            _abilityOnCooldown = false;
-            Debug.Log("No grapple point found");
-            return;
+            // get the grapple info and set the grapple normal and position to the point that was 
+            _grappleInfo = FindGrapplePoint();
+            
+            // if no grapple point is found, exit the method and dont put the ability on cooldown
+            if (_grappleInfo == null)
+            {
+                _abilityOnCooldown = false;
+                Debug.Log("No grapple point found");
+                return;
+            }
+
+            // if a grapple point is found, set the info and set the player to be grappling
+            _grapplePosition = _grappleInfo[0];
+            _grappleNormal = _grappleInfo[1];
+            _distanceToGrapplePoint = Vector3.Distance(_playerObject.transform.position, _grapplePosition);
+
+            _isGrappling = true;
+
+            // connect the grapple
+            StartGrapple(_grapplePosition);
         }
 
-        // if a grapple point is found, set the info and set the player to be grappling
-        _grapplePosition = _grappleInfo[0];
-        _grappleNormal = _grappleInfo[1];
-        _isGrappling = true;
-
-        StartGrapple(_grapplePosition);
+        else if(_isGrappling && !_isRetracting)
+        {
+            RetractGrapple();
+        }
     }
 
     // get the grapple point via raycast
@@ -76,15 +95,42 @@ public class GrappleAbility : CharacterAbility
         return null;
     }
 
+    // connect the player to the grapple point by creating a spring joint joining player and grappled object
     private void StartGrapple(Vector3 grapplePoint)
     {
+        
+        // create the spring joing and connect it to the grapple point
         _grappleJoint = _playerObject.AddComponent<SpringJoint>();
         _grappleJoint.autoConfigureConnectedAnchor = false;
         _grappleJoint.connectedAnchor = grapplePoint;
 
-        float distanceFromPoint = Vector3.Distance(_playerObject.transform.position, grapplePoint);
-        _grappleJoint.maxDistance = distanceFromPoint * 0.8f;
-        _grappleJoint.minDistance = distanceFromPoint * 0.25f;
+        SetGrappleJointBounds();
+    }
 
+    private void RetractGrapple()
+    {
+        StartCoroutine(GrappleRetraction());
+        
+    }
+
+    // a coroutine that retracts the grapple distance
+    private IEnumerator GrappleRetraction()
+    {
+        float retractStartTime = 0f;
+        _isRetracting = true;
+
+        while(retractStartTime <= _retractionTime && _isRetracting)
+        {
+            _distanceToGrapplePoint -= _retractionSpeed * Time.deltaTime;
+            SetGrappleJointBounds();
+            yield return null;
+        }
+    }
+
+    private void SetGrappleJointBounds()
+    {
+        // set the max and mind distance of the grapple hook based on the players distance to the grapple point
+        _grappleJoint.maxDistance = _distanceToGrapplePoint * 0.8f;
+        _grappleJoint.minDistance = _distanceToGrapplePoint * 0.25f;
     }
 }
