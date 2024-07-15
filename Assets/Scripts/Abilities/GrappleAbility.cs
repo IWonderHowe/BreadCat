@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class GrappleAbility : CharacterAbility
 {
+    [SerializeField] private GameObject _playerObject;
+
     // grappling hook variables
     private Vector3[] _grappleInfo = new Vector3[2];
     private Vector3 _grapplePosition;
@@ -17,6 +19,7 @@ public class GrappleAbility : CharacterAbility
     private bool _isGrappling = false;
     public bool IsGrappling => _isGrappling;
 
+    private SpringJoint _grappleJoint;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -35,14 +38,23 @@ public class GrappleAbility : CharacterAbility
         if (_abilityOnCooldown) return;
         base.UseAbility();
 
-        // get the grapple info and set the grapple normal and position to the point that was found
-        // exit the method if no grapple point is found
+        // get the grapple info and set the grapple normal and position to the point that was 
         _grappleInfo = FindGrapplePoint();
-        if (_grappleInfo == null) return;
+        
+        // if no grapple point is found, exit the method and dont put the ability on cooldown
+        if (_grappleInfo == null)
+        {
+            _abilityOnCooldown = false;
+            Debug.Log("No grapple point found");
+            return;
+        }
 
+        // if a grapple point is found, set the info and set the player to be grappling
         _grapplePosition = _grappleInfo[0];
         _grappleNormal = _grappleInfo[1];
+        _isGrappling = true;
 
+        StartGrapple(_grapplePosition);
     }
 
     // get the grapple point via raycast
@@ -62,5 +74,17 @@ public class GrappleAbility : CharacterAbility
 
         // return found transform, or null if none was found
         return null;
+    }
+
+    private void StartGrapple(Vector3 grapplePoint)
+    {
+        _grappleJoint = _playerObject.AddComponent<SpringJoint>();
+        _grappleJoint.autoConfigureConnectedAnchor = false;
+        _grappleJoint.connectedAnchor = grapplePoint;
+
+        float distanceFromPoint = Vector3.Distance(_playerObject.transform.position, grapplePoint);
+        _grappleJoint.maxDistance = distanceFromPoint * 0.8f;
+        _grappleJoint.minDistance = distanceFromPoint * 0.25f;
+
     }
 }

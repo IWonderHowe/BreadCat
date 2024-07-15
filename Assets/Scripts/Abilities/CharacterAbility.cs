@@ -28,7 +28,7 @@ public class CharacterAbility : MonoBehaviour
         _abilityOnCooldown = true;
 
         // wait for the timer to end (based on ability cooldown time)
-        while(timeSinceUse < _abilityCooldown)
+        while(timeSinceUse < _abilityCooldown && _abilityOnCooldown != false)
         {
             timeSinceUse += Time.deltaTime;
             yield return null;
