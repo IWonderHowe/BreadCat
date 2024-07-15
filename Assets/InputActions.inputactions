@@ -61,21 +61,21 @@
                 },
                 {
                     "name": "Ability1",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "d2953b5c-4b62-43c7-a3d8-53016efc21f3",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Ability2",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "05971cc0-8251-446c-9180-16de7d3a25fd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "SwapWeapon",
