@@ -4,23 +4,29 @@ using UnityEngine;
 
 public class GrenadeAbility : CharacterAbility
 {
+    // Explosion variables
     [SerializeField] private float _explosionRadius = 3f;
     [SerializeField] private float _timeToExplosion = 4f;
     [SerializeField] private float _damage = 30f;
-    [SerializeField] private float _throwForce = 4f;
     [SerializeField] private LayerMask _damageableLayers;
 
+    // Throwing variables
+    [SerializeField] private float _throwForce = 4f;
     [SerializeField] private Transform _throwOrigin;
+
+   
     [SerializeField] private GameObject _grenadePrefab;
 
     
     public override void UseAbility()
     {
+        // Do not use ability if on cooldown. If not, start the cooldown timer
         if (_abilityOnCooldown) return;
         base.UseAbility();
+
+        // Spawn a grenade, throw it, then start the explosion timer
         GameObject thrownGrenade = (GameObject)Instantiate(_grenadePrefab);
         thrownGrenade.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * _throwForce, ForceMode.Impulse);
-        //Debug.Break();
         thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _damageableLayers);
     }
 }
