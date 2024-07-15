@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b472df2bc1039374495d84d0efb4cd30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _abilityCooldown: 5
+  _abilityCooldown: 1
   _abilityOnCooldown: 0
   _retractionStrengh: 1
   _maxGrappleSpeed: 20

@@ -6,7 +6,7 @@ using UnityEngine;
 public class GrappleAbility : CharacterAbility
 {
     // grappling hook variables
-    private Transform _grapplePoint;
+    private Vector3 _grapplePoint;
     [SerializeField] private float _retractionStrengh = 1f;
     [SerializeField] private float _maxGrappleSpeed = 20f;
     [SerializeField] private float _grappleRange = 100f;
@@ -35,21 +35,21 @@ public class GrappleAbility : CharacterAbility
 
         _grapplePoint = FindGrapplePoint();
 
-        Debug.Log(_grapplePoint.position);
+        Debug.Log(_grapplePoint);
 
     }
 
     // get the grapple point via raycast
-    private Transform FindGrapplePoint()
+    private Vector3 FindGrapplePoint()
     {
         // set variables for raycast info and grapple point
-        Transform grapplePoint = null;
+        Vector3 grapplePoint = Vector3.zero;
         RaycastHit hit;
 
         // if a raycast hits a valid object, set the grapple point to the transform of the hit
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _grappleRange, _grappleableLayers))
         {
-            grapplePoint = hit.transform;
+            grapplePoint = hit.point;
         }
 
         // return found transform, or null if none was found
