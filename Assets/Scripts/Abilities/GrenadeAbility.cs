@@ -17,7 +17,13 @@ public class GrenadeAbility : CharacterAbility
    
     [SerializeField] private GameObject _grenadePrefab;
 
-    
+    protected override void Start()
+    {
+        base.Start();
+        _throwOrigin = transform.Find("ThrowablesOrigin");
+    }
+
+
     public override void UseAbility()
     {
         // Do not use ability if on cooldown. If not, start the cooldown timer

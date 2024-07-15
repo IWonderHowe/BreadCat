@@ -22,7 +22,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 _moveInput;
 
     // space for the abilities to be equipped/stored
-    [SerializeField] private CharacterAbility _ability1;
+    [SerializeField] GameObject _ability1Object;
+    [SerializeField] GameObject _ability2Object;
+    
+    private CharacterAbility _ability1;
+    private CharacterAbility _ability2;
+
 
 
     private void Awake()
@@ -31,6 +36,8 @@ public class PlayerController : MonoBehaviour
         // Get necessary components from gameobjects
         _gun1 = _gunObject1.GetComponent<Gun>();
         _gun2 = _gunObject2.GetComponent<Gun>();
+        _ability1 = _ability1Object.GetComponent<CharacterAbility>();
+        _ability2 = _ability2Object.GetComponent<CharacterAbility>();
         _movement = GetComponent<CharacterMovement>();
         
         // Set the current gun to the first gun
@@ -79,7 +86,7 @@ public class PlayerController : MonoBehaviour
     // attempt to use the secondary ability if button pressed
     public void OnAbility2(InputValue value)
     {
-
+        _ability2.UseAbility();
     }
 
     // Swap the current player weapon to the unequipped weapon when mouse is scrolled
