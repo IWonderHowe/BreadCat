@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using TMPro.EditorUtilities;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class GrappleAbility : CharacterAbility
@@ -28,11 +29,15 @@ public class GrappleAbility : CharacterAbility
     private float _retractionTime => (_distanceToGrapplePoint - _grappleRetractDistanceBuffer) / _retractionSpeed;
 
     private SpringJoint _grappleJoint;
+    private LineRenderer _grappleRenderer;
+    [SerializeField] private GameObject _grappleOriginPoint;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        _grappleRenderer = GetComponent<LineRenderer>();
+        _grappleRenderer.enabled = false;
     }
 
     // Update is called once per frame
@@ -110,6 +115,7 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint.connectedAnchor = grapplePoint;
 
         SetGrappleJointBounds();
+        SetRenderGrapple(true);
     }
 
     private void RetractGrapple()
@@ -143,6 +149,32 @@ public class GrappleAbility : CharacterAbility
     {
         _isRetracting = false;
         _isGrappling = false;
+        SetRenderGrapple(false);
         Destroy(_grappleJoint);
     }
+
+    private void SetRenderGrapple(bool isRendering)
+    {
+        if (!isRendering)
+        {
+            _grappleRenderer.enabled = false;
+            return;
+        }
+
+        _grappleRenderer.enabled = true;
+        _grappleRenderer.SetPosition(index: 0, _grappleOriginPoint.transform.position);
+        _grappleRenderer.SetPosition(index: 1, _grapplePosition);
+
+        StartCoroutine(UpdateGrappleRender());
+    }
+
+    private IEnumerator UpdateGrappleRender()
+    {
+        while (_isGrappling)
+        {
+            _grappleRenderer.SetPosition(index: 0, _grappleOriginPoint.transform.position);
+            yield return null;
+        }
+    }
+
 }
