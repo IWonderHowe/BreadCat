@@ -113,6 +113,8 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint = _playerObject.AddComponent<SpringJoint>();
         _grappleJoint.autoConfigureConnectedAnchor = false;
         _grappleJoint.connectedAnchor = grapplePoint;
+        _grappleJoint.spring = 15f;
+        _grappleJoint.tolerance = 0.5f;
 
         SetGrappleJointBounds();
         SetRenderGrapple(true);
@@ -136,13 +138,20 @@ public class GrappleAbility : CharacterAbility
             SetGrappleJointBounds();
             yield return null;
         }
+
+        while(Vector3.Distance(transform.position, _grapplePosition) > _distanceToGrapplePoint)
+        {
+            yield return null;
+        }
+
+        CancelGrapple();
     }
 
     private void SetGrappleJointBounds()
     {
         // set the max and mind distance of the grapple hook based on the players distance to the grapple point
-        _grappleJoint.maxDistance = _distanceToGrapplePoint * 0.8f;
-        _grappleJoint.minDistance = _distanceToGrapplePoint * 0.25f;
+        _grappleJoint.maxDistance = _distanceToGrapplePoint * 0.05f;
+        _grappleJoint.minDistance = _distanceToGrapplePoint * 0.85f;
     }
 
     private void CancelGrapple()
