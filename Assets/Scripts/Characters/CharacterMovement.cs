@@ -78,9 +78,19 @@ public class CharacterMovement : MonoBehaviour
         // Calculate the acceleration and apply to character
         Vector3 acceleration = velocityDiff * _acceleration;
 
+        // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability 
+        if(!IsGrounded || IsUsingMovementAbility)
+        {
+            if(targetVelocity.magnitude < Velocity.magnitude)
+            {
+                acceleration = forward * (_speed);
+            }
+        }
+
         // add gravity's acceleration then apply the acceleration to the player
         acceleration += GroundNormal * _gravity;
         _rigidbody.AddForce(acceleration);
+        
 
         // make the character face where the player is aiming
         SetCharacterFacing(Camera.main.transform.rotation.eulerAngles);
@@ -131,8 +141,6 @@ public class CharacterMovement : MonoBehaviour
     // Jump if the player is able to
     public void Jump()
     {
-
-
         if (!IsFudgeGrounded) return;
         float jumpVelocity = Mathf.Sqrt(2f * -_gravity * _jumpHeight);
         Velocity = new Vector3(Velocity.x, jumpVelocity, Velocity.z);
