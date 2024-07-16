@@ -39,6 +39,13 @@ public class Gun : MonoBehaviour
     // debug ray
     //private Ray _debugRay;
 
+    // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
+    [SerializeField] private GameObject _onHitUpgrade;
+    [SerializeField] private GameObject _onShotUpgrade;
+    [SerializeField] private GameObject _onReloadUpgrade;
+
+
+
 
     private void Awake()
     {
@@ -95,8 +102,9 @@ public class Gun : MonoBehaviour
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range))
         {
             // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
-            if (hit.collider.gameObject.tag == "EnemyCrit") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage * _critMultiplier);
-            else if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage);
+            //if (hit.collider.gameObject.tag == "EnemyCrit") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage * _critMultiplier);
+            //else if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage);
+            if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().AddDoTStack(10f, 0.5f, 5f);
 
             // Create a trail to show where the shot actually went (expose recoil)
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);

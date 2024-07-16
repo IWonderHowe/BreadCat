@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] private bool _isDead;
 
 
+    private List<DoTStack> _dotStacks = new List<DoTStack>();
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,4 +36,18 @@ public class Enemy : MonoBehaviour
         if (!_isDead) _currentHealth -= damage;
         if (_currentHealth <= 0) _isDead = true;
     }
+
+    public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
+    {
+        DoTStack DoTApplied = new DoTStack(damage, tickTime, totalDoTTime, this);
+        Debug.Log("stack added");
+        StartCoroutine(DoTApplied.ApplyDamage());
+        _dotStacks.Add(DoTApplied);
+    }
+
+    public void EndDoTStack(DoTStack stackToEnd)
+    {
+        _dotStacks.Remove(stackToEnd);
+    }
+
 }

@@ -102,7 +102,6 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.AddForce(acceleration);
 
         _debugVelocity = new Vector3(Velocity.x, 0, Velocity.z);
-        Debug.Log(acceleration + " " + _debugVelocity.magnitude);
         
 
         // make the character face where the player is aiming
