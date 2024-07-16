@@ -7,7 +7,9 @@ using UnityEngine;
 
 public class GrappleAbility : CharacterAbility
 {
+    // variables to get/set info about player
     [SerializeField] private GameObject _playerObject;
+    private CharacterMovement _playerMovement;
 
     // grappling hook variables
     private Vector3[] _grappleInfo = new Vector3[2];
@@ -36,6 +38,7 @@ public class GrappleAbility : CharacterAbility
     protected override void Start()
     {
         base.Start();
+        _playerMovement = _playerObject.GetComponent<CharacterMovement>();
         _grappleRenderer = GetComponent<LineRenderer>();
         _grappleRenderer.enabled = false;
     }
@@ -70,6 +73,7 @@ public class GrappleAbility : CharacterAbility
             _distanceToGrapplePoint = Vector3.Distance(_playerObject.transform.position, _grapplePosition);
 
             _isGrappling = true;
+            _playerMovement.SetUsingMovementAbility(true);
 
             // connect the grapple
             StartGrapple(_grapplePosition);
@@ -159,6 +163,7 @@ public class GrappleAbility : CharacterAbility
         _isRetracting = false;
         _isGrappling = false;
         SetRenderGrapple(false);
+        _playerMovement.SetUsingMovementAbility(false);
         Destroy(_grappleJoint);
     }
 

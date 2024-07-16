@@ -13,6 +13,7 @@ public class CharacterMovement : MonoBehaviour
     public bool IsFudgeGrounded => Time.timeSinceLevelLoad < _lastGroundedTime + _groundedFudgeTime;
     public bool IsGrounded { get; private set; }
 
+    [SerializeField] private float _speedLimit = 20f;
 
     // ground movement
     [SerializeField] private float _baseSpeed = 5f;
@@ -39,6 +40,9 @@ public class CharacterMovement : MonoBehaviour
     // necessary classes for applying force
     private Rigidbody _rigidbody;
 
+    private bool _isUsingMovementAbility;
+    public bool IsUsingMovementAbility => _isUsingMovementAbility;
+
 
     // Start is called before the first frame update
     void Start()
@@ -52,8 +56,6 @@ public class CharacterMovement : MonoBehaviour
         // Check to see if the character is grounded
         IsGrounded = CheckGrounded();
 
-        //SetCharacterFacing(Camera.main.transform.rotation.eulerAngles.y);
-
         // take the movement input and calculate what is forward in relation to input and player
         Vector3 input = MoveInput;
         Vector3 right = Vector3.Cross(transform.up, input);
@@ -62,16 +64,27 @@ public class CharacterMovement : MonoBehaviour
         // find a target velocity on calculated forward vector
         Vector3 targetVelocity = forward * (_speed);
 
+
+        // have a different movement system if using movement ability or not on the ground
+        /*if(_isUsingMovementAbility || !IsGrounded)
+        {
+            targetVelocity = forward * _speedLimit;
+        }*/
+        
         // Find the difference in velocity between the current and target velocity (flattened)
         Vector3 velocityDiff = targetVelocity - Velocity;
         velocityDiff.y = 0f;
 
         // Calculate the acceleration and apply to character
         Vector3 acceleration = velocityDiff * _acceleration;
+
+        // add gravity's acceleration then apply the acceleration to the player
         acceleration += GroundNormal * _gravity;
         _rigidbody.AddForce(acceleration);
 
+        // make the character face where the player is aiming
         SetCharacterFacing(Camera.main.transform.rotation.eulerAngles);
+
 
 
     }
@@ -118,6 +131,8 @@ public class CharacterMovement : MonoBehaviour
     // Jump if the player is able to
     public void Jump()
     {
+
+
         if (!IsFudgeGrounded) return;
         float jumpVelocity = Mathf.Sqrt(2f * -_gravity * _jumpHeight);
         Velocity = new Vector3(Velocity.x, jumpVelocity, Velocity.z);
@@ -133,5 +148,9 @@ public class CharacterMovement : MonoBehaviour
     private void OnDrawGizmos()
     {
 
+    }
+    public void SetUsingMovementAbility(bool isUsingAbility)
+    {
+        _isUsingMovementAbility = isUsingAbility;
     }
 }
