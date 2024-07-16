@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -44,6 +45,10 @@ public class CharacterMovement : MonoBehaviour
     public bool IsUsingMovementAbility => _isUsingMovementAbility;
 
 
+    // debug variables
+    [SerializeField] private Vector3 _debugVelocity;
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -71,6 +76,19 @@ public class CharacterMovement : MonoBehaviour
             targetVelocity = forward * _speedLimit;
         }*/
         
+        // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability
+        // acceleration is only added to already established velocity, will not increase magnitude of velocity (magnitude increase needs to come from abilities)
+        if(!IsGrounded || IsUsingMovementAbility)
+        {
+            if(targetVelocity.magnitude < Velocity.magnitude)
+            {
+                Vector3 targetTechVelocity = targetVelocity + Velocity;
+
+                targetTechVelocity.Normalize();
+                targetVelocity = targetTechVelocity * Vector3.Dot(targetTechVelocity, Velocity);
+            }
+        }
+
         // Find the difference in velocity between the current and target velocity (flattened)
         Vector3 velocityDiff = targetVelocity - Velocity;
         velocityDiff.y = 0f;
@@ -78,18 +96,13 @@ public class CharacterMovement : MonoBehaviour
         // Calculate the acceleration and apply to character
         Vector3 acceleration = velocityDiff * _acceleration;
 
-        // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability 
-        if(!IsGrounded || IsUsingMovementAbility)
-        {
-            if(targetVelocity.magnitude < Velocity.magnitude)
-            {
-                acceleration = forward * (_speed);
-            }
-        }
 
         // add gravity's acceleration then apply the acceleration to the player
         acceleration += GroundNormal * _gravity;
         _rigidbody.AddForce(acceleration);
+
+        _debugVelocity = new Vector3(Velocity.x, 0, Velocity.z);
+        Debug.Log(acceleration + " " + _debugVelocity.magnitude);
         
 
         // make the character face where the player is aiming
