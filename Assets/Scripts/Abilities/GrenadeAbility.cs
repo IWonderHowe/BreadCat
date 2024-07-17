@@ -35,8 +35,13 @@ public class GrenadeAbility : CharacterAbility
         if (_abilityOnCooldown) return;
         base.UseAbility();
 
-        // Spawn a grenade, throw it, then start the explosion timer
+        // Spawn a grenade
         GameObject thrownGrenade = (GameObject)Instantiate(_grenadePrefab, _throwOrigin);
+
+        // apply ability to grenade if applicable
+        if(_hasHitEnemyUpgrade) thrownGrenade.GetComponent<Grenade>().AddAbilityOnEnemyHit(_abilityHitEnemyUpgrade);
+
+        // throw the grenade, then start the explosion timer
         thrownGrenade.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * _throwForce, ForceMode.Impulse);
         thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _damageableLayers);
     }
