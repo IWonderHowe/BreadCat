@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(DoTStack.EnemiesAffected.Count);
     }
 
 
@@ -40,7 +40,7 @@ public class Enemy : MonoBehaviour
     public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
     {
         DoTStack DoTApplied = new DoTStack(damage, tickTime, totalDoTTime, this);
-        DoTApplied.AddEnemyToDoTList(this);
+        DoTStack.AddEnemyToDoTList(this.gameObject);
         Debug.Log("stack added");
         StartCoroutine(DoTApplied.ApplyDamage());
         _dotStacks.Add(DoTApplied);
@@ -49,6 +49,7 @@ public class Enemy : MonoBehaviour
     public void EndDoTStack(DoTStack stackToEnd)
     {
         _dotStacks.Remove(stackToEnd);
+        if (_dotStacks.Count == 0) DoTStack.RemoveEnemyFromDoTList(this.gameObject);
     }
 
 }

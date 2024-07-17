@@ -15,7 +15,7 @@ public class DoTStack
     private float _endTime => _timeApplied + _totalDoTTime;
     private float _damagePerSecond => _totalDamage / _totalDoTTime;
 
-    public static List<Enemy> EnemiesAffected;
+    public static List<GameObject> EnemiesAffected = new List<GameObject>();
 
     // contructor
     public DoTStack(float totalDamage, float tickTime, float totalDoTTime, Enemy attachedEnemy)
@@ -43,13 +43,13 @@ public class DoTStack
         _attachedEnemy.EndDoTStack(this);
     }
 
-    public void AddEnemyToDoTList(Enemy enemy)
+    public static void AddEnemyToDoTList(GameObject enemy)
     {
         if (EnemiesAffected.Contains(enemy)) return;
         EnemiesAffected.Add(enemy);
     }
 
-    public void RemoveEnemyFromDoTList(Enemy enemy)
+    public static void RemoveEnemyFromDoTList(GameObject enemy)
     {
         EnemiesAffected.Remove(enemy);
     }
