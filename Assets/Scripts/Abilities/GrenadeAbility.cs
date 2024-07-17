@@ -18,9 +18,14 @@ public class GrenadeAbility : CharacterAbility
    
     [SerializeField] private GameObject _grenadePrefab;
 
+    private OnAbilityHitEnemyUpgrade _abilityHitEnemyUpgrade;
+    private bool _hasHitEnemyUpgrade = false;
+
     protected override void Start()
     {
         base.Start();
+        _abilityHitEnemyUpgrade = new DoTOnAbilityHit(0.5f, 5f, 0.3f);
+        _hasHitEnemyUpgrade = true;
     }
 
 

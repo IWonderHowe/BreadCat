@@ -36,11 +36,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private TrailRenderer _trailRenderer;
     private Camera _playerCam;
 
-    // debug ray
-    //private Ray _debugRay;
-
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
-    [SerializeField] private OnHitUpgrade _onHitUpgrade;
+    [SerializeField] private OnBulletHitUpgrade _onHitUpgrade;
     [SerializeField] private GameObject _onShotUpgrade;
     [SerializeField] private GameObject _onReloadUpgrade;
 
@@ -58,7 +55,7 @@ public class Gun : MonoBehaviour
     private void Awake()
     {
         // Debug area
-        _onHitUpgrade = new DoTOnHit(0.5f, 5f, .2f);
+        _onHitUpgrade = new DoTOnBulletHit(0.5f, 5f, .2f);
         _onHitActive = true;
 
 
