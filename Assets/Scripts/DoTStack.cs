@@ -15,6 +15,8 @@ public class DoTStack
     private float _endTime => _timeApplied + _totalDoTTime;
     private float _damagePerSecond => _totalDamage / _totalDoTTime;
 
+    public static List<Enemy> EnemiesAffected;
+
     // contructor
     public DoTStack(float totalDamage, float tickTime, float totalDoTTime, Enemy attachedEnemy)
     {
@@ -39,6 +41,17 @@ public class DoTStack
 
         // when finished, remove this DoT stack from the enemy it was applied from
         _attachedEnemy.EndDoTStack(this);
+    }
+
+    public void AddEnemyToDoTList(Enemy enemy)
+    {
+        if (EnemiesAffected.Contains(enemy)) return;
+        EnemiesAffected.Add(enemy);
+    }
+
+    public void RemoveEnemyFromDoTList(Enemy enemy)
+    {
+        EnemiesAffected.Remove(enemy);
     }
 
     // reset the DoT timer to keep the DoT stack damaging for another max time

@@ -40,6 +40,7 @@ public class Enemy : MonoBehaviour
     public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
     {
         DoTStack DoTApplied = new DoTStack(damage, tickTime, totalDoTTime, this);
+        DoTApplied.AddEnemyToDoTList(this);
         Debug.Log("stack added");
         StartCoroutine(DoTApplied.ApplyDamage());
         _dotStacks.Add(DoTApplied);
