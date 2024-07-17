@@ -1956,9 +1956,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 363091461921175638, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 1384127060668224527, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
       propertyPath: m_Name
       value: Enemy Mannequin
+      objectReference: {fileID: 0}
+    - target: {fileID: 1384127060668224527, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7857298364348843186, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1999,6 +2007,10 @@ PrefabInstance:
     - target: {fileID: 7857298364348843186, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8510475482194305785, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

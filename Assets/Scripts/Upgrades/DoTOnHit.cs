@@ -2,22 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoTOnHit : MonoBehaviour
+public class DoTOnHit : OnHitUpgrade
 {
-    private float _damagePerSecond;
-    private float _secondsToApply;
+    private float _tickTime;
+    private float _totalDoTTime;
+    private float _percentOfBulletDamage;
 
 
-
-    // Start is called before the first frame update
-    void Start()
+    public DoTOnHit(float tickTime, float totalDoTTime, float percentOfbulletDamage)
     {
-        
+        _tickTime = tickTime;
+        _totalDoTTime = totalDoTTime;
+        _percentOfBulletDamage = percentOfbulletDamage;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void ApplyOnHit(Enemy enemy, float bulletDamage)
     {
-        
+        enemy.AddDoTStack(bulletDamage * _percentOfBulletDamage, _tickTime, _totalDoTTime);
+        Debug.Log("On hit applied");
     }
+
 }

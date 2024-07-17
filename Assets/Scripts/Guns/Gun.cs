@@ -40,15 +40,28 @@ public class Gun : MonoBehaviour
     //private Ray _debugRay;
 
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
-    [SerializeField] private GameObject _onHitUpgrade;
+    [SerializeField] private OnHitUpgrade _onHitUpgrade;
     [SerializeField] private GameObject _onShotUpgrade;
     [SerializeField] private GameObject _onReloadUpgrade;
+
+    private bool _onHitActive = false;
+    private bool _onShotActive = false;
+    private bool _onReloadActive = false;
+
+    public bool OnHitActive => _onHitActive;
+    public bool OnShotActive => _onShotActive;
+    public bool OnReloadActive => _onReloadActive;
 
 
 
 
     private void Awake()
     {
+        // Debug area
+        _onHitUpgrade = new DoTOnHit(0.5f, 5f, .2f);
+        _onHitActive = true;
+
+
         // get the players camera
         _playerCam = Camera.main;
 
@@ -72,6 +85,7 @@ public class Gun : MonoBehaviour
     // shoot one ammo from gun
     public void Shoot()
     {
+
         // if the player is able to shoot, interrupt the reload
         _isReloading = false;
 
@@ -101,10 +115,17 @@ public class Gun : MonoBehaviour
         // check to see if the player hits anything with a raycast based on gun properties
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range))
         {
-            // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
-            //if (hit.collider.gameObject.tag == "EnemyCrit") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage * _critMultiplier);
-            //else if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(_damage);
-            if (hit.collider.gameObject.tag == "Enemy") hit.collider.gameObject.GetComponentInParent<Enemy>().AddDoTStack(10f, 0.5f, 5f);
+            // do this if the shot hits an enemy
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                // if there is an on hit effect active, apply it
+                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _damage);
+                
+                // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
+                float damageToTake = _damage;
+                if (hit.collider.gameObject.tag == "EnemyCrit") damageToTake *= _critMultiplier;
+                hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
+            }
 
             // Create a trail to show where the shot actually went (expose recoil)
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
