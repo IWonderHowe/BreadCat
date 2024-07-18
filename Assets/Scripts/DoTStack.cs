@@ -15,6 +15,12 @@ public class DoTStack
     private float _endTime => _timeApplied + _totalDoTTime;
     private float _damagePerSecond => _totalDamage / _totalDoTTime;
 
+    // exposed variables for DoT effects
+    private float _dotTimeLeft => _endTime - Time.timeSinceLevelLoad;
+    public float DoTDamageRemaining => _damagePerSecond * _dotTimeLeft;
+
+
+    // keep track of all enemies with DoT currently affecting them
     public static List<GameObject> EnemiesAffected = new List<GameObject>();
 
     // contructor

@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _currentHealth;
     [SerializeField] private bool _isDead;
 
-
+    // DoT variables
     private List<DoTStack> _dotStacks = new List<DoTStack>();
 
 
@@ -24,9 +24,14 @@ public class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        Debug.Log(DoTStack.EnemiesAffected.Count);
+        float dotDamageLeft = 0;
+        foreach(DoTStack i in _dotStacks)
+        {
+            dotDamageLeft += i.DoTDamageRemaining;
+        }
+        Debug.Log(dotDamageLeft);
     }
 
 
@@ -37,17 +42,21 @@ public class Enemy : MonoBehaviour
         if (_currentHealth <= 0) _isDead = true;
     }
 
+    
     public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
     {
+        // Add a DoT stack to the current enemy, and begin its damage
         DoTStack DoTApplied = new DoTStack(damage, tickTime, totalDoTTime, this);
-        DoTStack.AddEnemyToDoTList(this.gameObject);
-        Debug.Log("stack added");
         StartCoroutine(DoTApplied.ApplyDamage());
+        
+        // add the DoT stack to this enemies list of DoT stacks, and add the enemy to the list of enemies affected by DoT
         _dotStacks.Add(DoTApplied);
+        DoTStack.AddEnemyToDoTList(this.gameObject);
     }
 
     public void EndDoTStack(DoTStack stackToEnd)
     {
+        // remove a finished stack of DoT from the enemy. remove it from the DoT affected enemies list if it has no more DoT stacks left
         _dotStacks.Remove(stackToEnd);
         if (_dotStacks.Count == 0) DoTStack.RemoveEnemyFromDoTList(this.gameObject);
     }
