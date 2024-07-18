@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -14,6 +15,11 @@ public class Enemy : MonoBehaviour
     // DoT variables
     private List<DoTStack> _dotStacks = new List<DoTStack>();
     public List<DoTStack> DoTStacks => _dotStacks;
+
+    [SerializeField] private Slider _healthSlider;
+    [SerializeField] private Slider _dotSlider;
+
+
 
 
     // Start is called before the first frame update
@@ -32,6 +38,9 @@ public class Enemy : MonoBehaviour
         {
             dotDamageLeft += i.DoTDamageRemaining;
         }
+
+
+        UpdateHealthBar();
     }
 
 
@@ -42,7 +51,20 @@ public class Enemy : MonoBehaviour
         if (_currentHealth <= 0) _isDead = true;
     }
 
-    
+    private void UpdateHealthBar()
+    {
+        float remainingDoT = GetRemainingDoT();
+        if (remainingDoT == 0) _dotSlider.gameObject.SetActive(false);
+        else
+        {
+            _dotSlider.gameObject.SetActive(true);
+            _dotSlider.value = GetRemainingDoT() / _maxHealth;
+        }
+
+        _healthSlider.value = _currentHealth / _maxHealth;
+        
+    }
+
     public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
     {
         // Add a DoT stack to the current enemy, and begin its damage
@@ -59,6 +81,20 @@ public class Enemy : MonoBehaviour
         // remove a finished stack of DoT from the enemy. remove it from the DoT affected enemies list if it has no more DoT stacks left
         _dotStacks.Remove(stackToEnd);
         if (_dotStacks.Count == 0) DoTStack.RemoveEnemyFromDoTList(this.gameObject);
+    }
+
+    private float GetRemainingDoT()
+    {
+        float dotRemaining = 0f;
+
+        foreach(DoTStack dotStack in _dotStacks)
+        {
+            dotRemaining += dotStack.DoTDamageRemaining;
+        }
+
+        if (dotRemaining > _currentHealth) dotRemaining = _currentHealth;
+
+        return dotRemaining;
     }
 
 }

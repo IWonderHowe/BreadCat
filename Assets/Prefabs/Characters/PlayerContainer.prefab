@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3901930348933223137}
   - component: {fileID: 5928947826445783153}
   - component: {fileID: 1874626434594699124}
-  - component: {fileID: 895269708936288618}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -106,21 +105,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &895269708936288618
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1837945583233805794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0209d3e21430fe4418b96c2fef83b920, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHealth: 0
-  _currentHealth: 0
-  _isDead: 0
 --- !u!1 &2988388720876882105
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +370,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5069206168882292565}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 6d86da68216b2464fbd23aadbf746bae, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -459,6 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fda3378311e7ef428620f1f2c382104, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speedLimit: 20
   _baseSpeed: 5
   _acceleration: 10
   _sprintSpeedMultiplier: 2
@@ -471,6 +456,7 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 1
+  _debugVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &5637479910482505762
 GameObject:
   m_ObjectHideFlags: 0
@@ -585,7 +571,7 @@ Transform:
   m_GameObject: {fileID: 5828197248020984384}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0.028, y: 0, z: 0.642}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -643,6 +629,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6108606568859642228, guid: 1dc7c85a30ecc264dbcd53b120241453, type: 3}
+      propertyPath: _playerObject
+      value: 
+      objectReference: {fileID: 5069206168882292565}
+    - target: {fileID: 6108606568859642228, guid: 1dc7c85a30ecc264dbcd53b120241453, type: 3}
+      propertyPath: _retractionSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6108606568859642228, guid: 1dc7c85a30ecc264dbcd53b120241453, type: 3}
+      propertyPath: _isMovementAbility
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6108606568859642228, guid: 1dc7c85a30ecc264dbcd53b120241453, type: 3}
+      propertyPath: _grappleOriginPoint
+      value: 
+      objectReference: {fileID: 5828197248020984384}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -666,6 +668,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2077630572097453504}
     m_Modifications:
+    - target: {fileID: 1210552942103662493, guid: 37f2cbe70ec5585429603a11f7822745, type: 3}
+      propertyPath: _throwOrigin
+      value: 
+      objectReference: {fileID: 5847078042247244163}
+    - target: {fileID: 1210552942103662493, guid: 37f2cbe70ec5585429603a11f7822745, type: 3}
+      propertyPath: _damageableLayers.m_Bits
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 6090261880371511856, guid: 37f2cbe70ec5585429603a11f7822745, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.488624
@@ -778,6 +788,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 482905298558441074, guid: 1678d1ad7ba096441a75eeba52cf9d6d, type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 5069206168882292565}
+    - target: {fileID: 482905298558441074, guid: 1678d1ad7ba096441a75eeba52cf9d6d, type: 3}
       propertyPath: _rateOfFire
       value: 15
       objectReference: {fileID: 0}
@@ -860,6 +874,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Revolver
       objectReference: {fileID: 0}
+    - target: {fileID: 6963876292973370394, guid: 5a00ed00816686f438bccaa9f00577c0, type: 3}
+      propertyPath: _player
+      value: 
+      objectReference: {fileID: 5069206168882292565}
+    - target: {fileID: 6963876292973370394, guid: 5a00ed00816686f438bccaa9f00577c0, type: 3}
+      propertyPath: _trailRenderer
+      value: 
+      objectReference: {fileID: 8863564733872356137, guid: c26acc8c66feae447abc0854c4252946, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
