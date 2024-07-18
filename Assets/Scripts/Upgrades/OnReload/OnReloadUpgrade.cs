@@ -4,5 +4,13 @@ using UnityEngine;
 
 public abstract class OnReloadUpgrade
 {
-    public abstract void ApplyOnReloadAreaEffect(float radius, Vector3 position);
+    public virtual void ApplyOnReloadAreaEffect(float radius, Vector3 position)
+    {
+
+    }
+
+    public virtual void ThrowableMagReloadEffect(Vector3 throwOrigin, float throwForce, GameObject mag)
+    {
+
+    }
 }
