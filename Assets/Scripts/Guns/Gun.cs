@@ -1,6 +1,7 @@
 using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -39,6 +40,11 @@ public class Gun : MonoBehaviour
     [SerializeField] private TrailRenderer _trailRenderer;
     private Camera _playerCam;
 
+    // spaces to store gameobjects related to the gun
+    [SerializeField] private GameObject _gunMag;
+    [SerializeField] private Vector3 _throwablesOrigin;
+    [SerializeField] private float _throwForce;
+    
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
     [SerializeField] private OnBulletHitUpgrade _onHitUpgrade;
     [SerializeField] private OnBulletShotUpgrade _onShotUpgrade;
@@ -204,7 +210,12 @@ public class Gun : MonoBehaviour
         }
 
         // after reloading, trigger reload upgrade effect if applicable
-        if (_onReloadActive) _onReloadUpgrade.ApplyOnReloadAreaEffect(5, _player.transform.position);
+        if (_onReloadActive)
+        {
+            _onReloadUpgrade.ApplyOnReloadAreaEffect(5, _player.transform.position);
+            _onReloadUpgrade.ThrowableMagReloadEffect(_throwablesOrigin, _throwForce, _gunMag);
+        }
+        
 
         // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
         // Debug.Log("Reloaded");
