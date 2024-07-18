@@ -88,14 +88,12 @@ public class PlayerController : MonoBehaviour
     {
         if (value.isPressed == false) return;
         _ability2.UseAbility();
-        Debug.Log(value.isPressed);
     }
 
     // Swap the current player weapon to the unequipped weapon when mouse is scrolled
     public void OnSwapWeapon(InputValue value)
     {
         if (!value.isPressed) return;
-        Debug.Log(value.isPressed);
         if (_currentGun == _gun1) _currentGun = _gun2;
         else _currentGun = _gun1;
     }

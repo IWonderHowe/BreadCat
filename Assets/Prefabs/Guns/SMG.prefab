@@ -47,9 +47,15 @@ MonoBehaviour:
   _damage: 4
   _range: 15
   _reloadSpeed: 1.5
-  _rateOfFire: 20
+  _baseRateOfFire: 20
   _magSize: 60
   _usesProjectile: 0
   _projectile: {fileID: 0}
   _bulletSpread: 0.15
+  _critMultiplier: 2
+  _isShooting: 0
+  _isReloading: 0
+  _canShoot: 0
+  _currentAmmo: 0
   _trailRenderer: {fileID: 8863564733872356137, guid: c26acc8c66feae447abc0854c4252946, type: 3}
+  _onReloadUpgrade: {fileID: 0}

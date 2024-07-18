@@ -10,12 +10,13 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _damage = 15f;
     [SerializeField] private float _range = 15f;
     [SerializeField] private float _reloadSpeed = 1.5f;
-    [SerializeField] private float _rateOfFire = 1f;
+    [SerializeField] private float _baseRateOfFire = 1f;
     [SerializeField] private int _magSize = 20;
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private float _bulletSpread = 15;
     [SerializeField] private float _critMultiplier = 2f;
+    [SerializeField] private GameObject _player;
 
     // expose info in relation to gun and shooting
     public bool IsShooting => _isShooting;
@@ -30,7 +31,9 @@ public class Gun : MonoBehaviour
 
     // variables to hold for the gun
     [SerializeField] private int _currentAmmo;
-    private float _secondsBetweenShots => 1 / _rateOfFire;
+    private float _secondsBetweenShots => 1 / _effectiveRateOfFire;
+    private float _effectiveRateOfFire;
+    private float _rateOfFireMultiplier = 1f;
     
     // space for the bullet tracers
     [SerializeField] private TrailRenderer _trailRenderer;
@@ -38,8 +41,8 @@ public class Gun : MonoBehaviour
 
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
     [SerializeField] private OnBulletHitUpgrade _onHitUpgrade;
-    [SerializeField] private GameObject _onShotUpgrade;
-    [SerializeField] private GameObject _onReloadUpgrade;
+    [SerializeField] private OnBulletShotUpgrade _onShotUpgrade;
+    [SerializeField] private OnReloadUpgrade _onReloadUpgrade;
 
     private bool _onHitActive = false;
     private bool _onShotActive = false;
@@ -55,9 +58,11 @@ public class Gun : MonoBehaviour
     private void Awake()
     {
         // Debug area
-        _onHitUpgrade = new DoTOnBulletHit(0.5f, 5f, .2f);
-        _onHitActive = true;
+        _onReloadUpgrade = new DoTAreaOnReload(0.5f, 5f, 10f);
+        _onReloadActive = true;
 
+        // begin the effective rate of fire to be at the base rate of fire
+        _effectiveRateOfFire = _baseRateOfFire;
 
         // get the players camera
         _playerCam = Camera.main;
@@ -69,6 +74,9 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
+        // update the rate of fire based on any changes to the RoF multiplier
+        _effectiveRateOfFire = _baseRateOfFire * (1 + _rateOfFireMultiplier);
+
         // Reload the gun if the player isnt currently and 
         if(_currentAmmo == 0 && !_isReloading) TriggerReload();
 
@@ -192,6 +200,9 @@ public class Gun : MonoBehaviour
             yield return null;
         }
 
+        // after reloading, trigger reload upgrade effect if applicable
+        if (_onReloadActive) _onReloadUpgrade.ApplyOnReloadAreaEffect(5, _player.transform.position);
+
         // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
         // Debug.Log("Reloaded");
         _isReloading = false;
@@ -226,6 +237,7 @@ public class Gun : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(_player.transform.position, 5);
         //Gizmos.DrawRay(_debugRay);
     }
 }

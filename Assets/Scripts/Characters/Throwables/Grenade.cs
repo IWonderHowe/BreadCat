@@ -35,8 +35,7 @@ public class Grenade : MonoBehaviour
         _objectsHit = Physics.OverlapSphere(this.transform.position, explosionRadius, damageableLayers);
         foreach(Collider hit in _objectsHit)
         {
-            Debug.Log("Hit stuff");
-
+            Debug.Log("enemy hit");
             // damage enemy with base damage
             if (hit.gameObject.CompareTag("Enemy")) hit.gameObject.GetComponentInParent<Enemy>().TakeDamage(damage);
 

@@ -63,7 +63,6 @@ public class GrappleAbility : CharacterAbility
             if (_grappleInfo == null)
             {
                 _abilityOnCooldown = false;
-                Debug.Log("No grapple point found");
                 return;
             }
 

@@ -31,7 +31,6 @@ public class Enemy : MonoBehaviour
         {
             dotDamageLeft += i.DoTDamageRemaining;
         }
-        Debug.Log(dotDamageLeft);
     }
 
 
