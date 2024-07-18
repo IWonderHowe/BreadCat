@@ -69,6 +69,8 @@ public class PlayerController : MonoBehaviour
     public void OnJump(InputValue value)
     {
         _movement.Jump();
+        if (_ability1.IsMovementAbility) _ability1.CancelMovementAbility();
+        if(_ability2.IsMovementAbility) _ability2.CancelMovementAbility();
     }
 
     // reload if the player presses the reload button

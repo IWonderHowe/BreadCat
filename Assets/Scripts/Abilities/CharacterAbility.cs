@@ -8,6 +8,10 @@ public class CharacterAbility : MonoBehaviour
     [SerializeField] protected float _abilityCooldown = 5f;
     [SerializeField] protected bool _abilityOnCooldown;
 
+    // ability info
+    [SerializeField] protected bool _isMovementAbility;
+    public bool IsMovementAbility => _isMovementAbility;
+
     protected virtual void Start()
     {
         // set the ability to be available
@@ -36,5 +40,10 @@ public class CharacterAbility : MonoBehaviour
 
         // set the ability to be allowed to be used again
         _abilityOnCooldown = false;
+    }
+
+    public virtual void CancelMovementAbility()
+    {
+
     }
 }

@@ -85,7 +85,7 @@ public class GrappleAbility : CharacterAbility
 
         else if(_isGrappling && _isRetracting)
         {
-            CancelGrapple();
+            CancelMovementAbility();
         }
     }
 
@@ -147,7 +147,7 @@ public class GrappleAbility : CharacterAbility
             yield return null;
         }
 
-        CancelGrapple();
+        CancelMovementAbility();
     }
 
     private void SetGrappleJointBounds()
@@ -157,8 +157,9 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint.minDistance = _distanceToGrapplePoint * 0.85f;
     }
 
-    private void CancelGrapple()
+    public override void CancelMovementAbility()
     {
+        if (!_isGrappling) return;
         _isRetracting = false;
         _isGrappling = false;
         SetRenderGrapple(false);
