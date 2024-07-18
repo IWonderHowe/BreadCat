@@ -61,6 +61,9 @@ public class Gun : MonoBehaviour
         _onReloadUpgrade = new DoTAreaOnReload(0.5f, 5f, 10f);
         _onReloadActive = true;
 
+        _onHitUpgrade = new DoTSpikeOnBulletCrit();
+        _onHitActive = true;
+
         // begin the effective rate of fire to be at the base rate of fire
         _effectiveRateOfFire = _baseRateOfFire;
 
@@ -124,7 +127,7 @@ public class Gun : MonoBehaviour
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 // if there is an on hit effect active, apply it
-                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _damage);
+                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _damage, hit.collider.gameObject.CompareTag("EnemyCrit"));
                 
                 // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
                 float damageToTake = _damage;

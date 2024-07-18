@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 
     // DoT variables
     private List<DoTStack> _dotStacks = new List<DoTStack>();
+    public List<DoTStack> DoTStacks => _dotStacks;
 
 
     // Start is called before the first frame update

@@ -16,7 +16,7 @@ public class DoTOnBulletHit : OnBulletHitUpgrade
         _percentOfBulletDamage = percentOfBulletDamage;
     }
 
-    public override void ApplyOnHit(Enemy enemy, float bulletDamage)
+    public override void ApplyOnHit(Enemy enemy, float bulletDamage, bool onCrit)
     {
         enemy.AddDoTStack(bulletDamage * _percentOfBulletDamage, _tickTime, _totalDoTTime);
     }
