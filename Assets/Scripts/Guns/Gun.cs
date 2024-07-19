@@ -44,11 +44,15 @@ public class Gun : MonoBehaviour
     [SerializeField] private GameObject _gunMag;
     [SerializeField] private Vector3 _throwablesOrigin;
     [SerializeField] private float _throwForce;
-    
+
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
-    [SerializeField] private OnBulletHitUpgrade _onHitUpgrade;
-    [SerializeField] private OnBulletShotUpgrade _onShotUpgrade;
-    [SerializeField] private OnReloadUpgrade _onReloadUpgrade;
+    [SerializeField] private GameObject _onHitObject;
+    [SerializeField] private GameObject _onShotObject;
+    [SerializeField] private GameObject _onReloadObject;
+
+    private OnBulletHitUpgrade _onHitUpgrade;
+    private OnBulletShotUpgrade _onShotUpgrade;
+    private OnReloadUpgrade _onReloadUpgrade;
 
     private bool _onHitActive = false;
     private bool _onShotActive = false;
@@ -64,11 +68,13 @@ public class Gun : MonoBehaviour
     private void Awake()
     {
         // Debug area
-        _onReloadUpgrade = new DoTAreaOnReload(0.5f, 5f, 10f);
-        _onReloadActive = true;
-
-        _onHitUpgrade = new DoTSpikeOnBulletCrit();
+        //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
+        //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
+        _onHitUpgrade = new DoTOnBulletHit(0.5f, 5, .5f);
         _onHitActive = true;
+
+        _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
+        _onReloadActive = true;
 
         // begin the effective rate of fire to be at the base rate of fire
         _effectiveRateOfFire = _baseRateOfFire;
@@ -213,7 +219,7 @@ public class Gun : MonoBehaviour
         if (_onReloadActive)
         {
             _onReloadUpgrade.ApplyOnReloadAreaEffect(5, _player.transform.position);
-            _onReloadUpgrade.ThrowableMagReloadEffect(_throwablesOrigin, _throwForce, _gunMag);
+            _onReloadUpgrade.ThrowableMagReloadEffect(_throwablesOrigin, _throwForce, this);
         }
         
 

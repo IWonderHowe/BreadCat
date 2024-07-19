@@ -83,7 +83,7 @@ public class Enemy : MonoBehaviour
         if (_dotStacks.Count == 0) DoTStack.RemoveEnemyFromDoTList(this.gameObject);
     }
 
-    private float GetRemainingDoT()
+    public float GetRemainingDoT()
     {
         float dotRemaining = 0f;
 
