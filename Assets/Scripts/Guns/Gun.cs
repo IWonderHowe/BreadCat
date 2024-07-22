@@ -80,7 +80,7 @@ public class Gun : MonoBehaviour
 
         // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
-        _effectiveBulletSpread = _baseRateOfFire;
+        _effectiveBulletSpread = _baseBulletSpread;
 
 
         // get the players camera
