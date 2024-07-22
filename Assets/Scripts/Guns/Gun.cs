@@ -78,6 +78,9 @@ public class Gun : MonoBehaviour
         _onHitUpgrade = new ArmorOnBulletHit();
         _onHitActive = true;
 
+        _onCritUpgrade = new ArmorToHealthOnBulletCrit();
+        _onCritActive = true;
+
         _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
         _onReloadActive = true;
 
