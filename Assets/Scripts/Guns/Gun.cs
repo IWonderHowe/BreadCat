@@ -247,6 +247,16 @@ public class Gun : MonoBehaviour
         return direction;
     }
 
+    public void SetAccuracy(float accuracy)
+    {
+        _effectiveBulletSpread = accuracy;
+    }
+
+    private void ResetAccuracy()
+    {
+        _effectiveBulletSpread = _baseBulletSpread;
+    }
+
     // set the player to be shooting (for automatic weapon functionality)
     public void SetIsShooting(bool isShooting)
     {
