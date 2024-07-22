@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class OnBulletHitUpgrade
 {
-    public abstract void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage, bool onCrit);
+    public abstract void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage);
 }

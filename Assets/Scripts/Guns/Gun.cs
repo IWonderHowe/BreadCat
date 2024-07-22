@@ -2,6 +2,7 @@ using Palmmedia.ReportGenerator.Core.Reporting.Builders;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -55,7 +56,9 @@ public class Gun : MonoBehaviour
     private OnBulletHitUpgrade _onHitUpgrade;
     private OnBulletShotUpgrade _onShotUpgrade;
     private OnReloadUpgrade _onReloadUpgrade;
+    private OnBulletCritUpgrade _onCritUpgrade;
 
+    private bool _onCritActive = false;
     private bool _onHitActive = false;
     private bool _onShotActive = false;
     private bool _onReloadActive = false;
@@ -142,12 +145,19 @@ public class Gun : MonoBehaviour
             // do this if the shot hits an enemy
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
+                // store the enemy script of the hit enemy
+                Enemy enemyHit = hit.collider.gameObject.GetComponentInParent<Enemy>();
+
                 // if there is an on hit effect active, apply it
-                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _player, _damage, hit.collider.gameObject.CompareTag("EnemyCrit"));
+                if (_onHitActive) _onHitUpgrade.ApplyOnHit(enemyHit, _player, _damage);
                 
-                // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
+                // Apply crit damage if hitting a critical weakpoint, as well as crit upgrade effects
                 float damageToTake = _damage;
-                if (hit.collider.gameObject.tag == "EnemyCrit") damageToTake *= _critMultiplier;
+                if (hit.collider.gameObject.tag == "EnemyCrit")
+                {
+                    damageToTake *= _critMultiplier;
+                    if (_onCritActive) _onCritUpgrade.ApplyOnHit(enemyHit, _player, _damage);
+                }
                 hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
             }
 
