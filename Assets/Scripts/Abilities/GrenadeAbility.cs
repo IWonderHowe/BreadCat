@@ -24,7 +24,7 @@ public class GrenadeAbility : CharacterAbility
     protected override void Start()
     {
         base.Start();
-        _abilityHitEnemyUpgrade = new DoTOnAbilityHit(0.5f, 5f, 0.3f);
+        _abilityHitEnemyUpgrade = new DoTOnAbilityHit(5f, 0.3f);
         _hasHitEnemyUpgrade = true;
     }
 

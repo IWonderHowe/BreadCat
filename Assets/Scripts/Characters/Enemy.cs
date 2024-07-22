@@ -22,7 +22,7 @@ public class Enemy : MonoBehaviour
 
 
 
-    // Start is called before the first frame update
+    // Start is called before the first frame update 
     void Start()
     {
         // set the enemy to be alive and at full health
@@ -65,10 +65,10 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public void AddDoTStack(float damage, float tickTime, float totalDoTTime)
+    public void AddDoTStack(float damage, float totalDoTTime)
     {
         // Add a DoT stack to the current enemy, and begin its damage
-        DoTStack DoTApplied = new DoTStack(damage, tickTime, totalDoTTime, this);
+        DoTStack DoTApplied = new DoTStack(damage, totalDoTTime, this);
         StartCoroutine(DoTApplied.ApplyDamage());
         
         // add the DoT stack to this enemies list of DoT stacks, and add the enemy to the list of enemies affected by DoT

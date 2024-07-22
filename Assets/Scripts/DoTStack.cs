@@ -7,7 +7,6 @@ public class DoTStack
     // variables needed when contstructing a DoT Stack
     private float _totalDamage;
     private float _timeApplied;
-    private float _tickTime;
     private float _totalDoTTime;
     private Enemy _attachedEnemy;
 
@@ -24,11 +23,10 @@ public class DoTStack
     public static List<GameObject> EnemiesAffected = new List<GameObject>();
 
     // contructor
-    public DoTStack(float totalDamage, float tickTime, float totalDoTTime, Enemy attachedEnemy)
+    public DoTStack(float totalDamage,  float totalDoTTime, Enemy attachedEnemy)
     {
         _totalDamage = totalDamage;
         _timeApplied = Time.timeSinceLevelLoad;
-        _tickTime = tickTime;
         _totalDoTTime = totalDoTTime;
         _attachedEnemy = attachedEnemy;
     }
@@ -41,8 +39,8 @@ public class DoTStack
         while(Time.timeSinceLevelLoad <= _endTime)
         {
             // damage the enemy based on the DPS and apply it based on the tick time, then wait for the tick time
-            _attachedEnemy.TakeDamage(_damagePerSecond * _tickTime);
-            yield return new WaitForSeconds(_tickTime);
+            _attachedEnemy.TakeDamage(_damagePerSecond * Time.deltaTime);
+            yield return null;
         }
 
         // when finished, remove this DoT stack from the enemy it was applied from

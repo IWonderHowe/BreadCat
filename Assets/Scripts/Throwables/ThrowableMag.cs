@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class ThrowableMag : MonoBehaviour
 {
+    // NOTE UNFINISHED
+
+
     private Gun _originGun;
     private GameObject _reloadUpgradeObject;
     private OnReloadUpgrade _reloadUpgrade;
@@ -23,7 +26,7 @@ public class ThrowableMag : MonoBehaviour
             if (dotRemaining != 0) _reloadUpgrade.AddToStacks(dotRemaining);
             else
             {
-                hitObject.GetComponentInParent<Enemy>().AddDoTStack(_reloadUpgrade.GetStacks(), 0.5f, 5f);
+                //hitObject.GetComponentInParent<Enemy>().AddDoTStack(_reloadUpgrade.GetStacks(), 0.5f, 5f);
                 _reloadUpgrade.ResetStacks();
             }
         }

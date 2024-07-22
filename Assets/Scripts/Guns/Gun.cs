@@ -15,9 +15,11 @@ public class Gun : MonoBehaviour
     [SerializeField] private int _magSize = 20;
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
-    [SerializeField] private float _bulletSpread = 15;
+    [SerializeField] private float _baseBulletSpread = 15;
     [SerializeField] private float _critMultiplier = 2f;
     [SerializeField] private GameObject _player;
+
+    private float _effectiveBulletSpread;
 
     // expose info in relation to gun and shooting
     public bool IsShooting => _isShooting;
@@ -70,14 +72,16 @@ public class Gun : MonoBehaviour
         // Debug area
         //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
         //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
-        _onHitUpgrade = new DoTOnBulletHit(0.5f, 5, .5f);
+        _onHitUpgrade = new DoTOnBulletHit(5, .5f);
         _onHitActive = true;
 
         _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
         _onReloadActive = true;
 
-        // begin the effective rate of fire to be at the base rate of fire
+        // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
+        _effectiveBulletSpread = _baseRateOfFire;
+
 
         // get the players camera
         _playerCam = Camera.main;
@@ -139,7 +143,7 @@ public class Gun : MonoBehaviour
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 // if there is an on hit effect active, apply it
-                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _damage, hit.collider.gameObject.CompareTag("EnemyCrit"));
+                if (_onHitActive) _onHitUpgrade.ApplyOnHit(hit.collider.gameObject.GetComponentInParent<Enemy>(), _player, _damage, hit.collider.gameObject.CompareTag("EnemyCrit"));
                 
                 // Apply crit damage if hitting a critical weakpoint, or regular damage if hitting anywhere else on enemy
                 float damageToTake = _damage;
@@ -215,12 +219,13 @@ public class Gun : MonoBehaviour
             yield return null;
         }
 
+        /* OUTDATED ON RELOAD UPGRADE CODE
         // after reloading, trigger reload upgrade effect if applicable
         if (_onReloadActive)
         {
             _onReloadUpgrade.ApplyOnReloadAreaEffect(5, _player.transform.position);
             _onReloadUpgrade.ThrowableMagReloadEffect(_throwablesOrigin, _throwForce, this);
-        }
+        }*/
         
 
         // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
@@ -238,7 +243,7 @@ public class Gun : MonoBehaviour
     private Vector3 GetShotDirection()
     {
         Vector3 direction = _playerCam.transform.forward;
-        direction += new Vector3(Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread), Random.Range(-_bulletSpread, _bulletSpread));
+        direction += new Vector3(Random.Range(-_baseBulletSpread, _baseBulletSpread), Random.Range(-_baseBulletSpread, _baseBulletSpread), Random.Range(-_baseBulletSpread, _baseBulletSpread));
         return direction;
     }
 

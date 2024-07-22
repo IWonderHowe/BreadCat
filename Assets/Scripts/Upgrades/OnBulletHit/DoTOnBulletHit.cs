@@ -4,21 +4,19 @@ using UnityEngine;
 
 public class DoTOnBulletHit : OnBulletHitUpgrade
 {
-    private float _tickTime;
     private float _totalDoTTime;
     private float _percentOfBulletDamage;
 
 
-    public DoTOnBulletHit(float tickTime, float totalDoTTime, float percentOfBulletDamage)
+    public DoTOnBulletHit(float totalDoTTime, float percentOfBulletDamage)
     {
-        _tickTime = tickTime;
         _totalDoTTime = totalDoTTime;
         _percentOfBulletDamage = percentOfBulletDamage;
     }
 
-    public override void ApplyOnHit(Enemy enemy, float bulletDamage, bool onCrit)
+    public override void ApplyOnHit(Enemy enemy, GameObject player,  float bulletDamage, bool onCrit)
     {
-        enemy.AddDoTStack(bulletDamage * _percentOfBulletDamage, _tickTime, _totalDoTTime);
+        enemy.AddDoTStack(bulletDamage * _percentOfBulletDamage,  _totalDoTTime);
     }
 
 }

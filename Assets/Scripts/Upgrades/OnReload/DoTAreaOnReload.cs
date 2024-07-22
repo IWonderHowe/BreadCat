@@ -26,7 +26,7 @@ public class DoTAreaOnReload : OnReloadUpgrade
             if(enemy.gameObject.tag == "Enemy")
             {
                 Debug.Log(enemy.gameObject.name);
-                enemy.gameObject.GetComponentInParent<Enemy>().AddDoTStack(_damage, _tickTime, _totalDoTTime);
+                enemy.gameObject.GetComponentInParent<Enemy>().AddDoTStack(_damage, _totalDoTTime);
             }
         }
     }
