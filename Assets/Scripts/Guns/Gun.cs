@@ -12,8 +12,14 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _damage = 15f;
     [SerializeField] private float _range = 15f;
     [SerializeField] private float _baseRateOfFire = 1f;
-    [SerializeField] private int _magSize = 20;
     [SerializeField] private float _critMultiplier = 2f;
+
+    // ammo variables
+    [SerializeField] private int _magSize = 20;
+    [SerializeField] private int _currentAmmo;
+    public int MaxAmmo => _magSize;
+    public int CurrentAmmo => _currentAmmo;
+
 
     // Reloading variables
     [SerializeField] private float _reloadSpeed = 1.5f;
@@ -46,7 +52,6 @@ public class Gun : MonoBehaviour
     private float _timeOfLastShot;
 
     // variables to hold for the gun
-    [SerializeField] private int _currentAmmo;
     private float _secondsBetweenShots => 1 / _effectiveRateOfFire;
     private float _effectiveRateOfFire;
     private float _rateOfFireMultiplier = 1f;
