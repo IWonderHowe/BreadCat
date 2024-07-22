@@ -7,7 +7,7 @@ public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] private float _maxPlayerHealth = 150f;
     [SerializeField][Range(0, 1)] private float _playerArmorDamageReduction = 0.5f;
-    
+    [SerializeField][Range(0, 1)] private float _armorDamageReductionToHealthRatio = 0.5f;
 
     [SerializeField] private float _currentPlayerHealth = 0f;
     [SerializeField] private float _currentPlayerArmor;
@@ -32,11 +32,8 @@ public class PlayerCombat : MonoBehaviour
         float effectiveDamage = damageToTake;
         float armorDamageReduction = _playerArmorDamageReduction * _currentPlayerArmor;
 
-        Debug.Log("original damage: " + effectiveDamage);
-
         // clamp the armor damage reduction to be at max reducing all damage
         armorDamageReduction = Mathf.Clamp(armorDamageReduction, 0, effectiveDamage);
-        Debug.Log("damage reduced: " + armorDamageReduction);
 
         // reduce the blocked damage from the player armor
         _currentPlayerArmor -= effectiveDamage;
@@ -47,14 +44,31 @@ public class PlayerCombat : MonoBehaviour
 
         // reduce the player health by the effective damage taken
         _currentPlayerHealth -= effectiveDamage;
-
-
-        
-
     }
 
     public void AddArmor(float armorToAdd)
     {
         _currentPlayerArmor += armorToAdd;
+    }
+
+    public void ArmorToHealth()
+    {
+        // store values to calculate how much armor was used to restore health
+        float originalHealth = _currentPlayerHealth;
+        float healthRestored = 0f;
+
+        // calculate how much health to restore
+        float healthToRestore = _currentPlayerArmor * _playerArmorDamageReduction * _armorDamageReductionToHealthRatio;
+
+        // restore the players health by the amount calculated
+        _currentPlayerHealth += healthToRestore;
+        _currentPlayerHealth = Mathf.Clamp(_currentPlayerHealth, 0, _maxPlayerHealth);
+
+        // calculate how much health was actually restored
+        healthRestored = _currentPlayerHealth - originalHealth;
+
+        // reduce the player armor by the amount used to restore the player health
+        _currentPlayerArmor -= healthRestored / _playerArmorDamageReduction / _armorDamageReductionToHealthRatio;
+        _currentPlayerArmor = Mathf.Max(_currentPlayerArmor, 0);
     }
 }

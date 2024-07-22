@@ -386,8 +386,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 913091158}
         m_TargetAssemblyTypeName: PlayerCombat, Assembly-CSharp
-        m_MethodName: TakeDamage
-        m_Mode: 4
+        m_MethodName: ArmorToHealth
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3618,6 +3618,10 @@ PrefabInstance:
     - target: {fileID: 4193856269985779590, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_Name
       value: PlayerContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689196454681544412, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _currentPlayerHealth
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7689196454681544412, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: _playerArmorDamageReduction
