@@ -76,7 +76,14 @@ public class PlayerController : MonoBehaviour
     // reload if the player presses the reload button
     public void OnReload(InputValue value)
     {
+        // reload the gun
         _currentGun.TriggerReload();
+
+        // set the reload to be a manual reload
+        _currentGun.SetIsManualReloading(true);
+
+        // reset chaos stacks if applicable
+        if (ChaosStack.Stacks != 0) ChaosStack.ResetStacks();
     }
 
     // attempt to use the primary ability if button pressed

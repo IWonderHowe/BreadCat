@@ -8,17 +8,28 @@ using UnityEngine.Rendering;
 
 public class Gun : MonoBehaviour
 {
-    // inspector editable gun properties
+    // Gun base stats
     [SerializeField] private float _damage = 15f;
     [SerializeField] private float _range = 15f;
-    [SerializeField] private float _reloadSpeed = 1.5f;
     [SerializeField] private float _baseRateOfFire = 1f;
     [SerializeField] private int _magSize = 20;
+    [SerializeField] private float _critMultiplier = 2f;
+
+    // Reloading variables
+    [SerializeField] private float _reloadSpeed = 1.5f;
+    private bool _isReloading;
+    private bool _manualReload;
+    public bool IsReloading => _isReloading;
+    public bool ManualReload => _manualReload;
+
+    
+
+    // Info for gun
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
-    [SerializeField] private float _critMultiplier = 2f;
     [SerializeField] private GameObject _player;
 
+    // Accuracy variables
     [SerializeField] private float _baseAccuracy = 0.80f;
     [SerializeField] private float _minAccuracySpread = 1f;
     [SerializeField] private float _effectiveAccuracy;
@@ -26,12 +37,10 @@ public class Gun : MonoBehaviour
 
     // expose info in relation to gun and shooting
     public bool IsShooting => _isShooting;
-    public bool IsReloading => _isReloading;
     public bool CanShoot => _canShoot;
 
     // private spaces to store shooting info (serialized for debugging)
     [SerializeField] private bool _isShooting;
-    [SerializeField] private bool _isReloading;
     [SerializeField] private bool _canShoot;
     [SerializeField] private bool _hasPerfectAccuracy;
     private float _timeOfLastShot;
@@ -78,7 +87,7 @@ public class Gun : MonoBehaviour
         // Debug area
         //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
         //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
-        _onHitUpgrade = new ArmorOnBulletHit();
+        _onHitUpgrade = new ChaosOnBulletHit();
         _onHitActive = true;
 
         _onCritUpgrade = new ArmorToHealthOnBulletCrit();
@@ -102,6 +111,11 @@ public class Gun : MonoBehaviour
 
     private void Update()
     {
+        // DEBUGGING
+        Debug.Log(ChaosStack.Stacks);
+
+
+
         // update the rate of fire based on any changes to the RoF multiplier
         _effectiveRateOfFire = _baseRateOfFire * (1 + _rateOfFireMultiplier);
 
@@ -121,6 +135,7 @@ public class Gun : MonoBehaviour
 
         // if the player is able to shoot, interrupt the reload
         _isReloading = false;
+        _manualReload = false;
 
         // shoot a projectile or raycast, based on weapon
         if (_usesProjectile)
@@ -158,20 +173,24 @@ public class Gun : MonoBehaviour
                 // if there is an on hit effect active, apply it
                 if (_onHitActive) _onHitUpgrade.ApplyOnHit(enemyHit, _player, _damage);
                 
-                // Apply crit damage if hitting a critical weakpoint, as well as crit upgrade effects
+                // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
                 float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
                     damageToTake *= _critMultiplier;
                     if (_onCritActive) _onCritUpgrade.ApplyOnHit(enemyHit, _player, _damage);
                 }
+
+                // apply damage to the enemy
                 hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
             }
 
             // Create a trail to show where the shot actually went (expose recoil)
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
             StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
-        } 
+        }
+
+        // do this on a miss
         else
         {
             
@@ -246,8 +265,8 @@ public class Gun : MonoBehaviour
         
 
         // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
-        // Debug.Log("Reloaded");
         _isReloading = false;
+        _manualReload = false;
         if(time > _reloadSpeed) _currentAmmo = _magSize;
         _canShoot = true;
     }
@@ -264,23 +283,20 @@ public class Gun : MonoBehaviour
 
         // calculate the current effective accuracy if the player doesnt have perfect accuracy currently
         if (_hasPerfectAccuracy) _effectiveAccuracy = 0f;
-        else _effectiveAccuracy = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / 1));
+        else _effectiveAccuracy = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks));
 
         // set the direction for the player to shoot to deviate by accuracy
         direction += new Vector3(Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy));
         return direction;
     }
 
+    // set whether the player has perfect accuracy
     public void SetPerfectAccuracy(bool perfectAccuracy)
     {
-        if (perfectAccuracy)
-        {
-            _hasPerfectAccuracy = true;
-            return;
-        }
-        _hasPerfectAccuracy = false;
+        _hasPerfectAccuracy = perfectAccuracy;
     }  
 
+    // reset the gun accuracy to its base stat
     private void ResetAccuracy()
     {
         _effectiveAccuracy = _baseAccuracy;
@@ -296,6 +312,15 @@ public class Gun : MonoBehaviour
     public void SetIsReloading(bool isReloading)
     {
         _isReloading = isReloading;
+    }
+
+    // set whether the player reloaded manually
+    public void SetIsManualReloading(bool isManualReloading)
+    {
+        _manualReload = isManualReloading;
+
+        // reset chaos stacks on a manual reload
+        if (isManualReloading) ChaosStack.ResetStacks();
     }
 
     private void OnDrawGizmos()
