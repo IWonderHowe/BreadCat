@@ -308,6 +308,7 @@ GameObject:
   - component: {fileID: 5639952751167676178}
   - component: {fileID: 1039571217408980695}
   - component: {fileID: 5429850716434828419}
+  - component: {fileID: 7689196454681544412}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -457,6 +458,19 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _debugVelocity: {x: 0, y: 0, z: 0}
+--- !u!114 &7689196454681544412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5069206168882292565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43311647b107d3546aaf77d0ea3ccf4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxPlayerHealth: 150
 --- !u!1 &5637479910482505762
 GameObject:
   m_ObjectHideFlags: 0
@@ -803,6 +817,14 @@ PrefabInstance:
       propertyPath: _critMultiplier
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 482905298558441074, guid: 1678d1ad7ba096441a75eeba52cf9d6d, type: 3}
+      propertyPath: _onReloadObject
+      value: 
+      objectReference: {fileID: 2729295705250555741, guid: 553ecaaec0e82bd40858dfd58ba2bc54, type: 3}
+    - target: {fileID: 482905298558441074, guid: 1678d1ad7ba096441a75eeba52cf9d6d, type: 3}
+      propertyPath: _baseBulletSpread
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 8662449161295471297, guid: 1678d1ad7ba096441a75eeba52cf9d6d, type: 3}
       propertyPath: m_Name
       value: SMG
@@ -882,6 +904,14 @@ PrefabInstance:
       propertyPath: _trailRenderer
       value: 
       objectReference: {fileID: 8863564733872356137, guid: c26acc8c66feae447abc0854c4252946, type: 3}
+    - target: {fileID: 6963876292973370394, guid: 5a00ed00816686f438bccaa9f00577c0, type: 3}
+      propertyPath: _onReloadObject
+      value: 
+      objectReference: {fileID: 2729295705250555741, guid: 553ecaaec0e82bd40858dfd58ba2bc54, type: 3}
+    - target: {fileID: 6963876292973370394, guid: 5a00ed00816686f438bccaa9f00577c0, type: 3}
+      propertyPath: _baseBulletSpread
+      value: 0.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

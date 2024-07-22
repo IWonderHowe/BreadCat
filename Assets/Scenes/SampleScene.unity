@@ -3336,25 +3336,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2675859908438833628, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
-      propertyPath: _onReloadObject
-      value: 
-      objectReference: {fileID: 2729295705250555741, guid: 553ecaaec0e82bd40858dfd58ba2bc54, type: 3}
-    - target: {fileID: 2675859908438833628, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
-      propertyPath: _baseBulletSpread
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 3032097524273380392, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
-      propertyPath: _onReloadObject
-      value: 
-      objectReference: {fileID: 2729295705250555741, guid: 553ecaaec0e82bd40858dfd58ba2bc54, type: 3}
-    - target: {fileID: 3032097524273380392, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
-      propertyPath: _baseBulletSpread
-      value: 0.15
-      objectReference: {fileID: 0}
     - target: {fileID: 4193856269985779590, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_Name
       value: PlayerContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 7689196454681544412, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _playerArmorDamageReduction
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

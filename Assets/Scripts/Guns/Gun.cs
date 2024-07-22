@@ -75,7 +75,7 @@ public class Gun : MonoBehaviour
         // Debug area
         //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
         //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
-        _onHitUpgrade = new DoTOnBulletHit(5, .5f);
+        _onHitUpgrade = new ArmorOnBulletHit();
         _onHitActive = true;
 
         _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
