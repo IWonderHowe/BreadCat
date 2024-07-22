@@ -12,6 +12,10 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float _currentPlayerHealth = 0f;
     [SerializeField] private float _currentPlayerArmor;
 
+    public float MaxHealth => _maxPlayerHealth;
+    public float CurrentHealth => _currentPlayerHealth;
+    public float ArmoredHealth => _currentPlayerArmor * _playerArmorDamageReduction;
+
 
     // Start is called before the first frame update
     void Awake()

@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
         // Debug area
         //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
         //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
-        _onHitUpgrade = new ChaosOnBulletHit();
+        _onHitUpgrade = new ArmorOnBulletHit();
         _onHitActive = true;
 
         _onCritUpgrade = new ChaosOnBulletCrit();

@@ -6,24 +6,42 @@ using UnityEngine.UI;
 
 public class GameUIManager : MonoBehaviour
 {
+    // store the player object
     [SerializeField] private GameObject _player;
     private PlayerController _playerController;
+    private PlayerCombat _playerCombat;
+
+    // ammo counter variables
+    [SerializeField] private TextMeshProUGUI _ammoCounter;
     private Gun _currentGun => _playerController.CurrentGun;
 
-    [SerializeField] private TextMeshProUGUI _ammoCounter;
+    // player health bar variables
+    [SerializeField] private Slider _healthSlider;
+    [SerializeField] private Slider _armorSlider;
+    private float _maxHealth => _playerCombat.MaxHealth;
+    private float _currentHealth => _playerCombat.CurrentHealth;
+    private float _currentArmor => _playerCombat.ArmoredHealth;
 
     private void Start()
     {
         _playerController = _player.GetComponent<PlayerController>();
+        _playerCombat = _player.GetComponent<PlayerCombat>();
     }
 
     private void Update()
     {
         UpdateAmmoCount();
+        UpdatePlayerHealth();
     }
 
     private void UpdateAmmoCount()
     {
         _ammoCounter.SetText(_currentGun.CurrentAmmo + "/" + _currentGun.MaxAmmo);
+    }
+
+    private void UpdatePlayerHealth()
+    {
+        _armorSlider.value = _currentHealth / _maxHealth;
+        _healthSlider.value = (_currentHealth / _maxHealth) - (_currentArmor / _maxHealth);
     }
 }
