@@ -12,6 +12,10 @@ public static class ChaosStack
     public static int Stacks => _stacks;
     public static float CurrentChaosMultiplier => _stacksMultiplier * _stacks;
 
+    private static bool _perfectAccuracy = false;
+
+    public static bool PerfectAccuracy => _perfectAccuracy;
+
     public static void ResetStacks()
     {
         _stacks = 0;
@@ -20,6 +24,11 @@ public static class ChaosStack
     public static void AddStack()
     {
         _stacks++;
+    }
+
+    public static void SetHasPerfectAccuracy(bool perfectAccuracy)
+    {
+        _perfectAccuracy = perfectAccuracy;
     }
 
 }

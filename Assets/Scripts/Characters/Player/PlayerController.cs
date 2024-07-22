@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
 
     // keep track of which gun is currently active
     [SerializeField] private Gun _currentGun;
+    public Gun CurrentGun => _currentGun;
 
     // get the players movement script and establish a space to store the move input (for normalization)
     private CharacterMovement _movement;

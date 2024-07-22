@@ -90,7 +90,7 @@ public class Gun : MonoBehaviour
         _onHitUpgrade = new ChaosOnBulletHit();
         _onHitActive = true;
 
-        _onCritUpgrade = new ArmorToHealthOnBulletCrit();
+        _onCritUpgrade = new ChaosOnBulletCrit();
         _onCritActive = true;
 
         _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
@@ -137,6 +137,8 @@ public class Gun : MonoBehaviour
         _isReloading = false;
         _manualReload = false;
 
+        // alter perfect accuracy from chaos stacks
+
         // shoot a projectile or raycast, based on weapon
         if (_usesProjectile)
         {
@@ -159,6 +161,11 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         Vector3 shotDirection = GetShotDirection();
 
+        if (ChaosStack.PerfectAccuracy)
+        {
+            SetPerfectAccuracy(false);
+            ChaosStack.SetHasPerfectAccuracy(false);
+        }
         //_debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
         
         // check to see if the player hits anything with a raycast based on gun properties
