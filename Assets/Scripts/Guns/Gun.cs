@@ -16,9 +16,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private int _magSize = 20;
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
-    [SerializeField] private float _baseBulletSpread = 15;
+    [SerializeField] private float _baseBulletSpread = 0.15f;
     [SerializeField] private float _critMultiplier = 2f;
     [SerializeField] private GameObject _player;
+    [SerializeField] private float _maxBulletSpread = 1f;
 
     private float _effectiveBulletSpread;
 
@@ -134,6 +135,7 @@ public class Gun : MonoBehaviour
     }
 
 
+    // shoot the raycast of a hitscan bullet
     protected virtual void ShootRayCast()
     {
         // spaces to store potential hits as well as the shot direction
@@ -155,7 +157,7 @@ public class Gun : MonoBehaviour
                 if (_onHitActive) _onHitUpgrade.ApplyOnHit(enemyHit, _player, _damage);
                 
                 // Apply crit damage if hitting a critical weakpoint, as well as crit upgrade effects
-                float damageToTake = _damage;
+                float damageToTake = _damage * ChaosStack.CurrentChaosMultiplier;
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
                     damageToTake *= _critMultiplier;
