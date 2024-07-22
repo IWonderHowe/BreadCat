@@ -16,12 +16,13 @@ public class Gun : MonoBehaviour
     [SerializeField] private int _magSize = 20;
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
-    [SerializeField] private float _baseBulletSpread = 0.15f;
     [SerializeField] private float _critMultiplier = 2f;
     [SerializeField] private GameObject _player;
-    [SerializeField] private float _maxBulletSpread = 1f;
 
-    private float _effectiveBulletSpread;
+    [SerializeField] private float _baseAccuracy = 0.80f;
+    [SerializeField] private float _minAccuracySpread = 1f;
+    [SerializeField] private float _effectiveAccuracy;
+
 
     // expose info in relation to gun and shooting
     public bool IsShooting => _isShooting;
@@ -32,6 +33,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private bool _isShooting;
     [SerializeField] private bool _isReloading;
     [SerializeField] private bool _canShoot;
+    [SerializeField] private bool _hasPerfectAccuracy;
     private float _timeOfLastShot;
 
     // variables to hold for the gun
@@ -87,7 +89,7 @@ public class Gun : MonoBehaviour
 
         // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
-        _effectiveBulletSpread = _baseBulletSpread;
+        _effectiveAccuracy = _baseAccuracy;
 
 
         // get the players camera
@@ -257,19 +259,31 @@ public class Gun : MonoBehaviour
     // add bullet spread to the look direction of the player to add recoil to a shot
     private Vector3 GetShotDirection()
     {
+        // start with the direction the player is looking
         Vector3 direction = _playerCam.transform.forward;
-        direction += new Vector3(Random.Range(-_baseBulletSpread, _baseBulletSpread), Random.Range(-_baseBulletSpread, _baseBulletSpread), Random.Range(-_baseBulletSpread, _baseBulletSpread));
+
+        // calculate the current effective accuracy if the player doesnt have perfect accuracy currently
+        if (_hasPerfectAccuracy) _effectiveAccuracy = 0f;
+        else _effectiveAccuracy = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / 1));
+
+        // set the direction for the player to shoot to deviate by accuracy
+        direction += new Vector3(Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy));
         return direction;
     }
 
-    public void SetAccuracy(float accuracy)
+    public void SetPerfectAccuracy(bool perfectAccuracy)
     {
-        _effectiveBulletSpread = accuracy;
-    }
+        if (perfectAccuracy)
+        {
+            _hasPerfectAccuracy = true;
+            return;
+        }
+        _hasPerfectAccuracy = false;
+    }  
 
     private void ResetAccuracy()
     {
-        _effectiveBulletSpread = _baseBulletSpread;
+        _effectiveAccuracy = _baseAccuracy;
     }
 
     // set the player to be shooting (for automatic weapon functionality)

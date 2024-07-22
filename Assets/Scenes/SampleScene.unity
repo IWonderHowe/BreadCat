@@ -3615,9 +3615,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3032097524273380392, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _baseBulletSpread
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4193856269985779590, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_Name
       value: PlayerContainer
+      objectReference: {fileID: 0}
+    - target: {fileID: 6287505492500036695, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: m_VerticalAxis.m_MaxValue
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6287505492500036695, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: m_VerticalAxis.m_MinValue
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 7689196454681544412, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: _currentPlayerHealth
