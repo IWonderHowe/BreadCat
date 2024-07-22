@@ -100,6 +100,12 @@ public class PlayerController : MonoBehaviour
         else _currentGun = _gun1;
     }
 
+    public void OnToggleLockMouse(InputValue value)
+    {
+        if (Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
+        else Cursor.lockState = CursorLockMode.Confined;
+    }
+
     private void Update()
     {
         // Get vectors in relation to the player and their aim
