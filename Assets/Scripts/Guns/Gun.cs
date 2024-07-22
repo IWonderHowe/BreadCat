@@ -157,7 +157,7 @@ public class Gun : MonoBehaviour
                 if (_onHitActive) _onHitUpgrade.ApplyOnHit(enemyHit, _player, _damage);
                 
                 // Apply crit damage if hitting a critical weakpoint, as well as crit upgrade effects
-                float damageToTake = _damage * ChaosStack.CurrentChaosMultiplier;
+                float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
                     damageToTake *= _critMultiplier;
