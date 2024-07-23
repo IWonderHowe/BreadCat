@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LevelPiece : MonoBehaviour
 {
-    [SerializeField] public Vector3 _size;
-    [SerializeField] public bool _northOpen;
-    [SerializeField] public bool _southOpen;
-    [SerializeField] public bool _eastOpen;
-    [SerializeField] public bool _westOpen;
-    [SerializeField] public bool _aboveOpen;
-    [SerializeField] public bool _belowOpen;
-    [SerializeField] public bool _isEntrance;
-    [SerializeField] public bool _isExit;
+    [SerializeField] public Vector3 Size;
+    [SerializeField] public bool NorthOpen;
+    [SerializeField] public bool SouthOpen;
+    [SerializeField] public bool EastOpen;
+    [SerializeField] public bool WestOpen;
+    [SerializeField] public bool AboveOpen;
+    [SerializeField] public bool BelowOpen;
+    [SerializeField] public bool IsEntrance;
+    [SerializeField] public bool IsExit;
 
 
 }
