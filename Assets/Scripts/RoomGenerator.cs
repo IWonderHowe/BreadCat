@@ -7,16 +7,16 @@ public class RoomGenerator : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _roomPieces = new List<GameObject>();
     [SerializeField] private Vector3 _roomSize;
+    private GameObject[,,] _roomLayout;
 
     public void GenerateRoom()
     {
-        GameObject[,,] roomLayout = new GameObject[(int)_roomSize.x,(int)_roomSize.y,(int)_roomSize.z];
+        _roomLayout = new GameObject[(int)_roomSize.x,(int)_roomSize.y,(int)_roomSize.z];
         int[] startCell = FindStartCell("North");
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
-
-
-        roomLayout[startCell[0], startCell[1], startCell[2]] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
-        Instantiate(roomLayout[startCell[0], startCell[1], startCell[2]]);
+        int[] debugCell = { 0, 0, 4 };
+        SpawnRoomPiece(startCell);
+        Debug.Log(_roomLayout[0, 0, 4].gameObject);
 
 
     }
@@ -51,8 +51,16 @@ public class RoomGenerator : MonoBehaviour
         return startCell;
     }
 
-    private void SpawnRoomPiece()
+    private void SpawnRoomPiece(int[] cell)
     {
+        // set the spawn location of the cell. all multiplied by 3 to account for 3x3 cell size in our grid
+        Vector3 spawnLocation = new Vector3(cell[0] * 3, cell[1] * 3, cell[2] * 3);
 
+        // add the cell into the room layout array
+        _roomLayout[cell[0], cell[1], cell[2]] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
+
+        // add the cell to the world
+        Instantiate(_roomLayout[cell[0], cell[1], cell[2]], spawnLocation, Quaternion.identity);
+        
     }
 }
