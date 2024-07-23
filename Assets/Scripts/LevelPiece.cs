@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LevelPiece : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] public Vector3 _size;
+    [SerializeField] public bool _northOpen;
+    [SerializeField] public bool _southOpen;
+    [SerializeField] public bool _eastOpen;
+    [SerializeField] public bool _westOpen;
+    [SerializeField] public bool _aboveOpen;
+    [SerializeField] public bool _belowOpen;
+    [SerializeField] public bool _isEntrance;
+    [SerializeField] public bool _isExit;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }
