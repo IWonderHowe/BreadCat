@@ -6797,6 +6797,8 @@ MonoBehaviour:
   - {fileID: 7830895893303177270, guid: a7b0b0e9ec7e9594b90f3177dc3401fe, type: 3}
   - {fileID: 2702720698158305099, guid: 77a964685bc09f949b48caacea1d5cc1, type: 3}
   - {fileID: 4898692521172592353, guid: 9e831b7fecbc152469f9636b50d722b6, type: 3}
+  - {fileID: 8992906138338641517, guid: 27c96282a6b3e68438e2a79128164cb9, type: 3}
+  - {fileID: 9028365703688095903, guid: eafb6536376c6704580aa00f20b89107, type: 3}
   _roomSize: {x: 5, y: 1, z: 5}
 --- !u!4 &1274296900
 Transform:

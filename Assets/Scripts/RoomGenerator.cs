@@ -9,9 +9,13 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] private Vector3Int _roomSize;
     private GameObject[,,] _roomLayout;
     private List<GameObject>[,,] _availablePieces;
+    private List<Vector3Int> _openCells;
 
     private void Start()
     {
+        // instantiate the open cells list
+        _openCells = new List<Vector3Int>();
+
         // set space for the room layout that is updated with established pieces
         _roomLayout = new GameObject[_roomSize.x, _roomSize.y, _roomSize.z];
 
@@ -26,6 +30,7 @@ public class RoomGenerator : MonoBehaviour
             {
                 for (int z = 0; z < _roomSize.z; z++)
                 {
+                    _openCells.Add(new Vector3Int(x, y, z));
                     //Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z);
                     foreach (GameObject piece in _availablePieces[x, y, z])
                     {
@@ -58,7 +63,7 @@ public class RoomGenerator : MonoBehaviour
 
         nextCell = GetNextCell(startCell);
 
-        for (int x = 0; x < _roomLayout.Length; x++)
+        for (int x = 0; x < _roomLayout.Length - 1; x++)
         {
             SpawnRoomPiece(nextCell);
             UpdateAvailableRoomPieces(nextCell);
@@ -309,13 +314,12 @@ public class RoomGenerator : MonoBehaviour
         // have a place to store the information for the next cell
         Vector3Int nextCell = Vector3Int.zero;
 
-        // make a list of available cells adjecent to the previous cell
-        List<Vector3Int> availableCells = new List<Vector3Int>();
-        availableCells = GetAdjacentEmptyCells(lastCell);
-
         // find which adjacent cell has the least amount of possible room pieces
-        int lowestPieces = 100;
-        foreach(Vector3Int cell in availableCells)
+        int lowestPieces = _roomPieces.Count;
+
+
+
+        foreach(Vector3Int cell in _openCells)
         {
             if (_availablePieces[cell.x, cell.y, cell.z].Count < lowestPieces && 0 < _availablePieces[cell.x,cell.y,cell.z].Count)
             {
@@ -394,5 +398,9 @@ public class RoomGenerator : MonoBehaviour
 
         // clear all potential pieces for the cell so it can't be generated again
         _availablePieces[cell.x, cell.y, cell.z].Clear();
+
+
+        // clear cell out of open cells list
+        _openCells.Remove(cell);
     }
 }
