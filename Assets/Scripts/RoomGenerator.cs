@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RoomGenerator : MonoBehaviour
@@ -64,6 +66,29 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    private void RemoveAllExits()
+    {
+
+        for (int x = 0; x < _roomSize.x; x++)
+        {
+            for (int y = 0; y < _roomSize.y; y++)
+            {
+                for (int z = 0; z < _roomSize.z; z++)
+                {
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+                    foreach (GameObject piece in _availablePieces[x, y, z])
+                    {
+                        if (piece.GetComponent<LevelPiece>().IsExit) piecesToRemove.Add(piece);
+                    }
+                    foreach (GameObject piece in piecesToRemove)
+                    {
+                        _availablePieces[x, y, z].Remove(piece);
+                    }
+                }
+            }
+        }
+    }
+
     public void GenerateRoom()
     {
         Vector3Int startCell = FindStartCell("North");
@@ -72,6 +97,10 @@ public class RoomGenerator : MonoBehaviour
         SpawnRoomPiece(startCell);
         UpdateAvailableRoomPieces(startCell);
         RemoveAllEntrances();
+        Vector3Int exitCell = FindExitCell("North");
+        SpawnRoomPiece(exitCell);
+        UpdateAvailableRoomPieces(exitCell);
+        RemoveAllExits();
 
         /* Used to see available piece count for each cell
         for (int x = 0; x < _roomSize.x; x++)
@@ -87,7 +116,8 @@ public class RoomGenerator : MonoBehaviour
 
         nextCell = GetNextCell(startCell);
 
-        for (int x = 0; x < _roomLayout.Length - 1; x++)
+        // go through the generation for all remaining cells. -2 to get rid of already placed entrance and exit cells
+        for (int x = 0; x < _roomLayout.Length - 2; x++)
         {
             SpawnRoomPiece(nextCell);
             UpdateAvailableRoomPieces(nextCell);
@@ -394,11 +424,64 @@ public class RoomGenerator : MonoBehaviour
         return startCell;
     }
 
+    private Vector3Int FindExitCell(string startWall)
+    {
+        Vector3Int exitCell = new Vector3Int();
+        string exitWall = "None";
+
+        // set the exit wall based on the start wall
+        switch (startWall)
+        {
+            case "North":
+                exitWall = "South";
+                break;
+            case "South":
+                exitWall = "North";
+                break;
+            case "East":
+                exitWall = "West";
+                break;
+            case "West":
+                exitWall = "East";
+                break;
+            default:
+                Debug.Log("oops");
+                break;
+        }
+
+        switch (exitWall)
+        {
+            case "North":
+                exitCell.x = Random.Range(0, (int)_roomSize.x);
+                exitCell.z = _roomSize.z - 1;
+                break;
+            case "South":
+                exitCell.x = Random.Range(0, (int)_roomSize.x);
+                exitCell.z = 0;
+                break;
+            case "East":
+                exitCell.x = _roomSize.x - 1;
+                exitCell.z = Random.Range(0, (int)_roomSize.z);
+                break;
+            case "West":
+                exitCell.x = 0;
+                exitCell.z = Random.Range(0, (int)_roomSize.z);
+                break;
+            default:
+                Debug.Log("Whoops");
+                break;
+        }
+
+        // remove any available pieces for the cell that arent an entrance
+        _availablePieces[exitCell.x, exitCell.y, exitCell.z].RemoveAll(i => !i.GetComponent<LevelPiece>().IsExit);
+
+        return exitCell;
+    }
+
     private bool FindIsEntrance(GameObject levelPiece)
     {
         return levelPiece.GetComponent<LevelPiece>().IsEntrance;
     }
-
 
     private void SpawnRoomPiece(Vector3Int cell)
     {
