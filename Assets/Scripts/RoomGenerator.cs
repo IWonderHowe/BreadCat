@@ -14,11 +14,39 @@ public class RoomGenerator : MonoBehaviour
         _roomLayout = new GameObject[(int)_roomSize.x,(int)_roomSize.y,(int)_roomSize.z];
         int[] startCell = FindStartCell("North");
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
-        int[] debugCell = { 0, 0, 4 };
         SpawnRoomPiece(startCell);
-        Debug.Log(_roomLayout[0, 0, 4].gameObject);
+        GetNextCell(startCell);
+
+    }
+
+    private int[] GetNextCell(int[] lastCell)
+    {
+        // have a place to store the information for the next cell
+        int[] nextCell = new int[3];
+
+        // make a list of available cells adjecent to the previous cell
+        List<Vector3Int> availableCells = new List<Vector3Int>();
 
 
+        // check all adjacjent cells to the starter cell, if they exist and are empty add them to the list of the available cells
+        // check cells to the left and right of starter cell
+        if (lastCell[0] - 1 >= 0 && _roomLayout[lastCell[0] - 1, lastCell[1], lastCell[2]] == null)
+            availableCells.Add(new Vector3Int(lastCell[0] - 1, lastCell[1], lastCell[2]));
+        if (lastCell[0] + 1 < _roomLayout.GetLength(0) && _roomLayout[lastCell[0] + 1, lastCell[1], lastCell[2]] == null)
+            availableCells.Add(new Vector3Int(lastCell[0] + 1, lastCell[1], lastCell[2]));
+        // check cells ahead of and behind the starter cell
+        if (lastCell[2] - 1 >= 0 && _roomLayout[lastCell[0], lastCell[1], lastCell[2] - 1] == null)
+            availableCells.Add(new Vector3Int(lastCell[0], lastCell[1], lastCell[2] - 1));
+        if (lastCell[2] + 1 < _roomLayout.GetLength(2) && _roomLayout[lastCell[0], lastCell[1], lastCell[2] + 1] == null)
+            availableCells.Add(new Vector3Int(lastCell[0], lastCell[1], lastCell[2] + 1)); 
+
+        foreach(Vector3Int cell in availableCells)
+        {
+            Debug.Log(cell.x + " " + cell.y + " " + cell.z);
+        }
+
+
+        return nextCell;
     }
 
     private int[] FindStartCell(string startWall)
@@ -51,16 +79,17 @@ public class RoomGenerator : MonoBehaviour
         return startCell;
     }
 
+
     private void SpawnRoomPiece(int[] cell)
     {
         // set the spawn location of the cell. all multiplied by 3 to account for 3x3 cell size in our grid
-        Vector3 spawnLocation = new Vector3(cell[0] * 3, cell[1] * 3, cell[2] * 3);
+        // we add 1 to our z coordinate because thats the way it goes
+        Vector3 spawnLocation = new Vector3(cell[0] * 3, cell[1] * 3, (cell[2] + 1) * 3);
 
         // add the cell into the room layout array
         _roomLayout[cell[0], cell[1], cell[2]] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
 
         // add the cell to the world
         Instantiate(_roomLayout[cell[0], cell[1], cell[2]], spawnLocation, Quaternion.identity);
-        
     }
 }
