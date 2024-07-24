@@ -19,6 +19,8 @@ public class RoomGenerator : MonoBehaviour
         _availablePieces = new List<GameObject>[_roomSize.x, _roomSize.y, _roomSize.z];
 
         FillAvailableRoomPieces();
+
+        
     }
 
     public void GenerateRoom()
@@ -26,8 +28,20 @@ public class RoomGenerator : MonoBehaviour
         Vector3Int startCell = FindStartCell("North");
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
         SpawnRoomPiece(startCell);
-        GetNextCell(startCell);
+        UpdateAvailableRoomPieces(startCell);
 
+        for (int x = 0; x < _roomSize.x; x++)
+        {
+            for (int y = 0; y < _roomSize.y; y++)
+            {
+                for (int z = 0; z < _roomSize.z; z++)
+                {
+                    Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z); 
+                }
+            }
+        }
+
+        GetNextCell(startCell);
     }
 
     private void FillAvailableRoomPieces()
@@ -91,7 +105,179 @@ public class RoomGenerator : MonoBehaviour
 
     private void UpdateAvailableRoomPieces(Vector3Int cellPlaced)
     {
+        // set space for variables needed up update which pieces are available
         List<Vector3Int> adjacjentCells = GetAdjacentEmptyCells(cellPlaced);
+        LevelPiece placedPiece = _roomLayout[cellPlaced.x, cellPlaced.y, cellPlaced.z].GetComponent<LevelPiece>();
+
+        // go through each piece and see if the 
+        foreach(Vector3Int cell in adjacjentCells)
+        {
+            // a negative xDiff means this cell is left of the origin cell, positive means right
+            int xDiff = cell.x - cellPlaced.x;
+            // negative = below, positive = above
+            int yDiff = cell.y - cellPlaced.y;
+            // negative = behind, positive = ahead
+            int zDiff = cell.z - cellPlaced.z;
+
+            // adjust cell to the left
+            if(xDiff < 0)
+            {
+                // remove all pieces that are closed off to an open west
+                if(placedPiece.WestOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (!potentialPiece.GetComponent<LevelPiece>().EastOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+                // remove all peices that are open to a closed west
+                if(!placedPiece.WestOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (potentialPiece.GetComponent<LevelPiece>().EastOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+            }
+
+            //adjust cell to the right
+            if(xDiff > 0)
+            {
+                // remove all pieces that are closed off to an open east
+                if (placedPiece.EastOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    // find all pieces to remove
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (!potentialPiece.GetComponent<LevelPiece>().WestOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+                // remove all pieces that are open to a closed east
+                if (!placedPiece.EastOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if(potentialPiece.GetComponent<LevelPiece>().WestOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+            }
+
+            // adjust potential pieces for cell behind
+            if(zDiff < 0)
+            {
+                // remove all pieces that are closed to an open south
+                if (placedPiece.SouthOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (!potentialPiece.GetComponent<LevelPiece>().NorthOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+
+                // remove all pieces that are open to a closed south
+                if (!placedPiece.SouthOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (potentialPiece.GetComponent<LevelPiece>().NorthOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+            }
+
+            // adjust potential pieces for cell ahead
+            if(zDiff > 0)
+            {
+                // remove all pieces that are closed to an open north
+                if (placedPiece.NorthOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (!potentialPiece.GetComponent<LevelPiece>().SouthOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+
+                // remove all pieces that are open to a closed north
+                if (!placedPiece.NorthOpen)
+                {
+                    // make a list of pieces to remove, so piece isnt remove while in a foreach loop
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    foreach (GameObject potentialPiece in _availablePieces[cell.x, cell.y, cell.z])
+                    {
+                        if (potentialPiece.GetComponent<LevelPiece>().SouthOpen) piecesToRemove.Add(potentialPiece);
+                    }
+
+                    // remove the pieces 
+                    foreach (GameObject removeable in piecesToRemove)
+                    {
+                        _availablePieces[cell.x, cell.y, cell.z].Remove(removeable);
+                    }
+                }
+            }
+        }
         
     }
 
