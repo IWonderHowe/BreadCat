@@ -10,7 +10,7 @@ public class RoomGenerator : MonoBehaviour
     private GameObject[,,] _roomLayout;
     private List<GameObject>[,,] _availablePieces;
 
-    private void Awake()
+    private void Start()
     {
         // set space for the room layout that is updated with established pieces
         _roomLayout = new GameObject[_roomSize.x, _roomSize.y, _roomSize.z];
@@ -19,27 +19,11 @@ public class RoomGenerator : MonoBehaviour
         _availablePieces = new List<GameObject>[_roomSize.x, _roomSize.y, _roomSize.z];
 
         FillAvailableRoomPieces();
-        Debug.Log(_availablePieces.GetLength(0));
-
-        for (int x = 0; x < _roomSize.x; x++)
-        {
-            for (int y = 0; y < _roomSize.y; y++)
-            {
-                for (int z = 0; z < _roomSize.z; z++)
-                {
-                    Debug.Log(_availablePieces[x, y, z].Count + ": at coordinate " + x + ", " + y + ", " + z);
-                    foreach(GameObject piece in _availablePieces[x, y, z])
-                    {
-                        //Debug.Log(piece.name);
-                    }
-                }
-            }
-        }
     }
 
     public void GenerateRoom()
     {
-        int[] startCell = FindStartCell("North");
+        Vector3Int startCell = FindStartCell("North");
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
         SpawnRoomPiece(startCell);
         GetNextCell(startCell);
@@ -78,43 +62,44 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    private List<Vector3Int> GetAdjacentEmptyCells(int[] originCell)
+    private List<Vector3Int> GetAdjacentEmptyCells(Vector3Int originCell)
     {
         List<Vector3Int> adjacentCells = new List<Vector3Int>();
 
         // check all adjacjent cells to the origin cell, if they exist and are empty add them to the list of the available cells
         // check cells to the left and right of starter cell
-        if (originCell[0] - 1 >= 0 && _roomLayout[originCell[0] - 1, originCell[1], originCell[2]] == null)
+        if (originCell.x - 1 >= 0 && _roomLayout[originCell.x - 1, originCell.y, originCell.z] == null)
         {
-            adjacentCells.Add(new Vector3Int(originCell[0] - 1, originCell[1], originCell[2]));
+            adjacentCells.Add(new Vector3Int(originCell.x - 1, originCell.y, originCell.z));
         }
-        if (originCell[0] + 1 < _roomLayout.GetLength(0) && _roomLayout[originCell[0] + 1, originCell[1], originCell[2]] == null)
+        if (originCell.x + 1 < _roomLayout.GetLength(0) && _roomLayout[originCell.x + 1, originCell.y, originCell.z] == null)
         {
-            adjacentCells.Add(new Vector3Int(originCell[0] + 1, originCell[1], originCell[2]));
+            adjacentCells.Add(new Vector3Int(originCell.x + 1, originCell.y, originCell.z));
         }
         // check cells ahead of and behind the starter cell
-        if (originCell[2] - 1 >= 0 && _roomLayout[originCell[0], originCell[1], originCell[2] - 1] == null)
+        if (originCell.z - 1 >= 0 && _roomLayout[originCell.x, originCell.y, originCell.z - 1] == null)
         {
-            adjacentCells.Add(new Vector3Int(originCell[0], originCell[1], originCell[2] - 1));
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y, originCell.z - 1));
         }
-        if (originCell[2] + 1 < _roomLayout.GetLength(2) && _roomLayout[originCell[0], originCell[1], originCell[2] + 1] == null)
+        if (originCell.z + 1 < _roomLayout.GetLength(2) && _roomLayout[originCell.x, originCell.y, originCell.z + 1] == null)
         {
-            adjacentCells.Add(new Vector3Int(originCell[0], originCell[1], originCell[2] + 1));
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y, originCell.z + 1));
         }
 
         return adjacentCells;
     }
 
-    private void UpdateAvailableRoomPieces(GameObject previousPlacedPiece)
+    private void UpdateAvailableRoomPieces(Vector3Int cellPlaced)
     {
-
+        List<Vector3Int> adjacjentCells = GetAdjacentEmptyCells(cellPlaced);
+        
     }
 
 
-    private int[] GetNextCell(int[] lastCell)
+    private Vector3Int GetNextCell(Vector3Int lastCell)
     {
         // have a place to store the information for the next cell
-        int[] nextCell = new int[3];
+        Vector3Int nextCell = Vector3Int.zero;
 
         // make a list of available cells adjecent to the previous cell
         List<Vector3Int> availableCells = new List<Vector3Int>();
@@ -133,28 +118,33 @@ public class RoomGenerator : MonoBehaviour
         return nextCell;
     }
 
-    private int[] FindStartCell(string startWall)
+    /// <summary>
+    /// THIS NEEDS UPDATING, RUDIMENTARY CURRENTLY
+    /// </summary>
+    /// <param name="startWall"></param>
+    /// <returns></returns>
+    private Vector3Int FindStartCell(string startWall)
     {
-        int[] startCell = new int[3];
-        startCell[1] = 0;
+        Vector3Int startCell = new Vector3Int();
+        startCell.y = 0;
 
         switch (startWall)
         {
             case "North":
-                startCell[0] = Random.Range(0, (int)_roomSize.x);
-                startCell[2] = 4;
+                startCell.x = Random.Range(0, (int)_roomSize.x);
+                startCell.z = 4;
                 break;
             case "South":
-                startCell[0] = Random.Range(0, (int)_roomSize.x);
-                startCell[2] = 0;
+                startCell.x = Random.Range(0, (int)_roomSize.x);
+                startCell.z = 0;
                 break;
             case "East":
-                startCell[0] = 4;
-                startCell[2] = Random.Range(0, (int)_roomSize.z);
+                startCell.x = 4;
+                startCell.z = Random.Range(0, (int)_roomSize.z);
                 break;
             case "West":
-                startCell[0] = 0;
-                startCell[2] = Random.Range(0, (int)_roomSize.z);
+                startCell.x = 0;
+                startCell.z = Random.Range(0, (int)_roomSize.z);
                 break;
             default:
                 Debug.Log("Whoops");
@@ -164,16 +154,16 @@ public class RoomGenerator : MonoBehaviour
     }
 
 
-    private void SpawnRoomPiece(int[] cell)
+    private void SpawnRoomPiece(Vector3Int cell)
     {
         // set the spawn location of the cell. all multiplied by 3 to account for 3x3 cell size in our grid
         // we add 1 to our z coordinate because thats the way it goes
-        Vector3 spawnLocation = new Vector3(cell[0] * 3, cell[1] * 3, (cell[2] + 1) * 3);
+        Vector3 spawnLocation = new Vector3(cell.x * 3, cell.y * 3, (cell.z + 1) * 3);
 
         // add the cell into the room layout array
-        _roomLayout[cell[0], cell[1], cell[2]] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
+        _roomLayout[cell.x, cell.y, cell.z] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
 
         // add the cell to the world
-        Instantiate(_roomLayout[cell[0], cell[1], cell[2]], spawnLocation, Quaternion.identity);
+        Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
     }
 }
