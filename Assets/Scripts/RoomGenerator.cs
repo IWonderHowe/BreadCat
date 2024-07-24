@@ -28,6 +28,10 @@ public class RoomGenerator : MonoBehaviour
                 for (int z = 0; z < _roomSize.z; z++)
                 {
                     Debug.Log(_availablePieces[x, y, z].Count + ": at coordinate " + x + ", " + y + ", " + z);
+                    foreach(GameObject piece in _availablePieces[x, y, z])
+                    {
+                        //Debug.Log(piece.name);
+                    }
                 }
             }
         }
