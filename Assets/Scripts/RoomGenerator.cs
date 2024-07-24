@@ -41,6 +41,29 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    private void RemoveAllEntrances()
+    {
+
+        for (int x = 0; x < _roomSize.x; x++)
+        {
+            for (int y = 0; y < _roomSize.y; y++)
+            {
+                for (int z = 0; z < _roomSize.z; z++)
+                {
+                    List<GameObject> piecesToRemove = new List<GameObject>();
+                    foreach (GameObject piece in _availablePieces[x, y, z])
+                    {
+                        if (piece.GetComponent<LevelPiece>().IsEntrance) piecesToRemove.Add(piece);
+                    }
+                    foreach (GameObject piece in piecesToRemove)
+                    {
+                        _availablePieces[x, y, z].Remove(piece);
+                    }
+                }
+            }
+        }
+    }
+
     public void GenerateRoom()
     {
         Vector3Int startCell = FindStartCell("North");
@@ -48,6 +71,7 @@ public class RoomGenerator : MonoBehaviour
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
         SpawnRoomPiece(startCell);
         UpdateAvailableRoomPieces(startCell);
+        RemoveAllEntrances();
 
         /* Used to see available piece count for each cell
         for (int x = 0; x < _roomSize.x; x++)
