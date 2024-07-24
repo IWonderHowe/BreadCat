@@ -20,16 +20,31 @@ public class RoomGenerator : MonoBehaviour
 
         FillAvailableRoomPieces();
 
-        
+        for (int x = 0; x < _roomSize.x; x++)
+        {
+            for (int y = 0; y < _roomSize.y; y++)
+            {
+                for (int z = 0; z < _roomSize.z; z++)
+                {
+                    //Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z);
+                    foreach (GameObject piece in _availablePieces[x, y, z])
+                    {
+                        //Debug.Log(piece.name);
+                    }
+                }
+            }
+        }
     }
 
     public void GenerateRoom()
     {
         Vector3Int startCell = FindStartCell("North");
+        Vector3Int nextCell = new Vector3Int();
         //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
         SpawnRoomPiece(startCell);
         UpdateAvailableRoomPieces(startCell);
 
+        /* Used to see available piece count for each cell
         for (int x = 0; x < _roomSize.x; x++)
         {
             for (int y = 0; y < _roomSize.y; y++)
@@ -39,9 +54,17 @@ public class RoomGenerator : MonoBehaviour
                     Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z); 
                 }
             }
+        }*/
+
+        nextCell = GetNextCell(startCell);
+
+        for (int x = 0; x < _roomLayout.Length; x++)
+        {
+            SpawnRoomPiece(nextCell);
+            UpdateAvailableRoomPieces(nextCell);
+            nextCell = GetNextCell(nextCell);
         }
 
-        GetNextCell(startCell);
     }
 
     private void FillAvailableRoomPieces()
@@ -64,7 +87,7 @@ public class RoomGenerator : MonoBehaviour
                         if (z == _roomSize.z - 1 && roomPiece.GetComponent<LevelPiece>().NorthOpen) continue;
 
                         // omit room entrance or exit piece if the current gridspot is not on a room edge
-                        if (x == 0 || x == _roomSize.x - 1 || z == 0 || z == _roomSize.z - 1)
+                        if (x != 0 && x != _roomSize.x - 1 && z != 0 && z != _roomSize.z - 1)
                         {
                             if (roomPiece.GetComponent<LevelPiece>().IsEntrance || roomPiece.GetComponent<LevelPiece>().IsExit) continue;
                         }
@@ -281,7 +304,6 @@ public class RoomGenerator : MonoBehaviour
         
     }
 
-
     private Vector3Int GetNextCell(Vector3Int lastCell)
     {
         // have a place to store the information for the next cell
@@ -289,17 +311,18 @@ public class RoomGenerator : MonoBehaviour
 
         // make a list of available cells adjecent to the previous cell
         List<Vector3Int> availableCells = new List<Vector3Int>();
-
-
-        
         availableCells = GetAdjacentEmptyCells(lastCell);
 
-
+        // find which adjacent cell has the least amount of possible room pieces
+        int lowestPieces = 100;
         foreach(Vector3Int cell in availableCells)
         {
-            Debug.Log(cell.x + " " + cell.y + " " + cell.z);
+            if (_availablePieces[cell.x, cell.y, cell.z].Count < lowestPieces && 0 < _availablePieces[cell.x,cell.y,cell.z].Count)
+            {
+                nextCell = cell;
+                lowestPieces = _availablePieces[cell.x, cell.y, cell.z].Count;
+            }
         }
-
 
         return nextCell;
     }
@@ -318,14 +341,14 @@ public class RoomGenerator : MonoBehaviour
         {
             case "North":
                 startCell.x = Random.Range(0, (int)_roomSize.x);
-                startCell.z = 4;
+                startCell.z = _roomSize.z - 1;
                 break;
             case "South":
                 startCell.x = Random.Range(0, (int)_roomSize.x);
                 startCell.z = 0;
                 break;
             case "East":
-                startCell.x = 4;
+                startCell.x = _roomSize.x - 1;
                 startCell.z = Random.Range(0, (int)_roomSize.z);
                 break;
             case "West":
@@ -336,7 +359,16 @@ public class RoomGenerator : MonoBehaviour
                 Debug.Log("Whoops");
                 break;
         }
+
+        // remove any available pieces for the cell that arent an entrance
+        _availablePieces[startCell.x, startCell.y, startCell.z].RemoveAll(i => !i.GetComponent<LevelPiece>().IsEntrance);
+
         return startCell;
+    }
+
+    private bool FindIsEntrance(GameObject levelPiece)
+    {
+        return levelPiece.GetComponent<LevelPiece>().IsEntrance;
     }
 
 
@@ -346,10 +378,21 @@ public class RoomGenerator : MonoBehaviour
         // we add 1 to our z coordinate because thats the way it goes
         Vector3 spawnLocation = new Vector3(cell.x * 3, cell.y * 3, (cell.z + 1) * 3);
 
+        // get a random piece to place based on available pieces
+        int randomIndex = Random.Range(0, _availablePieces[cell.x, cell.y, cell.z].Count - 1);
+        Debug.Log(randomIndex);
+        Debug.Log(cell);
+        Debug.Log(_availablePieces[cell.x, cell.y, cell.z].Count);
+
+        GameObject pieceToPlace = _availablePieces[cell.x, cell.y, cell.z][randomIndex];
+
         // add the cell into the room layout array
-        _roomLayout[cell.x, cell.y, cell.z] = _roomPieces.Find(i => i.GetComponent<LevelPiece>().IsEntrance);
+        _roomLayout[cell.x, cell.y, cell.z] = pieceToPlace;
 
         // add the cell to the world
         Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
+
+        // clear all potential pieces for the cell so it can't be generated again
+        _availablePieces[cell.x, cell.y, cell.z].Clear();
     }
 }
