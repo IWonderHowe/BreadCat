@@ -174,6 +174,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+
     private List<Vector3Int> GetAdjacentEmptyCells(Vector3Int originCell)
     {
         // create a new list to store the coordinates of the adjacent cells to return
@@ -198,6 +199,56 @@ public class RoomGenerator : MonoBehaviour
         if (originCell.z + 1 < _roomLayout.GetLength(2) && _roomLayout[originCell.x, originCell.y, originCell.z + 1] == null)
         {
             adjacentCells.Add(new Vector3Int(originCell.x, originCell.y, originCell.z + 1));
+        }
+
+        // check cells above and below starter cell
+        if (originCell.y - 1 >= 0 && _roomLayout[originCell.x, originCell.y - 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y - 1, originCell.z));
+        }
+        if (originCell.y + 1 < _roomLayout.GetLength(1) && _roomLayout[originCell.x, originCell.y + 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y + 1, originCell.z));
+        }
+
+        // check cells below the cells ahead and behind of the starter cell
+        if (originCell.y - 1 >= 0 && originCell.z - 1 >= 0 && _roomLayout[originCell.x, originCell.y - 1, originCell.z - 1] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y - 1, originCell.z - 1));
+        }
+        if (originCell.y - 1 >= 0 && originCell.z + 1 < _roomLayout.GetLength(2) && _roomLayout[originCell.x, originCell.y - 1, originCell.z + 1] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y - 1, originCell.z + 1));
+        }
+
+        // check the cells above the cells ahead and behind of the starter cell
+        if (originCell.y + 1 < _roomLayout.GetLength(1) && originCell.z - 1 >= 0 && _roomLayout[originCell.x, originCell.y + 1, originCell.z - 1] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y + 1, originCell.z - 1));
+        }
+        if (originCell.y + 1 < _roomLayout.GetLength(1) && originCell.z + 1 < _roomLayout.GetLength(2) && _roomLayout[originCell.x, originCell.y + 1, originCell.z + 1] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x, originCell.y + 1, originCell.z + 1));
+        }
+
+        // check cells below the cells left and right of the starter cell
+        if (originCell.y - 1 >= 0 && originCell.x - 1 >= 0 && _roomLayout[originCell.x - 1, originCell.y - 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x - 1, originCell.y - 1, originCell.z));
+        }
+        if (originCell.y - 1 >= 0 && originCell.x + 1 < _roomLayout.GetLength(0) && _roomLayout[originCell.x + 1, originCell.y - 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x + 1, originCell.y - 1, originCell.z));
+        }
+
+        // check the cells above the cells left and right of the starter cell
+        if (originCell.y + 1 < _roomLayout.GetLength(1) && originCell.x - 1 >= 0 && _roomLayout[originCell.x - 1, originCell.y + 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x - 1, originCell.y + 1, originCell.z));
+        }
+        if (originCell.y + 1 < _roomLayout.GetLength(1) && originCell.x + 1 < _roomLayout.GetLength(0) && _roomLayout[originCell.x + 1, originCell.y + 1, originCell.z] == null)
+        {
+            adjacentCells.Add(new Vector3Int(originCell.x + 1, originCell.y + 1, originCell.z));
         }
 
         return adjacentCells;
@@ -395,6 +446,7 @@ public class RoomGenerator : MonoBehaviour
             // only count unique pieces in the amount of potential pieces to offset weighting
             int uniquePieces = _availablePieces[cell.x, cell.y, cell.z].GroupBy(cellPiece => cellPiece.name).Count();
 
+            // if this cell has the lowest pieces, set it to be the next cell
             if (uniquePieces < lowestPieces && 0 < uniquePieces)
             {
                 nextCell = cell;
@@ -405,16 +457,12 @@ public class RoomGenerator : MonoBehaviour
         return nextCell;
     }
 
-    /// <summary>
-    /// THIS NEEDS UPDATING, RUDIMENTARY CURRENTLY
-    /// </summary>
-    /// <param name="startWall"></param>
-    /// <returns></returns>
     private Vector3Int FindStartCell(string startWall)
     {
         Vector3Int startCell = new Vector3Int();
         startCell.y = 0;
 
+        
         switch (startWall)
         {
             case "North":
