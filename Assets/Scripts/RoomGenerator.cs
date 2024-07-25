@@ -5,12 +5,20 @@ using System.Net.Http.Headers;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
 public class RoomGenerator : MonoBehaviour
 {
+    // properties to define the generation
     [SerializeField] private List<GameObject> _roomPieces = new List<GameObject>();
     [SerializeField] private Vector3Int _roomSize;
+
+    // a 3D array to store chosen peices for each filled cell
     private GameObject[,,] _roomLayout;
+
+    // a 3d array for lists of potential pieces for each empty cell
     private List<GameObject>[,,] _availablePieces;
+
+    // a list of all cell coordinates that are empty
     private List<Vector3Int> _openCells;
 
     private void Start()
@@ -24,8 +32,13 @@ public class RoomGenerator : MonoBehaviour
         // set space for the available room pieces in vacant spaces
         _availablePieces = new List<GameObject>[_roomSize.x, _roomSize.y, _roomSize.z];
 
+        // populate the lists for open cells and potential room pieces
         FillAvailableRoomPieces();
+        FillOpenCellsList();
+    }
 
+    private void FillOpenCellsList()
+    {
         for (int x = 0; x < _roomSize.x; x++)
         {
             for (int y = 0; y < _roomSize.y; y++)
@@ -33,11 +46,6 @@ public class RoomGenerator : MonoBehaviour
                 for (int z = 0; z < _roomSize.z; z++)
                 {
                     _openCells.Add(new Vector3Int(x, y, z));
-                    //Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z);
-                    foreach (GameObject piece in _availablePieces[x, y, z])
-                    {
-                        //Debug.Log(piece.name);
-                    }
                 }
             }
         }
@@ -52,11 +60,16 @@ public class RoomGenerator : MonoBehaviour
             {
                 for (int z = 0; z < _roomSize.z; z++)
                 {
+                    // make a list of pieces to remove
                     List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    // populate that list with all potential entrances in this cell
                     foreach (GameObject piece in _availablePieces[x, y, z])
                     {
                         if (piece.GetComponent<LevelPiece>().IsEntrance) piecesToRemove.Add(piece);
                     }
+
+                    // remove all pieces in that list fromt the potential pieces for this cell
                     foreach (GameObject piece in piecesToRemove)
                     {
                         _availablePieces[x, y, z].Remove(piece);
@@ -66,6 +79,7 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
+    
     private void RemoveAllExits()
     {
 
@@ -75,11 +89,16 @@ public class RoomGenerator : MonoBehaviour
             {
                 for (int z = 0; z < _roomSize.z; z++)
                 {
+                    // make a list of pieces to remove
                     List<GameObject> piecesToRemove = new List<GameObject>();
+
+                    // populate that list with all potential exits in this cell
                     foreach (GameObject piece in _availablePieces[x, y, z])
                     {
                         if (piece.GetComponent<LevelPiece>().IsExit) piecesToRemove.Add(piece);
                     }
+
+                    // remove all pieces in that list fromt the potential pieces for this cell
                     foreach (GameObject piece in piecesToRemove)
                     {
                         _availablePieces[x, y, z].Remove(piece);
@@ -91,29 +110,21 @@ public class RoomGenerator : MonoBehaviour
 
     public void GenerateRoom()
     {
+
+        // determine the cell with the room entrance and instantiate a piece for it
         Vector3Int startCell = FindStartCell("North");
-        Vector3Int nextCell = new Vector3Int();
-        //Debug.Log(roomLayout.GetLength(0) + " " + roomLayout.GetLength(1) + " " + roomLayout.GetLength(2));
         SpawnRoomPiece(startCell);
         UpdateAvailableRoomPieces(startCell);
         RemoveAllEntrances();
+
+        // determine the cell for the roome exit and instantiate a piece for it
         Vector3Int exitCell = FindExitCell("North");
         SpawnRoomPiece(exitCell);
         UpdateAvailableRoomPieces(exitCell);
         RemoveAllExits();
 
-        /* Used to see available piece count for each cell
-        for (int x = 0; x < _roomSize.x; x++)
-        {
-            for (int y = 0; y < _roomSize.y; y++)
-            {
-                for (int z = 0; z < _roomSize.z; z++)
-                {
-                    Debug.Log(_availablePieces[x, y, z].Count + " available for coordinate " + x + y + z); 
-                }
-            }
-        }*/
-
+        // create a space to store the next cell to find the piece for, and find the next piece to generate
+        Vector3Int nextCell = new Vector3Int();
         nextCell = GetNextCell(startCell);
 
         // go through the generation for all remaining cells. -2 to get rid of already placed entrance and exit cells
@@ -123,20 +134,20 @@ public class RoomGenerator : MonoBehaviour
             UpdateAvailableRoomPieces(nextCell);
             nextCell = GetNextCell(nextCell);
         }
-
     }
 
     private void FillAvailableRoomPieces()
     {
-        // fill the available pieces array with all possible pieces
         for (int x = 0; x < _roomSize.x; x++)
         {
             for (int y = 0; y < _roomSize.y; y++)
             {
                 for (int z = 0; z < _roomSize.z; z++)
                 {
+                    // instantiate a list for the given grid coordinates
                     _availablePieces[x, y, z] = new List<GameObject>();
-                    // add each room piece to possible pieces
+                    
+                    // add each room piece to possible pieces for the given grid coordinates
                     foreach (GameObject roomPiece in _roomPieces)
                     {
                         // omit room piece being added if it is on the edge of the room layout and the outside wall doesnt exist
@@ -151,6 +162,8 @@ public class RoomGenerator : MonoBehaviour
                             if (roomPiece.GetComponent<LevelPiece>().IsEntrance || roomPiece.GetComponent<LevelPiece>().IsExit) continue;
                         }
 
+                        // add each piece to the list a number of times equal to that pieces weight
+                        // MAYBE WILL BITE ME IN THE ASS //////////////////////////////////////////
                         for(int i = 0; i < roomPiece.GetComponent<LevelPiece>().Weight; i++)
                         {
                             _availablePieces[x, y, z].Add(roomPiece);
@@ -163,6 +176,7 @@ public class RoomGenerator : MonoBehaviour
 
     private List<Vector3Int> GetAdjacentEmptyCells(Vector3Int originCell)
     {
+        // create a new list to store the coordinates of the adjacent cells to return
         List<Vector3Int> adjacentCells = new List<Vector3Int>();
 
         // check all adjacjent cells to the origin cell, if they exist and are empty add them to the list of the available cells
@@ -175,6 +189,7 @@ public class RoomGenerator : MonoBehaviour
         {
             adjacentCells.Add(new Vector3Int(originCell.x + 1, originCell.y, originCell.z));
         }
+
         // check cells ahead of and behind the starter cell
         if (originCell.z - 1 >= 0 && _roomLayout[originCell.x, originCell.y, originCell.z - 1] == null)
         {
@@ -373,15 +388,17 @@ public class RoomGenerator : MonoBehaviour
 
         // find which adjacent cell has the least amount of possible room pieces
         int lowestPieces = _roomPieces.Count;
-
-
-
+        
+        // find one of the cells in the grid that has the least amount of potential pieces
         foreach(Vector3Int cell in _openCells)
         {
-            if (_availablePieces[cell.x, cell.y, cell.z].Count < lowestPieces && 0 < _availablePieces[cell.x,cell.y,cell.z].Count)
+            // only count unique pieces in the amount of potential pieces to offset weighting
+            int uniquePieces = _availablePieces[cell.x, cell.y, cell.z].GroupBy(cellPiece => cellPiece.name).Count();
+
+            if (uniquePieces < lowestPieces && 0 < uniquePieces)
             {
                 nextCell = cell;
-                lowestPieces = _availablePieces[cell.x, cell.y, cell.z].Count;
+                lowestPieces = uniquePieces;
             }
         }
 
