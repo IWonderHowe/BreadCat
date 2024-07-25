@@ -6816,6 +6816,8 @@ MonoBehaviour:
   - {fileID: 8980578850998398486, guid: 9c3d824423624874c83be70f4479a5de, type: 3}
   - {fileID: 6999701033000743765, guid: 4fd0870a88611774fb28b52cf1713fb0, type: 3}
   - {fileID: 2720902126008494361, guid: d91222a40f30f034abc13a6df0a22fed, type: 3}
+  - {fileID: 1521991641320121566, guid: a5dc5e938115f5540a63087f20ef02a7, type: 3}
+  - {fileID: 8587332051402510918, guid: 507da69dec724fe4f99298a1501898a3, type: 3}
   _roomSize: {x: 10, y: 1, z: 10}
 --- !u!4 &1274296900
 Transform:
