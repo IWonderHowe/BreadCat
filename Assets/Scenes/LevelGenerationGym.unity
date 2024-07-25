@@ -6807,7 +6807,7 @@ MonoBehaviour:
   - {fileID: 1569662517705829972, guid: 696930b6163b6054497ec129479fa898, type: 3}
   - {fileID: 4104212394335394462, guid: 6d411e477e357a343b58c8400eaa2de1, type: 3}
   - {fileID: 4238165862858925317, guid: a25d513c3b6be72458b245a76d7dcc7c, type: 3}
-  _roomSize: {x: 5, y: 1, z: 5}
+  _roomSize: {x: 10, y: 1, z: 10}
 --- !u!4 &1274296900
 Transform:
   m_ObjectHideFlags: 0

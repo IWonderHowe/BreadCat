@@ -706,3 +706,4 @@ MonoBehaviour:
   BelowOpen: 0
   IsEntrance: 1
   IsExit: 0
+  Weight: 1

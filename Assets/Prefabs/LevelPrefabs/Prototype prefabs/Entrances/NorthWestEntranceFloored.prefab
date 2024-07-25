@@ -707,6 +707,7 @@ MonoBehaviour:
   BelowOpen: 0
   IsEntrance: 1
   IsExit: 0
+  Weight: 1
 --- !u!1 &8494688024718527052
 GameObject:
   m_ObjectHideFlags: 0

@@ -151,7 +151,10 @@ public class RoomGenerator : MonoBehaviour
                             if (roomPiece.GetComponent<LevelPiece>().IsEntrance || roomPiece.GetComponent<LevelPiece>().IsExit) continue;
                         }
 
-                        _availablePieces[x, y, z].Add(roomPiece);
+                        for(int i = 0; i < roomPiece.GetComponent<LevelPiece>().Weight; i++)
+                        {
+                            _availablePieces[x, y, z].Add(roomPiece);
+                        }
                     }
                 }
             }
@@ -491,9 +494,6 @@ public class RoomGenerator : MonoBehaviour
 
         // get a random piece to place based on available pieces
         int randomIndex = Random.Range(0, _availablePieces[cell.x, cell.y, cell.z].Count - 1);
-        Debug.Log(randomIndex);
-        Debug.Log(cell);
-        Debug.Log(_availablePieces[cell.x, cell.y, cell.z].Count);
 
         GameObject pieceToPlace = _availablePieces[cell.x, cell.y, cell.z][randomIndex];
 
