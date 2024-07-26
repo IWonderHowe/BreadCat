@@ -46,15 +46,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 20
   _range: 100
-  _reloadSpeed: 1.5
-  _rateOfFire: 2
+  _baseRateOfFire: 1
+  _critMultiplier: 2
   _magSize: 6
+  _currentAmmo: 0
+  _reloadSpeed: 1.5
   _usesProjectile: 0
   _projectile: {fileID: 0}
-  _bulletSpread: 0
-  _critMultiplier: 2
+  _player: {fileID: 0}
+  _baseAccuracy: 0.98
+  _minAccuracySpread: 1
+  _effectiveAccuracy: 0
   _isShooting: 0
-  _isReloading: 0
   _canShoot: 0
-  _currentAmmo: 0
+  _hasPerfectAccuracy: 0
   _trailRenderer: {fileID: 0}
+  _gunMag: {fileID: 0}
+  _throwablesOrigin: {x: 0, y: 0, z: 0}
+  _throwForce: 0
+  _onHitObject: {fileID: 0}
+  _onShotObject: {fileID: 0}
+  _onReloadObject: {fileID: 0}

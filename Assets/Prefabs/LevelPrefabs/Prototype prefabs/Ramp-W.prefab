@@ -370,3 +370,5 @@ MonoBehaviour:
   BelowOpen: 0
   IsEntrance: 0
   IsExit: 0
+  CenterOccupied: 1
+  Weight: 1

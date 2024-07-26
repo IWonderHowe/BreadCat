@@ -729,6 +729,7 @@ MonoBehaviour:
   BelowOpen: 0
   IsEntrance: 0
   IsExit: 0
+  CenterOccupied: 1
   Weight: 10
 --- !u!1001 &6132306815619880890
 PrefabInstance:

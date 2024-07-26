@@ -51,7 +51,7 @@ MonoBehaviour:
   SouthOpen: 1
   EastOpen: 1
   WestOpen: 1
-  AboveOpen: 1
+  AboveOpen: 0
   BelowOpen: 0
   IsEntrance: 0
   IsExit: 0
