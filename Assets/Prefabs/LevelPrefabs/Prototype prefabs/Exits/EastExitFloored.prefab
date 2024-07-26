@@ -661,6 +661,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5344663644637376357}
   - component: {fileID: 3606783421764512451}
+  - component: {fileID: 6728318125257001589}
+  - component: {fileID: -2487736496293999769}
   m_Layer: 0
   m_Name: EastExitFloored
   m_TagString: Untagged
@@ -707,3 +709,36 @@ MonoBehaviour:
   IsEntrance: 0
   IsExit: 1
   Weight: 1
+--- !u!65 &6728318125257001589
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5638596808267553584}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 1.5, y: 1.5, z: -1.5}
+--- !u!114 &-2487736496293999769
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5638596808267553584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732482a009b68746bfd007a2045c87a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

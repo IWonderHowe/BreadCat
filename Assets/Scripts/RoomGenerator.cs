@@ -26,6 +26,8 @@ public class RoomGenerator : MonoBehaviour
     public List<GameObject> _enemiesInLevel = new List<GameObject>();
     [SerializeField] private GameObject _enemyPrefab;
 
+    [SerializeField] private LevelExit _levelExit;
+
     private void Start()
     {
         // instantiate the open cells list
@@ -572,10 +574,19 @@ public class RoomGenerator : MonoBehaviour
         // add the cell into the room layout array
         _roomLayout[cell.x, cell.y, cell.z] = pieceToPlace;
 
-        // add the cell to the world
-        Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
 
-        if (Random.Range(0, 3) == 2) _enemiesInLevel.Add(Instantiate(_enemyPrefab, new Vector3(spawnLocation.x + 1.5f, spawnLocation.y + 0.75f, spawnLocation.z - 1.5f), Quaternion.identity));
+        // add the cell to the world
+        GameObject placedPiece = Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
+        if (placedPiece.GetComponent<LevelPiece>().IsExit) _levelExit = placedPiece.GetComponent<LevelExit>();
+
+
+        if (Random.Range(0, 10) == 2 || _enemiesInLevel.Count == 0)
+        {
+            GameObject spawnedEnemy = Instantiate(_enemyPrefab, new Vector3(spawnLocation.x + 1.5f, spawnLocation.y + 0.75f, spawnLocation.z - 1.5f), Quaternion.identity);
+            spawnedEnemy.GetComponent<Enemy>().SetRoom(this);
+            _enemiesInLevel.Add(spawnedEnemy);
+
+        }
 
         // clear all potential pieces for the cell so it can't be generated again
         _availablePieces[cell.x, cell.y, cell.z].Clear();
@@ -584,4 +595,12 @@ public class RoomGenerator : MonoBehaviour
         // clear cell out of open cells list
         _openCells.Remove(cell);
     }
+
+    public void RemoveFromEnemyList(GameObject enemy)
+    {
+        _enemiesInLevel.Remove(enemy);
+        if (_enemiesInLevel.Count == 0) _levelExit.SetExitActive();
+    }
+
+
 }

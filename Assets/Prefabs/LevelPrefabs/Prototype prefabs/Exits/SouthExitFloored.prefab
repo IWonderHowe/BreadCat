@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3053119100259647909}
   - component: {fileID: 1336165120564147282}
+  - component: {fileID: 3106501238725032329}
+  - component: {fileID: -6407760425837430832}
   m_Layer: 0
   m_Name: SouthExitFloored
   m_TagString: Untagged
@@ -56,6 +58,39 @@ MonoBehaviour:
   IsEntrance: 0
   IsExit: 1
   Weight: 1
+--- !u!65 &3106501238725032329
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569662517705829972}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3, y: 3, z: 3}
+  m_Center: {x: 1.5, y: 1.5, z: -1.5}
+--- !u!114 &-6407760425837430832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569662517705829972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c732482a009b68746bfd007a2045c87a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5316604993127863838
 GameObject:
   m_ObjectHideFlags: 0

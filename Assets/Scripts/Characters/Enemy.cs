@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private Slider _healthSlider;
     [SerializeField] private Slider _dotSlider;
+    private RoomGenerator _roomResided;
 
 
 
@@ -48,7 +49,7 @@ public class Enemy : MonoBehaviour
     {
         // take damage if the enemy isn't dead. Set the enemy to dead if the current health drops to 0
         if (!_isDead) _currentHealth -= damage;
-        if (_currentHealth <= 0) _isDead = true;
+        if (_currentHealth <= 0) OnDeath();
     }
 
     private void UpdateHealthBar()
@@ -95,6 +96,19 @@ public class Enemy : MonoBehaviour
         if (dotRemaining > _currentHealth) dotRemaining = _currentHealth;
 
         return dotRemaining;
+    }
+
+    private void OnDeath()
+    {
+        _roomResided.RemoveFromEnemyList(this.gameObject);
+        _isDead = true;
+
+        Destroy(this.gameObject);
+    }
+
+    public void SetRoom(RoomGenerator roomResided)
+    {
+        _roomResided = roomResided;
     }
 
 }
