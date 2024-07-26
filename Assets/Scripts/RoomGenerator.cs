@@ -1,10 +1,13 @@
+using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using Unity.VisualScripting;
+using UnityEditor.ProBuilder;
 using UnityEngine;
-
+using UnityEngine.ProBuilder;
+using UnityEngine.ProBuilder.MeshOperations;
 
 public class RoomGenerator : MonoBehaviour
 {
@@ -25,8 +28,13 @@ public class RoomGenerator : MonoBehaviour
 
     public List<GameObject> _enemiesInLevel = new List<GameObject>();
     [SerializeField] private GameObject _enemyPrefab;
-
     [SerializeField] private LevelExit _levelExit;
+
+    [SerializeField] List<ProBuilderMesh> _roomMeshes = new List<ProBuilderMesh>();
+    private ProBuilderMesh _totalRoomMesh;
+    [SerializeField] private List<ProBuilderMesh> _combindedMeshes;
+
+
 
     private void Start()
     {
@@ -42,6 +50,7 @@ public class RoomGenerator : MonoBehaviour
         // populate the lists for open cells and potential room pieces
         FillAvailableRoomPieces();
         FillOpenCellsList();
+
     }
 
     private void FillOpenCellsList()
@@ -143,6 +152,19 @@ public class RoomGenerator : MonoBehaviour
         }
 
         Instantiate(_playerSpawn, new Vector3(startCell.x * 3, startCell.y * 3, startCell.z * 3), Quaternion.identity);
+
+        _roomMeshes.Add(_totalRoomMesh);
+        _combindedMeshes = CombineMeshes.Combine(_roomMeshes, _totalRoomMesh);
+        _roomMeshes.Remove(_totalRoomMesh);
+        foreach(ProBuilderMesh mesh in _combindedMeshes)
+        {
+            _roomMeshes.Remove(mesh);
+        }
+        foreach(ProBuilderMesh mesh in _roomMeshes)
+        {
+            Destroy(mesh.gameObject);
+        }
+        
     }
 
     private void FillAvailableRoomPieces()
@@ -597,6 +619,15 @@ public class RoomGenerator : MonoBehaviour
 
         // clear cell out of open cells list
         _openCells.Remove(cell);
+
+        // add mesh to all meshes
+        ProBuilderMesh[] thisPieceMeshes = placedPiece.GetComponentsInChildren<ProBuilderMesh>();
+        for(int i = 0; i < thisPieceMeshes.Length; i++)
+        {
+            if (thisPieceMeshes[i].name != "Floor") continue;
+            if (_totalRoomMesh == null) _totalRoomMesh = thisPieceMeshes[i];
+            _roomMeshes.Add(thisPieceMeshes[i]);
+        }
     }
 
     public void RemoveFromEnemyList(GameObject enemy)
