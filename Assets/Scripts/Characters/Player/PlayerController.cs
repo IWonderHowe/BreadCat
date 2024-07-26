@@ -29,6 +29,8 @@ public class PlayerController : MonoBehaviour
     private CharacterAbility _ability1;
     private CharacterAbility _ability2;
 
+    private PlayerInput _playerInput;
+
 
 
     private void Awake()
@@ -46,6 +48,12 @@ public class PlayerController : MonoBehaviour
 
         // lock the cursor to the game screen
         Cursor.lockState = _cursorMode;
+        
+        // get the player input
+        _playerInput  = GetComponent<PlayerInput>();
+
+        // set the main camera to be the player FPS camera
+        _playerInput.camera = Camera.main;
     }
 
     // adjust moveinput variable based in input
