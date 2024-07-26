@@ -6842,8 +6842,10 @@ MonoBehaviour:
   - {fileID: 1569662517705829972, guid: 696930b6163b6054497ec129479fa898, type: 3}
   - {fileID: 4104212394335394462, guid: 6d411e477e357a343b58c8400eaa2de1, type: 3}
   - {fileID: 4238165862858925317, guid: a25d513c3b6be72458b245a76d7dcc7c, type: 3}
-  _roomSize: {x: 7, y: 1, z: 3}
+  _roomSize: {x: 15, y: 1, z: 15}
   _playerSpawn: {fileID: 525589510012746698, guid: 0be7f09b0a9957f4cbe68cfd9c0cb397, type: 3}
+  _enemiesInLevel: []
+  _enemyPrefab: {fileID: 1384127060668224527, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
 --- !u!4 &1274296900
 Transform:
   m_ObjectHideFlags: 0

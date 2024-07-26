@@ -23,6 +23,9 @@ public class RoomGenerator : MonoBehaviour
 
     [SerializeField] private PlayerSpawn _playerSpawn;
 
+    public List<GameObject> _enemiesInLevel = new List<GameObject>();
+    [SerializeField] private GameObject _enemyPrefab;
+
     private void Start()
     {
         // instantiate the open cells list
@@ -571,6 +574,8 @@ public class RoomGenerator : MonoBehaviour
 
         // add the cell to the world
         Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
+
+        if (Random.Range(0, 3) == 2) _enemiesInLevel.Add(Instantiate(_enemyPrefab, new Vector3(spawnLocation.x + 1.5f, spawnLocation.y + 0.75f, spawnLocation.z - 1.5f), Quaternion.identity));
 
         // clear all potential pieces for the cell so it can't be generated again
         _availablePieces[cell.x, cell.y, cell.z].Clear();
