@@ -8,6 +8,6 @@ public class PlayerSpawn : MonoBehaviour
 
     private void Awake()
     {
-        Instantiate(_playerContainer);
+        Instantiate(_playerContainer, this.transform);
     }
 }

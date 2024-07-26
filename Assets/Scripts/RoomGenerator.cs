@@ -21,6 +21,8 @@ public class RoomGenerator : MonoBehaviour
     // a list of all cell coordinates that are empty
     private List<Vector3Int> _openCells;
 
+    [SerializeField] private PlayerSpawn _playerSpawn;
+
     private void Start()
     {
         // instantiate the open cells list
@@ -134,6 +136,8 @@ public class RoomGenerator : MonoBehaviour
             UpdateAvailableRoomPieces(nextCell);
             nextCell = GetNextCell(nextCell);
         }
+
+        Instantiate(_playerSpawn, new Vector3(startCell.x * 3, startCell.y * 3, startCell.z * 3), Quaternion.identity);
     }
 
     private void FillAvailableRoomPieces()
