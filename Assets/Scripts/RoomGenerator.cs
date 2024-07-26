@@ -21,6 +21,11 @@ public class RoomGenerator : MonoBehaviour
     // a list of all cell coordinates that are empty
     private List<Vector3Int> _openCells;
 
+    [SerializeField] private PlayerSpawn _playerSpawn;
+
+    public List<GameObject> _enemiesInLevel = new List<GameObject>();
+    [SerializeField] private GameObject _enemyPrefab;
+
     private void Start()
     {
         // instantiate the open cells list
@@ -134,6 +139,8 @@ public class RoomGenerator : MonoBehaviour
             UpdateAvailableRoomPieces(nextCell);
             nextCell = GetNextCell(nextCell);
         }
+
+        Instantiate(_playerSpawn, new Vector3(startCell.x * 3, startCell.y * 3, startCell.z * 3), Quaternion.identity);
     }
 
     private void FillAvailableRoomPieces()
@@ -567,6 +574,8 @@ public class RoomGenerator : MonoBehaviour
 
         // add the cell to the world
         Instantiate(_roomLayout[cell.x, cell.y, cell.z], spawnLocation, Quaternion.identity);
+
+        if (Random.Range(0, 3) == 2) _enemiesInLevel.Add(Instantiate(_enemyPrefab, new Vector3(spawnLocation.x + 1.5f, spawnLocation.y + 0.75f, spawnLocation.z - 1.5f), Quaternion.identity));
 
         // clear all potential pieces for the cell so it can't be generated again
         _availablePieces[cell.x, cell.y, cell.z].Clear();
