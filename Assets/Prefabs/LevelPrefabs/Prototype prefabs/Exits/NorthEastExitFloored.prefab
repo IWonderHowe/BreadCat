@@ -709,6 +709,7 @@ MonoBehaviour:
   BelowOpen: 0
   IsEntrance: 0
   IsExit: 1
+  CenterOccupied: 0
   Weight: 1
 --- !u!65 &8166803440557220468
 BoxCollider:
@@ -743,6 +744,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c732482a009b68746bfd007a2045c87a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6316749739123998422, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
+        m_TargetAssemblyTypeName: UpgradeManager, Assembly-CSharp
+        m_MethodName: StartPlayerUpgrade
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5959786960267037586
 GameObject:
   m_ObjectHideFlags: 0

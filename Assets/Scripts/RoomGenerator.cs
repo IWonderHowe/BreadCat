@@ -604,7 +604,7 @@ public class RoomGenerator : MonoBehaviour
 
         if (Random.Range(0, 10) == 2 || _enemiesInLevel.Count == 0)
         {
-            if (!placedPiece.GetComponent<LevelPiece>().CenterOccupied && !placedPiece.GetComponent<LevelPiece>().IsEntrance)
+            if (!placedPiece.GetComponent<LevelPiece>().CenterOccupied && !placedPiece.GetComponent<LevelPiece>().IsEntrance && !placedPiece.GetComponent<LevelPiece>().IsExit)
             {
                 GameObject spawnedEnemy = Instantiate(_enemyPrefab, new Vector3(spawnLocation.x + 1.5f, spawnLocation.y + 0.75f, spawnLocation.z - 1.5f), Quaternion.identity);
                 spawnedEnemy.GetComponent<Enemy>().SetRoom(this);

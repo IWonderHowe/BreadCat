@@ -5,17 +5,17 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
+    // health variables
     [SerializeField] private float _maxPlayerHealth = 150f;
-    [SerializeField][Range(0, 1)] private float _playerArmorDamageReduction = 0.5f;
-    [SerializeField][Range(0, 1)] private float _armorDamageReductionToHealthRatio = 0.5f;
-
     [SerializeField] private float _currentPlayerHealth = 0f;
-    [SerializeField] private float _currentPlayerArmor;
-
     public float MaxHealth => _maxPlayerHealth;
     public float CurrentHealth => _currentPlayerHealth;
-    public float ArmoredHealth => _currentPlayerArmor * _playerArmorDamageReduction;
 
+    // armor variables
+    [SerializeField][Range(0, 1)] private float _playerArmorDamageReduction = 0.5f;
+    [SerializeField][Range(0, 1)] private float _armorDamageReductionToHealthRatio = 0.5f;
+    [SerializeField] private float _currentPlayerArmor;
+    public float ArmoredHealth => _currentPlayerArmor * _playerArmorDamageReduction;
 
     // Start is called before the first frame update
     void Awake()
