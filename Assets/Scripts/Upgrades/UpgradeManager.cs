@@ -23,6 +23,9 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Button _upgrade2;
     [SerializeField] private Button _upgrade3;
 
+    // a space to store the upgrade UI
+    private static Canvas _upgradeUI;
+
     // properties to hold the currently aquired upgrades
     public OnBulletHitUpgrade CurrentOnBulletHitUpgrade => _currentOnBulletHitUpgrade;
     public OnBulletCritUpgrade CurrentOnBulletCritUpgrade => _currentOnCritUpgrade;
@@ -44,14 +47,15 @@ public class UpgradeManager : MonoBehaviour
         _upgrade1.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[0]);
         _upgrade2.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[1]);
         _upgrade3.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[2]);
+
+        // get the cavas with the buttons and deactivate it until necessary
+        _upgradeUI = GetComponentInChildren<Canvas>();
+        _upgradeUI.enabled = false;
     }
 
-    public void ReloadScene()
+    public void ShowUpgrades()
     {
-        Scene sceneToLoad = SceneManager.GetActiveScene();
-
-        SceneManager.LoadScene(sceneToLoad.name);
-
+        
     }
 
     private void FillUpgradeLists()
@@ -66,6 +70,8 @@ public class UpgradeManager : MonoBehaviour
     public static void StartPlayerUpgrade()
     {
         Debug.Log("PlayerHasBeenUpgraded");
+        _upgradeUI.enabled = true;
+        Cursor.lockState = CursorLockMode.Confined;
 
     }
 
@@ -79,6 +85,8 @@ public class UpgradeManager : MonoBehaviour
             else if (upgrade.GetType() == typeof(ChaosOnBulletCrit)) _currentOnBulletHitUpgrade = (ChaosOnBulletCrit)upgrade;
         }
 
+        Cursor.lockState = CursorLockMode.Locked;
+        _upgradeUI.enabled = false;
     }
 
 }

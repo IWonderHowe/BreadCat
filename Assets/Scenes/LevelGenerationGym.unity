@@ -4482,7 +4482,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &876924881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13958,6 +13958,10 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2990688403969348049, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
       propertyPath: m_Name
+      value: UpgradeManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990688403969348049, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
+      propertyPath: m_TagString
       value: UpgradeManager
       objectReference: {fileID: 0}
     - target: {fileID: 4544568728986381023, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
