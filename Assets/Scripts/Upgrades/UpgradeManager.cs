@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 //using UnityEditor.SearchService;
@@ -12,7 +13,7 @@ public class UpgradeManager : MonoBehaviour
     private List<OnBulletHitUpgrade> _onBulletHitUpgrades = new List<OnBulletHitUpgrade>();
     private List<OnBulletCritUpgrade> _onBulletCritUpgrades = new List<OnBulletCritUpgrade>();
 
-    private OnBulletHitUpgrade _currentOnBulletHitUpgrade;
+    private static OnBulletHitUpgrade _currentOnBulletHitUpgrade;
     private GameObject _currentOnCritUpgrade;
 
     private UnityEvent _getUpgrade;
@@ -64,12 +65,19 @@ public class UpgradeManager : MonoBehaviour
     {
         Debug.Log("PlayerHasBeenUpgraded");
 
-
     }
 
-    public void AquireOnBulletHitUpgrade(OnBulletHitUpgrade upgrade)
+    public void AquireUpgrade(Upgrade upgrade)
     {
-        _currentOnBulletHitUpgrade = upgrade;
+        Type upgradeType = upgrade.GetType();
+        if(_currentOnBulletHitUpgrade == null)
+        {
+            if (upgrade.GetType() == typeof(DoTOnBulletHit)) _currentOnBulletHitUpgrade = (DoTOnBulletHit)upgrade;
+            else if (upgrade.GetType() == typeof(ArmorOnBulletHit)) _currentOnBulletHitUpgrade = (ArmorOnBulletHit)upgrade;
+            else if (upgrade.GetType() == typeof(ChaosOnBulletCrit)) _currentOnBulletHitUpgrade = (ChaosOnBulletCrit)upgrade;
+            Debug.Log(_currentOnBulletHitUpgrade.ToString());
+        }
+
     }
 
 }
