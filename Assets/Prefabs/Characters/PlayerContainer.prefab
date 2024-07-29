@@ -581,7 +581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_RecenterTarget: 0
   m_VerticalAxis:
-    Value: 0
+    Value: 1.274807
     m_SpeedMode: 1
     m_MaxSpeed: 0.05
     m_AccelTime: 0.05
@@ -605,7 +605,7 @@ MonoBehaviour:
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_HorizontalAxis:
-    Value: 0
+    Value: 0.45539856
     m_SpeedMode: 1
     m_MaxSpeed: 0.05
     m_AccelTime: 0.05
@@ -726,9 +726,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxPlayerHealth: 100
+  _currentPlayerHealth: 0
   _playerArmorDamageReduction: 0.5
   _armorDamageReductionToHealthRatio: 0.5
-  _currentPlayerHealth: 0
   _currentPlayerArmor: 0
 --- !u!136 &8042112414013093260
 CapsuleCollider:
@@ -985,7 +985,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerIndex: -1
-  AutoEnableInputs: 1
+  AutoEnableInputs: 0
   XYAxis: {fileID: 570821522212503073, guid: 88c3018e160e75b4e9bb64466a8acba2, type: 3}
   ZAxis: {fileID: 0}
 --- !u!1 &5828197248020984384

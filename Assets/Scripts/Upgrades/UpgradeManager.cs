@@ -72,7 +72,7 @@ public class UpgradeManager : MonoBehaviour
         Debug.Log("PlayerHasBeenUpgraded");
         _upgradeUI.enabled = true;
         Cursor.lockState = CursorLockMode.Confined;
-
+        PlayerController.SetPlayerInputActive(false);
     }
 
     public void AquireUpgrade(Upgrade upgrade)
@@ -87,6 +87,7 @@ public class UpgradeManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         _upgradeUI.enabled = false;
+        PlayerController.SetPlayerInputActive(true);
     }
 
 }

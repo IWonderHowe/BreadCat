@@ -29,7 +29,7 @@ public class PlayerController : MonoBehaviour
     private CharacterAbility _ability1;
     private CharacterAbility _ability2;
 
-    private PlayerInput _playerInput;
+    private static PlayerInput _playerInput;
 
 
 
@@ -120,6 +120,11 @@ public class PlayerController : MonoBehaviour
     {
         if (Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
         else Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    public static void SetPlayerInputActive(bool isActive)
+    {
+        _playerInput.enabled = isActive;
     }
 
     private void Update()
