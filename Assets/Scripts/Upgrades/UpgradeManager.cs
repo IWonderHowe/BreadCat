@@ -24,13 +24,13 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Button _upgrade3;
 
     // a space to store the upgrade UI
-    private static Canvas _upgradeUI;
+    [SerializeField] private static Canvas _upgradeUI;
 
     // properties to hold the currently aquired upgrades
     public OnBulletHitUpgrade CurrentOnBulletHitUpgrade => _currentOnBulletHitUpgrade;
     public OnBulletCritUpgrade CurrentOnBulletCritUpgrade => _currentOnCritUpgrade;
 
-    private void Awake()
+    private void Start()
     {
         // make sure there is only ever one upgrade manager
         GameObject[] objectManagers = GameObject.FindGameObjectsWithTag("UpgradeManager");
@@ -48,9 +48,9 @@ public class UpgradeManager : MonoBehaviour
         _upgrade2.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[1]);
         _upgrade3.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[2]);
 
-        // get the cavas with the buttons and deactivate it until necessary
-        _upgradeUI = GetComponentInChildren<Canvas>();
         _upgradeUI.enabled = false;
+
+        Cursor.lockState = CursorLockMode.Confined;
     }
 
     public void ShowUpgrades()
@@ -84,10 +84,15 @@ public class UpgradeManager : MonoBehaviour
             else if (upgrade.GetType() == typeof(ArmorOnBulletHit)) _currentOnBulletHitUpgrade = (ArmorOnBulletHit)upgrade;
             else if (upgrade.GetType() == typeof(ChaosOnBulletCrit)) _currentOnBulletHitUpgrade = (ChaosOnBulletCrit)upgrade;
         }
-
+        
         Cursor.lockState = CursorLockMode.Locked;
         _upgradeUI.enabled = false;
         PlayerController.SetPlayerInputActive(true);
+
+        Scene scene = SceneManager.GetActiveScene();
+        Debug.Log(scene.name);
+        SceneManager.LoadScene(scene.name);
+        
     }
 
 }
