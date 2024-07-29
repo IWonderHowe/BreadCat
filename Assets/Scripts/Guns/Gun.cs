@@ -84,6 +84,7 @@ public class Gun : MonoBehaviour
     public bool OnShotActive => _onShotActive;
     public bool OnReloadActive => _onReloadActive;
 
+    private UpgradeManager _upgradeManager;
 
 
 
@@ -112,12 +113,23 @@ public class Gun : MonoBehaviour
         // fill gun to max ammo and allow the player to be able to shoot
         _currentAmmo = _magSize;
         _canShoot = true;
+
+        // get upgrades from upgrade manager
+        _upgradeManager = FindObjectOfType<UpgradeManager>();
+        if (_upgradeManager.CurrentOnBulletHitUpgrade != null)
+        {
+            _onHitUpgrade = _upgradeManager.CurrentOnBulletHitUpgrade;
+            _onHitActive = true;
+        }
+
+        Debug.Log(_onHitUpgrade.ToString());
+
     }
 
     private void Update()
     {
         // DEBUGGING
-        Debug.Log(ChaosStack.Stacks);
+        //Debug.Log(ChaosStack.Stacks);
 
 
 

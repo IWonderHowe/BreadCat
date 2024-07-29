@@ -13,8 +13,8 @@ public class UpgradeManager : MonoBehaviour
     private List<OnBulletHitUpgrade> _onBulletHitUpgrades = new List<OnBulletHitUpgrade>();
     private List<OnBulletCritUpgrade> _onBulletCritUpgrades = new List<OnBulletCritUpgrade>();
 
-    private static OnBulletHitUpgrade _currentOnBulletHitUpgrade;
-    private GameObject _currentOnCritUpgrade;
+    private OnBulletHitUpgrade _currentOnBulletHitUpgrade;
+    private OnBulletCritUpgrade _currentOnCritUpgrade;
 
     private UnityEvent _getUpgrade;
 
@@ -24,6 +24,8 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Button _upgrade3;
 
     // properties to hold the currently aquired upgrades
+    public OnBulletHitUpgrade CurrentOnBulletHitUpgrade => _currentOnBulletHitUpgrade;
+    public OnBulletCritUpgrade CurrentOnBulletCritUpgrade => _currentOnCritUpgrade;
 
     private void Awake()
     {
@@ -75,7 +77,6 @@ public class UpgradeManager : MonoBehaviour
             if (upgrade.GetType() == typeof(DoTOnBulletHit)) _currentOnBulletHitUpgrade = (DoTOnBulletHit)upgrade;
             else if (upgrade.GetType() == typeof(ArmorOnBulletHit)) _currentOnBulletHitUpgrade = (ArmorOnBulletHit)upgrade;
             else if (upgrade.GetType() == typeof(ChaosOnBulletCrit)) _currentOnBulletHitUpgrade = (ChaosOnBulletCrit)upgrade;
-            Debug.Log(_currentOnBulletHitUpgrade.ToString());
         }
 
     }
