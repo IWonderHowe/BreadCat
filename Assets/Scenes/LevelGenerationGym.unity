@@ -5805,7 +5805,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1065728624
 Transform:
   m_ObjectHideFlags: 0
@@ -6843,7 +6843,9 @@ MonoBehaviour:
   - {fileID: 4104212394335394462, guid: 6d411e477e357a343b58c8400eaa2de1, type: 3}
   - {fileID: 4238165862858925317, guid: a25d513c3b6be72458b245a76d7dcc7c, type: 3}
   - {fileID: 6481843923315866482, guid: 39130c5a9864d324aaf46e9ca38fab2f, type: 3}
-  _roomSize: {x: 4, y: 1, z: 4}
+  - {fileID: 197841736405237408, guid: c9871b62b2d7db84185b6536269bc86f, type: 3}
+  _roomSize: {x: 6, y: 1, z: 6}
+  _courtyard: {x: 2, y: 2}
   _playerSpawn: {fileID: 525589510012746698, guid: 0be7f09b0a9957f4cbe68cfd9c0cb397, type: 3}
   _enemiesInLevel: []
   _enemyPrefab: {fileID: 1384127060668224527, guid: 7b0de4d8279c67b49abc83455188cbe9, type: 3}
@@ -13959,6 +13961,10 @@ PrefabInstance:
     - target: {fileID: 2990688403969348049, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
       propertyPath: m_Name
       value: UpgradeManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 2990688403969348049, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2990688403969348049, guid: b815a18f0183db04ab66fad576f1bc55, type: 3}
       propertyPath: m_TagString

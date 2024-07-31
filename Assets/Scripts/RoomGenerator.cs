@@ -14,9 +14,13 @@ public class RoomGenerator : MonoBehaviour
     // properties to define the generation
     [SerializeField] private List<GameObject> _roomPieces = new List<GameObject>();
     [SerializeField] private Vector3Int _roomSize;
+    [SerializeField] private Vector2Int _courtyard;
 
     // a 3D array to store chosen peices for each filled cell
     private GameObject[,,] _roomLayout;
+
+    // a 2D array to show which cells are part of the courtyard
+    private bool[,] _courtGrid;
 
     // a 3d array for lists of potential pieces for each empty cell
     private List<GameObject>[,,] _availablePieces;
@@ -46,10 +50,13 @@ public class RoomGenerator : MonoBehaviour
 
         // set space for the available room pieces in vacant spaces
         _availablePieces = new List<GameObject>[_roomSize.x, _roomSize.y, _roomSize.z];
+        
+        PopluateCourtyardGrid();
 
         // populate the lists for open cells and potential room pieces
         FillAvailableRoomPieces();
         FillOpenCellsList();
+
 
     }
 
@@ -95,7 +102,6 @@ public class RoomGenerator : MonoBehaviour
         }
     }
 
-    
     private void RemoveAllExits()
     {
 
@@ -175,12 +181,17 @@ public class RoomGenerator : MonoBehaviour
             {
                 for (int z = 0; z < _roomSize.z; z++)
                 {
+                    bool isPartOfCourtyard = _courtGrid[x, z];
+
                     // instantiate a list for the given grid coordinates
                     _availablePieces[x, y, z] = new List<GameObject>();
-                    
+
                     // add each room piece to possible pieces for the given grid coordinates
                     foreach (GameObject roomPiece in _roomPieces)
                     {
+                        // dont add level piece to potential pieces if it is part of cthe courtyard and not open on all sides except ground
+                        if (isPartOfCourtyard && !CheckIfOpenOnAllSides(roomPiece.GetComponent<LevelPiece>())) continue;
+
                         // omit room piece being added if it is on the edge of the room layout and the outside wall doesnt exist
                         if (x == 0 && roomPiece.GetComponent<LevelPiece>().WestOpen) continue;
                         if (x == _roomSize.x - 1 && roomPiece.GetComponent<LevelPiece>().EastOpen) continue;
@@ -200,6 +211,47 @@ public class RoomGenerator : MonoBehaviour
                             _availablePieces[x, y, z].Add(roomPiece);
                         }
                     }
+                    //Debug.Log(_availablePieces[x, y, z].Count + "pieces available at cell " + x + y + z + " is it part of the courtyard? " + isPartOfCourtyard);
+                }
+            }
+        }
+    }
+
+    // Courtyard methods
+    private bool CheckIfOpenOnAllSides(LevelPiece piece)
+    {
+        if (piece.WestOpen && piece.EastOpen && piece.NorthOpen && piece.SouthOpen && piece.AboveOpen) return true;
+        //if (!piece.IsCourtyard) return false;
+        return false;
+    }
+
+    private void PopluateCourtyardGrid()
+    {
+        // make a new grid to determine which cells are part of the courtyard
+        _courtGrid = new bool[_roomSize.x, _roomSize.z];
+
+        // set the start of the courtyard coordinates: note courtyard will always be centered
+        int courtXStart = (_roomSize.x - _courtyard.x) / 2;
+        int courtZStart = (_roomSize.z - _courtyard.y) / 2;
+        
+        // set the end coordinates of the courtyard
+        int courtXEnd = courtXStart + _courtyard.x;
+        int courtZEnd = courtZStart + _courtyard.y;
+
+        // go through the whole grid
+        for(int i = 0; i < _roomSize.x; i++)
+        {
+            for(int j = 0; j < _roomSize.z; j++)
+            {
+                // if this coordinate is within the courtyard bounds, set the gridspace to be true
+                if (i >= courtXStart && i < courtXEnd && j >= courtZStart && j < courtZEnd)
+                {
+                    _courtGrid[i, j] = true;
+                }
+                // if not, set it to be false
+                else
+                {
+                    _courtGrid[i, j] = false;
                 }
             }
         }

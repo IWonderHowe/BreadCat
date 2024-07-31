@@ -24,7 +24,7 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Button _upgrade3;
 
     // a space to store the upgrade UI
-    [SerializeField] private static Canvas _upgradeUI;
+    [SerializeField] private Canvas _upgradeUI;
 
     // properties to hold the currently aquired upgrades
     public OnBulletHitUpgrade CurrentOnBulletHitUpgrade => _currentOnBulletHitUpgrade;
@@ -48,7 +48,7 @@ public class UpgradeManager : MonoBehaviour
         _upgrade2.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[1]);
         _upgrade3.GetComponent<UpgradeAquisitionButton>().SetUpgrade(_onBulletHitUpgrades[2]);
 
-        _upgradeUI.enabled = false;
+        //_upgradeUI.enabled = false;
 
         Cursor.lockState = CursorLockMode.Confined;
     }
@@ -70,7 +70,7 @@ public class UpgradeManager : MonoBehaviour
     public static void StartPlayerUpgrade()
     {
         Debug.Log("PlayerHasBeenUpgraded");
-        _upgradeUI.enabled = true;
+        //_upgradeUI.enabled = true;
         Cursor.lockState = CursorLockMode.Confined;
         PlayerController.SetPlayerInputActive(false);
     }

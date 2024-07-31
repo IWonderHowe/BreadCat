@@ -14,7 +14,11 @@ public class LevelPiece : MonoBehaviour
     [SerializeField] public bool IsEntrance;
     [SerializeField] public bool IsExit;
     [SerializeField] public bool CenterOccupied;
-
+    
     [SerializeField] public int Weight = 1;
+
+    //properties for debugging
+    [SerializeField] public bool IsCourtyard;
+
 
 }

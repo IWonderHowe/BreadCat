@@ -14,6 +14,7 @@ public class LevelExit : MonoBehaviour
     private void Awake()
     {
         _exitCollider = GetComponent<Collider>();
+        
     }
 
     private void OnTriggerEnter(Collider other)
