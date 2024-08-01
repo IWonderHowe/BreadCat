@@ -116,7 +116,7 @@ public class Gun : MonoBehaviour
 
         // get upgrades from upgrade manager
         _upgradeManager = FindObjectOfType<UpgradeManager>();
-        if (_upgradeManager.CurrentOnBulletHitUpgrade != null)
+        if (_upgradeManager != null && _upgradeManager.CurrentOnBulletHitUpgrade != null)
         {
             _onHitUpgrade = _upgradeManager.CurrentOnBulletHitUpgrade;
             _onHitActive = true;

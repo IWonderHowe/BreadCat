@@ -481,7 +481,7 @@ GameObject:
   - component: {fileID: 2077630572097453504}
   m_Layer: 0
   m_Name: PlayerContainer
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -646,7 +646,7 @@ GameObject:
   - component: {fileID: 2610804042527093676}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -713,6 +713,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1
   _debugVelocity: {x: 0, y: 0, z: 0}
+  _currentSpeed: 0
 --- !u!114 &7689196454681544412
 MonoBehaviour:
   m_ObjectHideFlags: 0

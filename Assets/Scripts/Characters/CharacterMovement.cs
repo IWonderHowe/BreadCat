@@ -1,7 +1,9 @@
 using Palmmedia.ReportGenerator.Core;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.ProBuilder;
 
 
 // Note: Base architecture of this class is reliant on scripts from VFS tutors Scott and Quinn
@@ -47,7 +49,7 @@ public class CharacterMovement : MonoBehaviour
 
     // debug variables
     [SerializeField] private Vector3 _debugVelocity;
-
+    [SerializeField] private double _currentSpeed;
 
     // Start is called before the first frame update
     void Start()
@@ -78,7 +80,7 @@ public class CharacterMovement : MonoBehaviour
         
         // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability
         // acceleration is only added to already established velocity, will not increase magnitude of velocity (magnitude increase needs to come from abilities)
-        if(!IsGrounded || IsUsingMovementAbility)
+        if(IsUsingMovementAbility)
         {
             if(targetVelocity.magnitude < Velocity.magnitude)
             {
@@ -102,6 +104,10 @@ public class CharacterMovement : MonoBehaviour
         _rigidbody.AddForce(acceleration);
 
         _debugVelocity = new Vector3(Velocity.x, 0, Velocity.z);
+
+
+        _currentSpeed = System.Math.Round(_debugVelocity.magnitude, 2);
+
         
 
         // make the character face where the player is aiming
