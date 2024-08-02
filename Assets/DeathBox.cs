@@ -11,6 +11,7 @@ public class DeathBox : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             other.gameObject.transform.position = _respawnPosition;
+            other.gameObject.GetComponentInChildren<GrappleAbility>().StopMovementAbility();
         }
     }
 }

@@ -20,15 +20,21 @@ public class GrappleAbility : CharacterAbility
     [SerializeField] private float _grappleRange = 100f;
     [SerializeField] private LayerMask _grappleableLayers;
     [SerializeField] private float _grappleRetractDistanceBuffer = 1f;
+    [SerializeField] private float _minimumBreakAngle = 30f;
+    [SerializeField] private float _breakAngleTolerance = 5f;
 
+    private float _distanceToGrapplePoint = 0;
+    [SerializeField] private float _initialGrappleAngle;
+    [SerializeField] private float _currentGrappleAngle;
     private bool _isGrappling = false;
     public bool IsGrappling => _isGrappling;
 
     private bool _isRetracting = false;
     public bool IsRetracting => _isRetracting;
 
-    private float _distanceToGrapplePoint = 0;
     private float _retractionTime => (_distanceToGrapplePoint - _grappleRetractDistanceBuffer) / _retractionSpeed;
+
+
 
     private SpringJoint _grappleJoint;
     private LineRenderer _grappleRenderer;
@@ -46,7 +52,25 @@ public class GrappleAbility : CharacterAbility
     // Update is called once per frame
     void Update()
     {
+        if (_grappleJoint != null)
+        {
+            //Debug.Log("grappled");
+            _currentGrappleAngle = Vector3.Angle(Vector3.up, _grappleJoint.connectedAnchor - _playerObject.transform.position);
+        }
+        //Debug.Log("Initial angle: " + _initialGrappleAngle + "             Current angle: " + _currentGrappleAngle);
+        
+        // stop grappling if the player goes beyond their able grapple angle 
+        if (IsGrappling && _currentGrappleAngle > _initialGrappleAngle)
+        {
+            StopMovementAbility();
+        }
 
+        if(IsGrappling && !IsRetracting && _distanceToGrapplePoint > (_grapplePosition - _playerObject.transform.position).magnitude)
+        {
+            Debug.Log(_grappleJoint.maxDistance + "            " + _grappleJoint.minDistance);
+            _distanceToGrapplePoint = ((_grapplePosition - _playerObject.transform.position).magnitude);
+            SetGrappleJointBounds();
+        }
     }
 
     public override void UseAbility()
@@ -85,7 +109,7 @@ public class GrappleAbility : CharacterAbility
 
         else if(_isGrappling && _isRetracting)
         {
-            CancelMovementAbility();
+            StopMovementAbility();
         }
     }
 
@@ -116,8 +140,11 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint = _playerObject.AddComponent<SpringJoint>();
         _grappleJoint.autoConfigureConnectedAnchor = false;
         _grappleJoint.connectedAnchor = grapplePoint;
-        _grappleJoint.spring = 100f;
+        _grappleJoint.spring = 1f;
         _grappleJoint.tolerance = 0.5f;
+
+        // set the initial angle of the grapple to define the grapple limits
+        _initialGrappleAngle = Vector3.Angle(Vector3.up, grapplePoint - _playerObject.transform.position);
 
         SetGrappleJointBounds();
         SetRenderGrapple(true);
@@ -147,17 +174,17 @@ public class GrappleAbility : CharacterAbility
             yield return null;
         }
 
-        CancelMovementAbility();
+        StopMovementAbility();
     }
 
     private void SetGrappleJointBounds()
     {
         // set the max and mind distance of the grapple hook based on the players distance to the grapple point
         _grappleJoint.maxDistance = _distanceToGrapplePoint;
-        _grappleJoint.minDistance = _distanceToGrapplePoint * 0.99f;
+        _grappleJoint.minDistance = _distanceToGrapplePoint * 0.05f;
     }
 
-    public override void CancelMovementAbility()
+    public override void StopMovementAbility()
     {
         if (!_isGrappling) return;
         _isRetracting = false;

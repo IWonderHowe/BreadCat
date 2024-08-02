@@ -42,7 +42,7 @@ public class CharacterAbility : MonoBehaviour
         _abilityOnCooldown = false;
     }
 
-    public virtual void CancelMovementAbility()
+    public virtual void StopMovementAbility()
     {
 
     }
