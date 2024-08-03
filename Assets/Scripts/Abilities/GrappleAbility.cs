@@ -58,7 +58,6 @@ public class GrappleAbility : CharacterAbility
             _currentGrappleAngle = Vector3.Angle(Vector3.up, _grappleJoint.connectedAnchor - _playerObject.transform.position);
         }
         //Debug.Log("Initial angle: " + _initialGrappleAngle + "             Current angle: " + _currentGrappleAngle);
-        
         // stop grappling if the player goes beyond their able grapple angle 
         if (IsGrappling && _currentGrappleAngle > _initialGrappleAngle)
         {
@@ -68,7 +67,7 @@ public class GrappleAbility : CharacterAbility
         if(IsGrappling && !IsRetracting && _distanceToGrapplePoint > (_grapplePosition - _playerObject.transform.position).magnitude)
         {
             Debug.Log(_grappleJoint.maxDistance + "            " + _grappleJoint.minDistance);
-            _distanceToGrapplePoint = ((_grapplePosition - _playerObject.transform.position).magnitude);
+            _distanceToGrapplePoint = ((_grapplePosition - _playerObject.transform.position).magnitude * 0.95f);
             SetGrappleJointBounds();
         }
     }
@@ -140,8 +139,8 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint = _playerObject.AddComponent<SpringJoint>();
         _grappleJoint.autoConfigureConnectedAnchor = false;
         _grappleJoint.connectedAnchor = grapplePoint;
-        _grappleJoint.spring = 1f;
-        _grappleJoint.tolerance = 0.5f;
+        _grappleJoint.spring = 100f;
+        _grappleJoint.tolerance = 0.05f;
 
         // set the initial angle of the grapple to define the grapple limits
         _initialGrappleAngle = Vector3.Angle(Vector3.up, grapplePoint - _playerObject.transform.position);
