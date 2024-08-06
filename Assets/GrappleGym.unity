@@ -6733,7 +6733,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalRotation.x
@@ -6741,7 +6741,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalRotation.z
@@ -6753,7 +6753,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 2077630572097453504, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -6770,6 +6770,10 @@ PrefabInstance:
     - target: {fileID: 5262095235001844955, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5429850716434828419, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _sprintSpeedMultiplier
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6814549703366877200, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_AnchorMax.x
@@ -10285,7 +10289,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098487423}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.011124473, y: 0.003973846, z: -0.000044210024, w: 0.99993026}
+  m_LocalRotation: {x: 0.007834929, y: 0.7098674, z: -0.0078974515, w: 0.70424753}
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -10308,7 +10312,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 0
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 2
+  m_UpdateMethod: 1
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1

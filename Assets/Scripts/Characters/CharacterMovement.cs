@@ -7,7 +7,7 @@ using UnityEngine.ProBuilder;
 
 
 // Note: Base architecture of this class is reliant on scripts from VFS tutors Scott and Quinn
-public class CharacterMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 { 
     // make some information pbulic
     public Vector3 MoveInput { get; private set; }
@@ -16,11 +16,11 @@ public class CharacterMovement : MonoBehaviour
     public bool IsFudgeGrounded => Time.timeSinceLevelLoad < _lastGroundedTime + _groundedFudgeTime;
     public bool IsGrounded { get; private set; }
 
-    [SerializeField] private float _speedLimit = 20f;
+    [SerializeField] protected float _speedLimit = 20f;
 
     // ground movement
-    [SerializeField] private float _baseSpeed = 5f;
-    [SerializeField] private float _acceleration = 10f;
+    [SerializeField] protected float _baseSpeed = 5f;
+    [SerializeField] protected float _acceleration = 10f;
     [SerializeField] private float _sprintSpeedMultiplier = 2f;
 
     // jump variables
@@ -50,6 +50,7 @@ public class CharacterMovement : MonoBehaviour
     // debug variables
     [SerializeField] private Vector3 _debugVelocity;
     [SerializeField] private double _currentSpeed;
+    public double CurrentSpeed => _currentSpeed;
 
     // Start is called before the first frame update
     void Start()

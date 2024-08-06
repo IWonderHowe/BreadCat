@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     public Gun CurrentGun => _currentGun;
 
     // get the players movement script and establish a space to store the move input (for normalization)
-    private CharacterMovement _movement;
+    private PlayerMovement _movement;
     private Vector2 _moveInput;
 
     // space for the abilities to be equipped/stored
@@ -41,7 +41,7 @@ public class PlayerController : MonoBehaviour
         _gun2 = _gunObject2.GetComponent<Gun>();
         _ability1 = _ability1Object.GetComponent<CharacterAbility>();
         _ability2 = _ability2Object.GetComponent<CharacterAbility>();
-        _movement = GetComponent<CharacterMovement>();
+        _movement = GetComponent<PlayerMovement>();
         
         // Set the current gun to the first gun
         _currentGun = _gun1.GetComponent<Gun>();

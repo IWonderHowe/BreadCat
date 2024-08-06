@@ -9,7 +9,7 @@ public class GrappleAbility : CharacterAbility
 {
     // variables to get/set info about player
     [SerializeField] private GameObject _playerObject;
-    private CharacterMovement _playerMovement;
+    private PlayerMovement _playerMovement;
 
     // grappling hook variables
     private Vector3[] _grappleInfo = new Vector3[2];
@@ -44,7 +44,7 @@ public class GrappleAbility : CharacterAbility
     protected override void Start()
     {
         base.Start();
-        _playerMovement = _playerObject.GetComponent<CharacterMovement>();
+        _playerMovement = _playerObject.GetComponent<PlayerMovement>();
         _grappleRenderer = GetComponent<LineRenderer>();
         _grappleRenderer.enabled = false;
     }
@@ -62,11 +62,11 @@ public class GrappleAbility : CharacterAbility
         if (IsGrappling && _currentGrappleAngle > _initialGrappleAngle)
         {
             StopMovementAbility();
+            Debug.Log("Exit velocity: " + _playerObject.GetComponent<PlayerMovement>().CurrentSpeed);
         }
 
         if(IsGrappling && !IsRetracting && _distanceToGrapplePoint > (_grapplePosition - _playerObject.transform.position).magnitude)
         {
-            Debug.Log(_grappleJoint.maxDistance + "            " + _grappleJoint.minDistance);
             _distanceToGrapplePoint = ((_grapplePosition - _playerObject.transform.position).magnitude * 0.95f);
             SetGrappleJointBounds();
         }
