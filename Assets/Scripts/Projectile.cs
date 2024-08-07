@@ -5,6 +5,9 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     private Collider _projectileCollider;
+    private GameObject _parentObject;
+
+    private List<Collider> _collidersToIgnore = new List<Collider>();
 
     private void Awake()
     {
@@ -27,5 +30,15 @@ public class Projectile : MonoBehaviour
             Debug.Log("hit player");
         }
         Destroy(this.gameObject);
+    }
+
+    public void SetParentObject(GameObject parent) 
+    {
+        _parentObject = parent;
+        foreach (Collider parentCollider in GetComponentsInChildren<Collider>())
+        {
+            _collidersToIgnore.Add(parentCollider);
+            Physics.IgnoreCollision(_projectileCollider, parentCollider);
+        }
     }
 }

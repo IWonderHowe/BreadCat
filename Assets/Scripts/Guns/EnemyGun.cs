@@ -35,6 +35,7 @@ public class EnemyGun : MonoBehaviour
     {
         // set the projectile to be where the its origin is
         GameObject shotProjectile = Instantiate(_projectile);
+        shotProjectile.GetComponent<Projectile>().SetParentObject(this.GetComponentInParent<Enemy>().gameObject);
         _projectile.transform.position = _projectileOrigin.transform.position;
 
         // find the direction of the player target to get the normalized vector between the enemy and player
