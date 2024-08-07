@@ -13,7 +13,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private float _timeBetweenShots;
     [SerializeField] private EnemyGun _gun;
     [SerializeField] private float _sightRange;
-    [SerializeField] private LayerMask _environmentLayer;
+    [SerializeField] private LayerMask _raycastIgnoreLayer;
     [SerializeField] private GameObject _bulletOrigin;
 
     [SerializeField] private GameObject _target;
@@ -65,7 +65,7 @@ public class EnemyCombat : MonoBehaviour
 
         
         // if the object hit by the raycast is the player, return true
-        if(Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out hit, _sightRange))
+        if(Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out hit, _sightRange, _raycastIgnoreLayer))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
@@ -79,7 +79,7 @@ public class EnemyCombat : MonoBehaviour
     private void OnDrawGizmos()
     {
         Vector3 directionOfPlayer = _target.transform.position - _bulletOrigin.transform.position;
-        if (Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out RaycastHit hit,  _sightRange, _environmentLayer.value))
+        if (Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out RaycastHit hit,  _sightRange, _raycastIgnoreLayer))
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawLine(hit.point, _bulletOrigin.transform.position);
