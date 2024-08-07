@@ -47,7 +47,7 @@ MonoBehaviour:
   _damage: 5
   _range: 100
   _baseRateOfFire: 1
-  _usesProjectile: 0
+  _usesProjectile: 1
   _projectile: {fileID: 0}
   _projectileOrigin: {fileID: 0}
   _projectileSpeed: 0
