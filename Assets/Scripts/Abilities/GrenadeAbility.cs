@@ -36,7 +36,8 @@ public class GrenadeAbility : CharacterAbility
         base.UseAbility();
 
         // Spawn a grenade
-        GameObject thrownGrenade = Instantiate(_grenadePrefab, _throwOrigin);
+        GameObject thrownGrenade = Instantiate(_grenadePrefab);
+        thrownGrenade.transform.position = _throwOrigin.position;   
 
         // apply ability to grenade if applicable
         if(_hasHitEnemyUpgrade) thrownGrenade.GetComponent<Grenade>().AddAbilityOnEnemyHit(_abilityHitEnemyUpgrade);
