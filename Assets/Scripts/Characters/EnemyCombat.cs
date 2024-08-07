@@ -15,8 +15,9 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private float _sightRange;
     [SerializeField] private LayerMask _raycastIgnoreLayer;
     [SerializeField] private GameObject _bulletOrigin;
-
     [SerializeField] private GameObject _target;
+
+    [SerializeField] private bool _canMove = false;
 
     private Coroutine _currentCoroutine;
 
@@ -26,12 +27,17 @@ public class EnemyCombat : MonoBehaviour
     {
         _currentCoroutine = StartCoroutine(IdleState());
 
+
+
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        Debug.Log(CheckPlayerLoS());
+        //Debug.Log(CheckPlayerLoS());
         _hasPlayerLoS = CheckPlayerLoS();
+
+        // look at the player if in LoS
+        if (_hasPlayerLoS) SetEnemyFacing(transform.position - _target.transform.position);
     }
 
 
@@ -50,10 +56,26 @@ public class EnemyCombat : MonoBehaviour
         Debug.Log("Started aggro state");
         while (_hasPlayerLoS)
         {
+            // if the enemy can move, do movement stuffs
+            if (_canMove) ;
+
+            SetEnemyFacing(transform.position - _target.transform.position);
+
+
             _gun.Shoot(_target);
             yield return new WaitForSeconds(_timeBetweenShots);
         }
         StartCoroutine(IdleState());
+    }
+
+    private void SetEnemyFacing(Vector3 direction)
+    {
+        Vector3 lookRotation = Quaternion.LookRotation(_target.transform.position - transform.position).eulerAngles;
+        lookRotation.x = 0;
+        lookRotation.z = 0;
+
+        transform.rotation = Quaternion.Euler(lookRotation);
+
     }
 
     private bool CheckPlayerLoS()
