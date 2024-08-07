@@ -26,4 +26,9 @@ public  class DoTSpikeOnBulletCrit : OnBulletCritUpgrade
         // apply the damage to the enemy
         enemy.TakeDamage(damageToApply);
     }
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -10,4 +10,9 @@ public class ChaosOnBulletCrit : OnBulletCritUpgrade
         player.GetComponent<PlayerController>().CurrentGun.SetPerfectAccuracy(true);
     }
 
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

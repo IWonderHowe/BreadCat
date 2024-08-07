@@ -21,4 +21,9 @@ public class DoTOnBulletHit : OnBulletHitUpgrade
         enemy.AddDoTStack(bulletDamage * _percentOfBulletDamage,  _totalDoTTime);
     }
 
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

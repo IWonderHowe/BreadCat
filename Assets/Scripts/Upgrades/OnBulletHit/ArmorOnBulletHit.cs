@@ -10,4 +10,9 @@ public class ArmorOnBulletHit : OnBulletHitUpgrade
     {
         player.GetComponent<PlayerCombat>().AddArmor(0.5f * bulletDamage);
     }
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
 }

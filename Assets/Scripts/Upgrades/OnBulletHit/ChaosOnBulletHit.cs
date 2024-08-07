@@ -8,4 +8,17 @@ public class ChaosOnBulletHit : OnBulletHitUpgrade
     {
         ChaosStack.AddStack();
     }
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        List<Upgrade> playerUpgrades = player.GetComponent<PlayerCombat>().AqcuiredUpgrades;
+
+        ChaosOnBulletCrit chaosOnBulletCrit = new ChaosOnBulletCrit();
+
+        if(!playerUpgrades.Contains(chaosOnBulletCrit))
+        {
+            player.GetComponent<PlayerCombat>().AqcuiredUpgrades.Add(chaosOnBulletCrit);
+
+        }
+    }
 }

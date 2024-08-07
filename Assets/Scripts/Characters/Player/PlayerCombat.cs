@@ -16,6 +16,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField][Range(0, 1)] private float _armorDamageReductionToHealthRatio = 0.5f;
     [SerializeField] private float _currentPlayerArmor;
     public float ArmoredHealth => _currentPlayerArmor * _playerArmorDamageReduction;
+    public List<Upgrade> AqcuiredUpgrades = new List<Upgrade>();
 
     // Start is called before the first frame update
     void Awake()
@@ -75,4 +76,6 @@ public class PlayerCombat : MonoBehaviour
         _currentPlayerArmor -= healthRestored / _playerArmorDamageReduction / _armorDamageReductionToHealthRatio;
         _currentPlayerArmor = Mathf.Max(_currentPlayerArmor, 0);
     }
+
+    
 }

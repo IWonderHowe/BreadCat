@@ -16,5 +16,10 @@ public class OnBulletShotDoTRoFIncrease : OnBulletShotUpgrade
     {
         return RoFMultiplier;
     }
-    
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

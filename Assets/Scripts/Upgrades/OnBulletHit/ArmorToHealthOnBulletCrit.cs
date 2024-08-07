@@ -8,4 +8,9 @@ public class ArmorToHealthOnBulletCrit : OnBulletCritUpgrade
     {
         player.GetComponent<PlayerCombat>().ArmorToHealth();
     }
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
 }
