@@ -157,8 +157,6 @@ public class Gun : MonoBehaviour
 
     public void ApplyUpgrade(GameObject upgrade)
     {
-        Debug.Log(upgrade.GetComponent<Upgrade>().GetUpgradeType());
-
         switch (upgrade.GetComponent<Upgrade>().GetUpgradeType())
         {
             case "OnBulletHit":
@@ -173,7 +171,7 @@ public class Gun : MonoBehaviour
                     _onCrit1Object = upgrade;
                     break;
                 }
-
+                
                 _onCrit2Object = upgrade;
                 break;
             
