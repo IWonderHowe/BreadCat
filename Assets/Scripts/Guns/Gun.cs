@@ -179,6 +179,7 @@ public class Gun : MonoBehaviour
                 _onReloadActive = true;
                 _onReloadObject = upgrade;
                 break;
+
             
 
             default:

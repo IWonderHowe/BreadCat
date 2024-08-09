@@ -11,8 +11,9 @@ public class Grenade : MonoBehaviour
     // variable to adjust gizmo visibility
     private bool _grenadeExploded = false;
 
-    private OnAbilityHitEnemyUpgrade _grenadeHitEnemyUpgrade;
-    private bool _hasOnEnemyHitUpgrade = false;
+    //private OnAbilityHitEnemyUpgrade _grenadeHitEnemyUpgrade;
+    private bool _hasUpgrade;
+    private GameObject _upgrade;
 
 
     private void Awake()
@@ -35,18 +36,25 @@ public class Grenade : MonoBehaviour
         _objectsHit = Physics.OverlapSphere(this.transform.position, explosionRadius, damageableLayers);
         foreach(Collider hit in _objectsHit)
         {
+            hit.gameObject.GetComponentInParent<Enemy>().TakeDamage(damage);
             Debug.Log("enemy hit");
             // damage enemy with base damage
-            if (hit.gameObject.CompareTag("Enemy")) hit.gameObject.GetComponentInParent<Enemy>().TakeDamage(damage);
 
             // apply ability upgrade if necessary
-            if (hit.gameObject.CompareTag("Enemy") && _hasOnEnemyHitUpgrade) _grenadeHitEnemyUpgrade.ApplyOnAbilityHit(hit.gameObject.GetComponentInParent<Enemy>(), damage);
+            //if (hit.gameObject.CompareTag("Enemy") && _hasOnEnemyHitUpgrade) _grenadeHitEnemyUpgrade.ApplyOnAbilityHit(hit.gameObject.GetComponentInParent<Enemy>(), damage);
         }
+        if(_hasUpgrade) _upgrade.GetComponent<OnDamageAbilityUpgrade>().InvokeUpgrade(_objectsHit);
 
         // Show gizmo and wait for a second before destroying the grenade
         _grenadeExploded = true;
         yield return new WaitForSeconds(1f);
         Destroy(this.gameObject);
+    }
+
+    public void SetUpgrade(GameObject upgrade)
+    {
+        _hasUpgrade = true;
+        _upgrade = upgrade;
     }
 
     // a method to allow the start of the grenade coroutine from another script
@@ -63,9 +71,10 @@ public class Grenade : MonoBehaviour
     }
 
     // a way to apply abilities to the enemy if applicable
+    /*
     public void AddAbilityOnEnemyHit(OnAbilityHitEnemyUpgrade onEnemyHitUpgrade)
     {
         _grenadeHitEnemyUpgrade = onEnemyHitUpgrade;
         _hasOnEnemyHitUpgrade = true;
-    }
+    }*/
 }

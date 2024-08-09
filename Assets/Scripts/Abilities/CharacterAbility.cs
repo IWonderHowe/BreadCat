@@ -2,21 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterAbility : MonoBehaviour
+public abstract class CharacterAbility : MonoBehaviour
 {
     // variables for ability cooldowns
     [SerializeField] protected float _abilityCooldown = 5f;
     [SerializeField] protected bool _abilityOnCooldown;
 
+    // set space to define the style of ability via keywords
+    abstract public string AbilityBaseMechanic { get; }
+
+
     // ability info
     [SerializeField] protected bool _isMovementAbility;
     public bool IsMovementAbility => _isMovementAbility;
+
+    [SerializeField] protected bool _isThrowableBased;
+    public bool IsThrowableBased => _isThrowableBased;
+
+    [SerializeField] protected bool _isPointBased;
+    public bool IsPointBased => _isPointBased;
+
 
     protected virtual void Start()
     {
         // set the ability to be available
         _abilityOnCooldown = false;
     }
+
+    public abstract void ApplyUpgrade(GameObject upgrade);
 
     public virtual void UseAbility()
     {

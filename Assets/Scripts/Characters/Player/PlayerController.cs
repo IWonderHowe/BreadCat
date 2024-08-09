@@ -25,6 +25,9 @@ public class PlayerController : MonoBehaviour
     // space for the abilities to be equipped/stored
     [SerializeField] GameObject _ability1Object;
     [SerializeField] GameObject _ability2Object;
+
+    public GameObject Ability1Object => _ability1Object;
+    public GameObject Ability2Object => _ability2Object;
     
     private CharacterAbility _ability1;
     private CharacterAbility _ability2;

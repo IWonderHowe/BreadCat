@@ -20,7 +20,7 @@ public class ChaosOnBulletHit : OnBulletHitUpgrade
     public override void ApplyUpgrade(GameObject player)
     {
         // apply this upgrade to the gun
-        player.GetComponent<Gun>().ApplyUpgrade(this.gameObject);
+        player.GetComponent<PlayerController>().CurrentGun.ApplyUpgrade(this.gameObject);
 
     }
 }

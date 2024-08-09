@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class GrenadeAbility : CharacterAbility
 {
+    public override string AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
+    private string _abilityBaseMechanic = "Throwable";
+
     // Explosion variables
     [SerializeField] private float _explosionRadius = 3f;
     [SerializeField] private float _timeToExplosion = 4f;
@@ -18,14 +21,12 @@ public class GrenadeAbility : CharacterAbility
    
     [SerializeField] private GameObject _grenadePrefab;
 
-    private OnAbilityHitEnemyUpgrade _abilityHitEnemyUpgrade;
-    private bool _hasHitEnemyUpgrade = false;
+    private GameObject _abilityUpgrade;
+    private bool _hasUpgrade;
 
     protected override void Start()
     {
         base.Start();
-        _abilityHitEnemyUpgrade = new DoTOnAbilityHit(5f, 0.3f);
-        _hasHitEnemyUpgrade = true;
     }
 
 
@@ -37,13 +38,21 @@ public class GrenadeAbility : CharacterAbility
 
         // Spawn a grenade
         GameObject thrownGrenade = Instantiate(_grenadePrefab);
-        thrownGrenade.transform.position = _throwOrigin.position;   
+        thrownGrenade.transform.position = _throwOrigin.position;
+        if (_hasUpgrade) thrownGrenade.GetComponent<Grenade>().SetUpgrade(_abilityUpgrade);
 
         // apply ability to grenade if applicable
-        if(_hasHitEnemyUpgrade) thrownGrenade.GetComponent<Grenade>().AddAbilityOnEnemyHit(_abilityHitEnemyUpgrade);
+        //if(_hasHitEnemyUpgrade) thrownGrenade.GetComponent<Grenade>().AddAbilityOnEnemyHit(_abilityUpgrade);
 
         // throw the grenade, then start the explosion timer
         thrownGrenade.GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * _throwForce, ForceMode.Impulse);
         thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _damageableLayers);
+    }
+
+    public override void ApplyUpgrade(GameObject upgrade)
+    {
+        // get a reference to the upgrade applied, and set has upgrade to true
+        _abilityUpgrade = upgrade;
+        _hasUpgrade = true;
     }
 }

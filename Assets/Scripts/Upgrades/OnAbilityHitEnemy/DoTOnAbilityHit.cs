@@ -2,10 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DoTOnAbilityHit : OnAbilityHitEnemyUpgrade
+public class DoTOnAbilityHit : OnAbilityUpgrade
 {
+    public override string UpgradeType => throw new System.NotImplementedException();
     private float _totalDoTTime;
     private float _percentOfDamage;
+
+    public override string UpgradeName => throw new System.NotImplementedException();
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
 
     public DoTOnAbilityHit(float totalDoTTime, float percentOfDamage)
     {
@@ -13,8 +21,8 @@ public class DoTOnAbilityHit : OnAbilityHitEnemyUpgrade
         _percentOfDamage = percentOfDamage;
     }
 
-    public override void ApplyOnAbilityHit(Enemy enemy, float damage)
+    /*public override void ApplyOnAbilityHit(Enemy enemy, float damage)
     {
         enemy.AddDoTStack(damage * _percentOfDamage, _totalDoTTime);
-    }
+    }*/
 }

@@ -16,7 +16,7 @@ public class ChaosOnBulletCrit : OnBulletCritUpgrade
 
     public override void ApplyUpgrade(GameObject player)
     {
-        player.GetComponent<Gun>().ApplyUpgrade(this.gameObject);
+        player.GetComponent<PlayerController>().CurrentGun.ApplyUpgrade(this.gameObject);
     }
 
 }

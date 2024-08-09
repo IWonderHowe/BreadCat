@@ -7,6 +7,9 @@ using UnityEngine;
 
 public class GrappleAbility : CharacterAbility
 {
+    public override string AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
+    private string _abilityBaseMechanic = "Point";
+
     // variables to get/set info about player
     [SerializeField] private GameObject _playerObject;
     private PlayerMovement _playerMovement;
@@ -217,4 +220,8 @@ public class GrappleAbility : CharacterAbility
         }
     }
 
+    public override void ApplyUpgrade(GameObject upgrade)
+    {
+        throw new System.NotImplementedException();
+    }
 }

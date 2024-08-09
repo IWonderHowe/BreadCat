@@ -14,6 +14,7 @@ public class UpgradeManager : MonoBehaviour
     private PlayerCombat _playerCombat;
     [SerializeField] private Gun _playerGun;
     [SerializeField] private GameObject _upgradeHolder;
+    [SerializeField] private GameObject _player;
 
     // make a list of all possible upgrades for the player
     private List<OnBulletHitUpgrade> _onBulletHitUpgrades = new List<OnBulletHitUpgrade>();
@@ -79,7 +80,7 @@ public class UpgradeManager : MonoBehaviour
         _upgradeSlots.Add("OnReload");
         _upgradeSlots.Add("OnShot");
         _upgradeSlots.Add("OnKill");
-        _upgradeSlots.Add("Ability1Mod");
+        _upgradeSlots.Add("OnDamageAbility");
         _upgradeSlots.Add("Ability2Mod");
         _upgradeSlots.Add("PatronMod1");
         _upgradeSlots.Add("PatronMod2");
@@ -149,17 +150,13 @@ public class UpgradeManager : MonoBehaviour
         // find the upgrade with this name, add it to current upgrades
         foreach(GameObject upgrade in _availableUpgrades)
         {
-            Debug.Log("Upgrade cycled");
             if (upgrade.GetComponent<Upgrade>().UpgradeName == name)
             {
-                Debug.Log("upgrade added");
                 // add the upgrade to the current upgrades list
                 _currentUpgrades.Add(upgrade);
 
-                // make a new gameobject of with this upgrade script and add it as a child of the current upgrades holder
-                GameObject upgradeObject = upgrade;
-
-                _playerGun.ApplyUpgrade(upgrade);
+                // apply the upgrade
+                upgrade.GetComponent<Upgrade>().ApplyUpgrade(_player);
                 break;
             }
         }
