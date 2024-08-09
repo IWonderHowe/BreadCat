@@ -127,6 +127,16 @@ public class UpgradeManager : MonoBehaviour
         return count;
     }
 
+    private int CritModSlotsLeft()
+    {
+        int count = 0;
+
+        if (_upgradeSlots.Contains("OnEnemyCrit1")) count++;
+        if (_upgradeSlots.Contains("OnEnemyCrit2")) count++;
+
+        return count;
+    }
+
     public void AquireRandomUpgrade()
     {
         int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
@@ -143,9 +153,43 @@ public class UpgradeManager : MonoBehaviour
     public void AquireUpgrade(string upgradeType, string name)
     {
         // remove this slot for available upgrades
-        _upgradeSlots.Remove(upgradeType);
-
-
+        switch (upgradeType)
+        {
+            // remove the on enemy crit order by taking away on enemy crit 1 first
+            case "OnEnemyCrit":
+                if (_upgradeSlots.Contains("OnEnemyCrit1"))
+                {
+                    _upgradeSlots.Remove("OnEnemyCrit1");
+                    break;
+                }
+                _upgradeSlots.Remove("OnEnemyCrit2");
+                break;
+            
+            // remove patron mods in counting order
+            case "PatronMod":
+                if (_upgradeSlots.Contains("PatronMod1"))
+                {
+                    _upgradeSlots.Remove("PatronMod1");
+                    break;
+                }
+                else if (_upgradeSlots.Contains("PatronMod2"))
+                {
+                    _upgradeSlots.Remove("PatronMod2");
+                    break;
+                }
+                else if (_upgradeSlots.Contains("PatronMod3"))
+                {
+                    _upgradeSlots.Remove("PatronMod3");
+                    break;
+                }
+                _upgradeSlots.Remove("PatronMod4");
+                break;
+            
+            // if not a patron or crit upgrade, just remove this upgrade type from the upgrade slots
+            default:
+                _upgradeSlots.Remove(upgradeType);
+                break;
+        }
 
         // find the upgrade with this name, add it to current upgrades
         foreach(GameObject upgrade in _availableUpgrades)
