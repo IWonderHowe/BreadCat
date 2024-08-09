@@ -4,11 +4,15 @@ using System.Runtime.CompilerServices;
 using TMPro.EditorUtilities;
 using UnityEditor.Build;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 
 public class GrappleAbility : CharacterAbility
 {
     public override string AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
     private string _abilityBaseMechanic = "Point";
+
+    private bool _hasUpgrade = false;
+    private GameObject _upgrade;
 
     // variables to get/set info about player
     [SerializeField] private GameObject _playerObject;
@@ -34,6 +38,9 @@ public class GrappleAbility : CharacterAbility
 
     private bool _isRetracting = false;
     public bool IsRetracting => _isRetracting;
+
+    private bool _isGrapplingEnemy = false;
+
 
     private float _retractionTime => (_distanceToGrapplePoint - _grappleRetractDistanceBuffer) / _retractionSpeed;
 
@@ -80,23 +87,34 @@ public class GrappleAbility : CharacterAbility
         base.UseAbility();
 
 
-        if(!_isGrappling && !_isRetracting)
+        if (!_isGrappling && !_isRetracting)
         {
-            // get the grapple info and set the grapple normal and position to the point that was 
-            _grappleInfo = FindGrapplePoint();
-            
-            // if no grapple point is found, exit the method and dont put the ability on cooldown
-            if (_grappleInfo == null)
+            RaycastHit hit;
+
+            // raycast for the grapple, if nothing is hit, take ability off of cooldown and do nothing
+            if (!Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _grappleRange, _grappleableLayers))
             {
                 _abilityOnCooldown = false;
                 return;
             }
 
-            // if a grapple point is found, set the info and set the player to be grappling
-            _grapplePosition = _grappleInfo[0];
-            _grappleNormal = _grappleInfo[1];
+            // if there was a hit, store grapple info
+            _grapplePosition = hit.point;
+            _grappleNormal = hit.normal;
+
+            // if the grapple hits an enemy, set the is grappling enemy to true
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            {
+                _isGrapplingEnemy = true;
+
+                // if an upgrade for this ability is active, invoke it
+                if (_hasUpgrade) { _upgrade.GetComponent<OnNonDamageAbilityUpgrade>().InvokeUpgrade(_playerObject, hit.collider.gameObject); }
+            }
+
+            // get the distance from the player to the grapple position
             _distanceToGrapplePoint = Vector3.Distance(_playerObject.transform.position, _grapplePosition);
 
+            // set is grappling to true
             _isGrappling = true;
             _playerMovement.SetUsingMovementAbility(true);
 
@@ -116,7 +134,7 @@ public class GrappleAbility : CharacterAbility
     }
 
     // get the grapple point via raycast
-    private Vector3[] FindGrapplePoint()
+    private RaycastHit FindGrapplePoint()
     {
         // set variables for raycast info and grapple point. Using an array to store and return both position and normal of the grapple point found
         Vector3[] grappleInfo = new Vector3[2];
@@ -125,13 +143,12 @@ public class GrappleAbility : CharacterAbility
         // if a raycast hits a valid object, set the grapple point to the transform of the hit
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _grappleRange, _grappleableLayers))
         {
-            grappleInfo[0] = hit.point;
-            grappleInfo[1] = hit.normal;
-            return grappleInfo;
+            return hit;
+
         }
 
+        return hit;
         // return found transform, or null if none was found
-        return null;
     }
 
     // connect the player to the grapple point by creating a spring joint joining player and grappled object
@@ -191,9 +208,10 @@ public class GrappleAbility : CharacterAbility
         if (!_isGrappling) return;
         _isRetracting = false;
         _isGrappling = false;
+        _isGrapplingEnemy = false;
         SetRenderGrapple(false);
         _playerMovement.SetUsingMovementAbility(false);
-        Destroy(_grappleJoint);
+        Destroy(_grappleJoint); 
     }
 
     private void SetRenderGrapple(bool isRendering)
@@ -222,6 +240,7 @@ public class GrappleAbility : CharacterAbility
 
     public override void ApplyUpgrade(GameObject upgrade)
     {
-        throw new System.NotImplementedException();
+        _hasUpgrade = true;
+        _upgrade = upgrade;
     }
 }

@@ -81,7 +81,7 @@ public class UpgradeManager : MonoBehaviour
         _upgradeSlots.Add("OnShot");
         _upgradeSlots.Add("OnKill");
         _upgradeSlots.Add("OnDamageAbility");
-        _upgradeSlots.Add("Ability2Mod");
+        _upgradeSlots.Add("OnNonDamageAbility");
         _upgradeSlots.Add("PatronMod1");
         _upgradeSlots.Add("PatronMod2");
         _upgradeSlots.Add("PatronMod3");
