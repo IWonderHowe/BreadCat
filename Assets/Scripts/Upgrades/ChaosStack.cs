@@ -18,14 +18,18 @@ public static class ChaosStack
 
     public static void ResetStacks()
     {
+        Debug.Log("Chaos reset");
         _stacks = 0;
     }
 
-    public static void AddStack()
+    public static void AddStacks(int stacksToAdd)
     {
-        Debug.Log("Chaos incremented");
-        _stacks++;
+        _stacks += stacksToAdd;
+        Debug.Log("Chaos incremented by" + stacksToAdd);
+        Debug.Log("Current Chaos" + ChaosStack.Stacks);
     }
+
+    
 
     public static void SetHasPerfectAccuracy(bool perfectAccuracy)
     {

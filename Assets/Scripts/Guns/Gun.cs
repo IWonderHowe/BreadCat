@@ -174,6 +174,11 @@ public class Gun : MonoBehaviour
                 
                 _onCrit2Object = upgrade;
                 break;
+
+            case "OnReload":
+                _onReloadActive = true;
+                _onReloadObject = upgrade;
+                break;
             
 
             default:
@@ -331,6 +336,9 @@ public class Gun : MonoBehaviour
         }*/
         
 
+
+        if (_onReloadActive) _onReloadObject.GetComponent<OnReloadUpgrade>().ApplyReloadEffect(this.gameObject);
+
         // Set the player to be done reloading, and refill the current ammo to the magazine size, then allow the player to shoot
         _isReloading = false;
         _manualReload = false;
@@ -385,9 +393,6 @@ public class Gun : MonoBehaviour
     public void SetIsManualReloading(bool isManualReloading)
     {
         _manualReload = isManualReloading;
-
-        // reset chaos stacks on a manual reload
-        if (isManualReloading) ChaosStack.ResetStacks();
     }
 
     private void OnDrawGizmos()

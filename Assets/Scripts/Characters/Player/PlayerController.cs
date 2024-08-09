@@ -90,9 +90,6 @@ public class PlayerController : MonoBehaviour
 
         // set the reload to be a manual reload
         _currentGun.SetIsManualReloading(true);
-
-        // reset chaos stacks if applicable
-        if (ChaosStack.Stacks != 0) ChaosStack.ResetStacks();
     }
 
     // attempt to use the primary ability if button pressed

@@ -23,12 +23,12 @@ public class ThrowableMag : MonoBehaviour
         {
             float dotRemaining = 0f;
             dotRemaining = hitObject.GetComponentInParent<Enemy>().GetRemainingDoT();
-            if (dotRemaining != 0) _reloadUpgrade.AddToStacks(dotRemaining);
-            else
-            {
+           //if (dotRemaining != 0) _reloadUpgrade.AddToStacks(dotRemaining);
+           // else
+           // {
                 //hitObject.GetComponentInParent<Enemy>().AddDoTStack(_reloadUpgrade.GetStacks(), 0.5f, 5f);
-                _reloadUpgrade.ResetStacks();
-            }
+           //     _reloadUpgrade.ResetStacks();
+           // }
         }
 
         Destroy(this.gameObject);

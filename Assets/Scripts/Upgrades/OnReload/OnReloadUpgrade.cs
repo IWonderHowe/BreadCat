@@ -2,32 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class OnReloadUpgrade : MonoBehaviour
+public abstract class OnReloadUpgrade : Upgrade
 {
-    protected float _stacks = 0;
+    public override string UpgradeType { get { return _upgradeType; } }
+    private string _upgradeType = "OnReload";
 
-    public virtual void ApplyOnReloadAreaEffect(float radius, Vector3 position)
-    {
+    public abstract void ApplyReloadEffect(GameObject player);
 
-    }
 
-    public virtual void ThrowableMagReloadEffect(Vector3 throwOrigin, float throwForce, Gun gun)
-    {
-
-    }
-
-    public virtual void AddToStacks(float numberToAdd)
-    {
-        _stacks += numberToAdd;
-    }
-
-    public virtual float GetStacks() 
-    {
-        return _stacks;
-    }
-
-    public virtual void ResetStacks()
-    {
-        _stacks = 0;
-    }
 }

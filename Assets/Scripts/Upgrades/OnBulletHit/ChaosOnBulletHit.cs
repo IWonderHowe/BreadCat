@@ -13,7 +13,7 @@ public class ChaosOnBulletHit : OnBulletHitUpgrade
     public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
     {
         // when the player is hit, add a stack of chaos
-        ChaosStack.AddStack();
+        ChaosStack.AddStacks(1);
     }
 
 

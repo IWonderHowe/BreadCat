@@ -5,6 +5,20 @@ using UnityEngine;
 
 public class DoTAreaOnReload : OnReloadUpgrade
 {
+    public override string UpgradeName { get { return _upgradeName; } }
+    private string _upgradeName = "DoTOnReload";
+
+    public override void ApplyUpgrade(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void ApplyReloadEffect(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    /*
     private float _tickTime;
     private float _totalDoTTime;
     private float _damage;
@@ -31,5 +45,7 @@ public class DoTAreaOnReload : OnReloadUpgrade
         }
     }
 
-    
+
+    */
+
 }
