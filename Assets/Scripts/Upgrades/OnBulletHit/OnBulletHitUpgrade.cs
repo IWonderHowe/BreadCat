@@ -10,9 +10,4 @@ public abstract class OnBulletHitUpgrade : Upgrade
     
 
     public abstract void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage);
-
-    public override void ApplyUpgrade(GameObject player)
-    {
-        _upgradeType = "OnBulletHit";
-    }
 }

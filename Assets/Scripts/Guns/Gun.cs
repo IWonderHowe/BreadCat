@@ -165,7 +165,17 @@ public class Gun : MonoBehaviour
                 _onHitActive = true;
                 _onHitObject = upgrade;
                 break;
-                
+
+            case "OnBulletCrit":
+                _onCritActive = true;
+                if (_onCrit1Object == null)
+                {
+                    _onCrit1Object = upgrade;
+                    break;
+                }
+
+                _onCrit2Object = upgrade;
+                break;
             
 
             default:

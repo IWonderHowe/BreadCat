@@ -16,7 +16,7 @@ public class ChaosOnBulletCrit : OnBulletCritUpgrade
 
     public override void ApplyUpgrade(GameObject player)
     {
-        throw new System.NotImplementedException();
+        player.GetComponent<Gun>().ApplyUpgrade(this.gameObject);
     }
 
 }
