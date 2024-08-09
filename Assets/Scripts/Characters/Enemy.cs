@@ -100,7 +100,7 @@ public class Enemy : MonoBehaviour
 
     private void OnDeath()
     {
-        _roomResided.RemoveFromEnemyList(this.gameObject);
+        _roomResided?.RemoveFromEnemyList(this.gameObject);
         _isDead = true;
 
         Destroy(this.gameObject);

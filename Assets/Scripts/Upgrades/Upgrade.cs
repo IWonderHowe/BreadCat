@@ -5,6 +5,19 @@ using UnityEngine;
 
 public abstract class Upgrade : MonoBehaviour
 {
+    abstract public string UpgradeName { get; }
+    abstract public string UpgradeType { get; }
+
     public abstract void ApplyUpgrade(GameObject player);
+
+    public string GetUpgradeName()
+    {
+        return UpgradeName;
+    }
+
+    public string GetUpgradeType()
+    {
+        return UpgradeType;
+    }
 
 }

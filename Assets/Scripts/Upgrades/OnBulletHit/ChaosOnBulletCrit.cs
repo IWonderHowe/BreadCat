@@ -1,10 +1,14 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ChaosOnBulletCrit : OnBulletCritUpgrade
 {
-    public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
+    public override string UpgradeName { get { return _upgradeName; } }
+    private string _upgradeName = "ChaosOnBulletCrit";
+
+    public override void ApplyCritEffect(GameObject player)
     {
         ChaosStack.SetHasPerfectAccuracy(true);
         player.GetComponent<PlayerController>().CurrentGun.SetPerfectAccuracy(true);

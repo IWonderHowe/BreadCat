@@ -23,6 +23,7 @@ public static class ChaosStack
 
     public static void AddStack()
     {
+        Debug.Log("Chaos incremented");
         _stacks++;
     }
 

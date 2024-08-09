@@ -3350,12 +3350,12 @@ MonoBehaviour:
   _playerLayer:
     serializedVersion: 2
     m_Bits: 128
+  _visionLayers:
+    serializedVersion: 2
+    m_Bits: 0
   _timeBetweenShots: 3
   _gun: {fileID: 4089534085558341346}
   _sightRange: 1000
-  _raycastIgnoreLayer:
-    serializedVersion: 2
-    m_Bits: 129
   _bulletOrigin: {fileID: 782978272}
   _target: {fileID: 162457522}
   _canMove: 0
@@ -4333,6 +4333,10 @@ PrefabInstance:
       propertyPath: _target
       value: 
       objectReference: {fileID: 162457522}
+    - target: {fileID: 7012217948030004077, guid: 00b79b2752536f74b882e9cbf3f61cfe, type: 3}
+      propertyPath: _visionLayers.m_Bits
+      value: 129
+      objectReference: {fileID: 0}
     - target: {fileID: 8765630299373455783, guid: 00b79b2752536f74b882e9cbf3f61cfe, type: 3}
       propertyPath: m_Mesh
       value: 

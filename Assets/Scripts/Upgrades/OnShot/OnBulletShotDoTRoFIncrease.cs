@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class OnBulletShotDoTRoFIncrease : OnBulletShotUpgrade
 {
+    public override string UpgradeName => throw new System.NotImplementedException();
+
     private float _multiplierPerEnemy = 0f;
     public float RoFMultiplier => DoTStack.EnemiesAffected.Count * _multiplierPerEnemy;
 

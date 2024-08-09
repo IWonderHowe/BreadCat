@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class ArmorToHealthOnBulletCrit : OnBulletCritUpgrade
 {
-    public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
+    public override string UpgradeName => throw new System.NotImplementedException();
+
+    public override void ApplyCritEffect(GameObject player)
     {
         player.GetComponent<PlayerCombat>().ArmorToHealth();
     }

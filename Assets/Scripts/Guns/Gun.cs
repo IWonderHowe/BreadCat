@@ -69,11 +69,9 @@ public class Gun : MonoBehaviour
     [SerializeField] private GameObject _onHitObject;
     [SerializeField] private GameObject _onShotObject;
     [SerializeField] private GameObject _onReloadObject;
-
-    private OnBulletHitUpgrade _onHitUpgrade;
-    private OnBulletShotUpgrade _onShotUpgrade;
-    private OnReloadUpgrade _onReloadUpgrade;
-    private OnBulletCritUpgrade _onCritUpgrade;
+    private GameObject _onCrit1Object;
+    private GameObject _onCrit2Object;
+    private GameObject _onKillObject;
 
     private bool _onCritActive = false;
     private bool _onHitActive = false;
@@ -86,21 +84,9 @@ public class Gun : MonoBehaviour
 
     private UpgradeManager _upgradeManager;
 
-
-
     private void Awake()
     {
-        // Debug area
-        //_onHitUpgrade = _onHitObject?.GetComponent<OnBulletHitUpgrade>();
-        //_onShotUpgrade = _onShotObject?.GetComponent<OnBulletShotUpgrade>();
-        _onHitUpgrade = new ArmorOnBulletHit();
-        _onHitActive = true;
 
-        _onCritUpgrade = new ChaosOnBulletCrit();
-        _onCritActive = true;
-
-        _onReloadUpgrade = _onReloadObject?.GetComponent<OnReloadUpgrade>();
-        _onReloadActive = true;
 
         // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
@@ -114,15 +100,14 @@ public class Gun : MonoBehaviour
         _currentAmmo = _magSize;
         _canShoot = true;
 
-        // get upgrades from upgrade manager
+        /* get upgrades from upgrade manager
         _upgradeManager = FindObjectOfType<UpgradeManager>();
         if (_upgradeManager != null && _upgradeManager.CurrentOnBulletHitUpgrade != null)
         {
             _onHitUpgrade = _upgradeManager.CurrentOnBulletHitUpgrade;
             _onHitActive = true;
-        }
+        }*/
 
-        Debug.Log(_onHitUpgrade.ToString());
 
     }
 
@@ -170,6 +155,52 @@ public class Gun : MonoBehaviour
         _currentAmmo--;
     }
 
+    public void ApplyUpgrade(GameObject upgrade)
+    {
+        Debug.Log(upgrade.GetComponent<Upgrade>().GetUpgradeType());
+
+        switch (upgrade.GetComponent<Upgrade>().GetUpgradeType())
+        {
+            case "OnBulletHit":
+                _onHitActive = true;
+                _onHitObject = upgrade;
+                break;
+                
+            
+
+            default:
+                Debug.Log("Upgrade application  bugged");
+                break;
+        }
+        
+
+        /*switch (upgrade.GetUpgradeType())
+        {
+            case "OnBulletHit":
+                _onHitActive = true;
+                break;
+
+            case "OnBulletCrit":
+                _onCritActive = true;
+                break;
+
+            case "OnReload":
+                _onReloadActive = true;
+                break;
+
+            case "OnShot":
+                _onShotActive = true;
+                break;
+
+            default:
+                Debug.Log("UhOh");
+                break;
+        }*/
+
+
+
+
+    }
 
     // shoot the raycast of a hitscan bullet
     protected virtual void ShootRayCast()
@@ -195,14 +226,18 @@ public class Gun : MonoBehaviour
                 Enemy enemyHit = hit.collider.gameObject.GetComponentInParent<Enemy>();
 
                 // if there is an on hit effect active, apply it
-                if (_onHitActive) _onHitUpgrade.ApplyOnHit(enemyHit, _player, _damage);
-                
+                if (_onHitActive)
+                {
+                    _onHitObject.GetComponent<OnBulletHitUpgrade>().ApplyOnHit(enemyHit, _player, _damage);
+                    Debug.Log("On hit triggered");
+                }                
+
                 // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
                 float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
                     damageToTake *= _critMultiplier;
-                    if (_onCritActive) _onCritUpgrade.ApplyOnHit(enemyHit, _player, _damage);
+                    if (_onCritActive) _onCrit1Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
                 }
 
                 // apply damage to the enemy

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ArmorOnBulletHit : OnBulletHitUpgrade
 {
+    public override string UpgradeName => throw new System.NotImplementedException();
+
     public ArmorOnBulletHit() { }
 
     public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)

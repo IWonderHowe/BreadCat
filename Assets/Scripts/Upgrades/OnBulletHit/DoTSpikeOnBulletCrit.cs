@@ -4,14 +4,21 @@ using UnityEngine;
 
 public  class DoTSpikeOnBulletCrit : OnBulletCritUpgrade
 {
+    public override string UpgradeName => throw new System.NotImplementedException();
+
     // contructor (empty) for the DoT spike on crit
     public DoTSpikeOnBulletCrit()
     {
 
     }
 
+    public override void ApplyCritEffect(GameObject player)
+    {
+        throw new System.NotImplementedException();
+    }
+
     // check apply the on hit crit effect
-    public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
+    public void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
     {
         // set space to store the amount of damage to apply
         float damageToApply = 0f;
