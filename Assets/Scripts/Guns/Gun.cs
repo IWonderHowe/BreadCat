@@ -81,6 +81,7 @@ public class Gun : MonoBehaviour
     private bool _onHitActive = false;
     private bool _onShotActive = false;
     private bool _onReloadActive = false;
+    private bool _onKillActive = false;
 
     public bool OnHitActive => _onHitActive;
     public bool OnShotActive => _onShotActive;
@@ -188,6 +189,11 @@ public class Gun : MonoBehaviour
             case "OnShot":
                 _onShotActive = true;
                 _onShotObject = upgrade;
+                break;
+
+            case "OnKill":
+                _onKillActive = true;
+                _onKillObject = upgrade;
                 break;
 
             default:
@@ -469,9 +475,12 @@ public class Gun : MonoBehaviour
         _manualReload = isManualReloading;
     }
 
-    public void TriggerOnKillUpgrade()
+    public void TriggerOnKillUpgrade(GameObject enemyKilled)
     {
-
+        if (_onKillActive)
+        {
+            _onKillObject.GetComponent<OnKillUpgrade>().ApplyKillEffect(_player, enemyKilled);
+        }
         
     }
 

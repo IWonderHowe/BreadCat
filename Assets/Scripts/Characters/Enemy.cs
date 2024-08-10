@@ -20,7 +20,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Slider _dotSlider;
     private RoomGenerator _roomResided;
 
-    [SerializeField] private GameEvent<bool> OnDeathEvent;
+    [SerializeField] private GameObjectEvent _onDeath;
 
 
 
@@ -102,10 +102,12 @@ public class Enemy : MonoBehaviour
 
     private void OnDeath()
     {
+        
+
         _roomResided?.RemoveFromEnemyList(this.gameObject);
         _isDead = true;
 
-        OnDeathEvent.Invoke(true);
+        _onDeath.Invoke(this.gameObject);
 
         Destroy(this.gameObject);
     }

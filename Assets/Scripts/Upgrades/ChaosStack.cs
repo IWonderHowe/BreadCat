@@ -5,8 +5,9 @@ using UnityEngine;
 public static class ChaosStack
 {
     private static int _stacks;
-    private static int _maxStacks = 150;
+    private static int _baseMaxStacks = 150;
     private static float _stacksMultiplier = 0.5f;
+    private static int _maxStacks = _baseMaxStacks;
 
     public static int MaxStacks => _maxStacks;
     public static int Stacks => _stacks;
@@ -29,6 +30,17 @@ public static class ChaosStack
         Debug.Log("Current Chaos" + ChaosStack.Stacks);
     }
 
+    public static void AddMaxStacks(int limitToAdd)
+    {
+        Debug.Log("Max stacks added");
+        _maxStacks += limitToAdd;
+    }
+
+    public static void ResetMaxStacks()
+    {
+        _maxStacks = _baseMaxStacks;
+        Debug.Log(_baseMaxStacks);
+    }
     
 
     public static void SetHasPerfectAccuracy(bool perfectAccuracy)

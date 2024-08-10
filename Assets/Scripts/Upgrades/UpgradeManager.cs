@@ -151,6 +151,7 @@ public class UpgradeManager : MonoBehaviour
 
         AquireUpgrade(upgradeToAquire.UpgradeType, upgradeToAquire.UpgradeName);
 
+        Debug.Log("RandomUpgradeAquired");
 
     }
 
