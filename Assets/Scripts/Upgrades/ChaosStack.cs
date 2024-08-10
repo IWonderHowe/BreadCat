@@ -35,5 +35,4 @@ public static class ChaosStack
     {
         _perfectAccuracy = perfectAccuracy;
     }
-
 }

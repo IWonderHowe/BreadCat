@@ -8,6 +8,4 @@ public abstract class OnBulletCritUpgrade : Upgrade
     private string _upgradeType = "OnBulletCrit";
 
     abstract public void ApplyCritEffect(GameObject player);
-
-
 }

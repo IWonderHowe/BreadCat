@@ -24,4 +24,13 @@ public class OnBulletShotDoTRoFIncrease : OnBulletShotUpgrade
         throw new System.NotImplementedException();
     }
 
+    public override void ApplyOnShotEffect()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void ApplyOnShotEffect(GameObject player, RaycastHit hit)
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.Rendering;
 
 public class Gun : MonoBehaviour
@@ -12,7 +13,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private float _damage = 15f;
     [SerializeField] private float _range = 15f;
     [SerializeField] private float _baseRateOfFire = 1f;
-    [SerializeField] private float _critMultiplier = 2f;
+    [SerializeField] private float _baseCritMultiplier = 2f;
+    private float _effectiveCritMultiplier;
 
     // ammo variables
     [SerializeField] private int _magSize = 20;
@@ -73,7 +75,9 @@ public class Gun : MonoBehaviour
     private GameObject _onCrit2Object;
     private GameObject _onKillObject;
 
-    private bool _onCritActive = false;
+    // store if upgrade slot is filled
+    private bool _onCrit1Active = false;
+    private bool _onCrit2Active = false;
     private bool _onHitActive = false;
     private bool _onShotActive = false;
     private bool _onReloadActive = false;
@@ -165,13 +169,14 @@ public class Gun : MonoBehaviour
                 break;
 
             case "OnBulletCrit":
-                _onCritActive = true;
+                _onCrit1Active = true;
                 if (_onCrit1Object == null)
                 {
                     _onCrit1Object = upgrade;
                     break;
                 }
-                
+
+                _onCrit2Active = true;
                 _onCrit2Object = upgrade;
                 break;
 
@@ -180,7 +185,10 @@ public class Gun : MonoBehaviour
                 _onReloadObject = upgrade;
                 break;
 
-            
+            case "OnShot":
+                _onShotActive = true;
+                _onShotObject = upgrade;
+                break;
 
             default:
                 Debug.Log("Upgrade application  bugged");
@@ -223,16 +231,26 @@ public class Gun : MonoBehaviour
         RaycastHit hit;
         Vector3 shotDirection = GetShotDirection();
 
+        //reset chaos stacks perfect accuracy on a shot
         if (ChaosStack.PerfectAccuracy)
         {
             SetPerfectAccuracy(false);
             ChaosStack.SetHasPerfectAccuracy(false);
         }
+
         //_debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
         
+
         // check to see if the player hits anything with a raycast based on gun properties
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range))
         {
+            // get on shot effect, apply it to this raycast hit
+            if (_onShotActive)
+            {
+                _onShotObject.GetComponent<OnBulletShotUpgrade>().ApplyOnShotEffect(_player, hit);
+            } 
+
+
             // do this if the shot hits an enemy
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
@@ -243,24 +261,30 @@ public class Gun : MonoBehaviour
                 if (_onHitActive)
                 {
                     _onHitObject.GetComponent<OnBulletHitUpgrade>().ApplyOnHit(enemyHit, _player, _damage);
-                    Debug.Log("On hit triggered");
                 }                
 
                 // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
                 float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
-                    damageToTake *= _critMultiplier;
-                    if (_onCritActive) _onCrit1Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
+                    _effectiveCritMultiplier = _baseCritMultiplier;
+
+                    // apply on crit if active
+                    if (_onCrit1Active) _onCrit1Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
+                    if (_onCrit2Active) _onCrit2Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
+                    
+                    damageToTake *= _baseCritMultiplier;
                 }
 
                 // apply damage to the enemy
                 hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
             }
 
+            
+
             // Create a trail to show where the shot actually went (expose recoil)
             TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
-            StartCoroutine(SpawnBulletTrail(bulletTrail, hit));
+            StartCoroutine(SpawnBulletTrail(bulletTrail, _player.transform.position, hit.point));
         }
 
         // do this on a miss
@@ -275,23 +299,76 @@ public class Gun : MonoBehaviour
         //Debug.Log("Shots fired");
     }
 
+    public void SpawnBulletFrom(Vector3 origin, Vector3 destination)
+    {
+        TrailRenderer bulletTrail = Instantiate(_trailRenderer, origin, Quaternion.identity);
+
+        RaycastHit hit;
+        Vector3 directionOfBullet = destination - origin;
+
+        StartCoroutine(SpawnBulletTrail(bulletTrail, origin, destination));
+        
+    }
+
+    public void HitEnemy(RaycastHit hit)
+    {
+        // store the enemy script of the hit enemy
+        Enemy enemyHit = hit.collider.gameObject.GetComponentInParent<Enemy>();
+
+        // if there is an on hit effect active, apply it
+        if (_onHitActive)
+        {
+            _onHitObject.GetComponent<OnBulletHitUpgrade>().ApplyOnHit(enemyHit, _player, _damage);
+        }
+
+        // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
+        float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
+        if (hit.collider.gameObject.tag == "EnemyCrit")
+        {
+            _effectiveCritMultiplier = _baseCritMultiplier;
+
+            // apply on crit if active
+            if (_onCrit1Active) _onCrit1Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
+            if (_onCrit2Active) _onCrit2Object.GetComponent<OnBulletCritUpgrade>().ApplyCritEffect(_player);
+
+            damageToTake *= _baseCritMultiplier;
+        }
+
+        // apply damage to the enemy
+        hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
+    }
+
+    public void ModifyClipSize(float magSizeToAdd)
+    {
+
+    }
+
+    public void ModifyFireRate(float fireRateToAdd)
+    {
+
+    }
+
+    public void ModifyCritMultiplier(float critMultiToAdd)
+    {
+        _effectiveCritMultiplier += critMultiToAdd;
+    }
+
     // create a bullet trail to show bullet spread variance due to recoil
-    private IEnumerator SpawnBulletTrail(TrailRenderer trail, RaycastHit hit)
+    private IEnumerator SpawnBulletTrail(TrailRenderer trail, Vector3 origin,  Vector3 hitPoint)
     {
         // Set the initial variables for the bullet trail
         float time = 0;
-        Vector3 startPosition = trail.transform.position;
 
         // while the trail is up, adjust the trail position to go between where it was shot from and where it hits
         while(time < 1)
         {
-            trail.transform.position = Vector3.Lerp(startPosition, hit.point, time);
+            trail.transform.position = Vector3.Lerp(origin, hitPoint, time);
             time += Time.deltaTime / trail.time;
             yield return null;
         }
 
         // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail
-        trail.transform.position = hit.point;
+        trail.transform.position = hitPoint;
         Destroy(trail.gameObject, trail.time);
     }
 
