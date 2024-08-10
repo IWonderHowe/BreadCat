@@ -469,6 +469,12 @@ public class Gun : MonoBehaviour
         _manualReload = isManualReloading;
     }
 
+    public void TriggerOnKillUpgrade()
+    {
+
+        
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
