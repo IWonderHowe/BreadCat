@@ -141,6 +141,11 @@ public class UpgradeManager : MonoBehaviour
     {
         int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
 
+        if (_availableUpgrades.Count <= 0)
+        {
+            return;
+        }
+
         GameObject upgradeObject = _availableUpgrades[upgradeIndex];
         Upgrade upgradeToAquire = _availableUpgrades[upgradeIndex].GetComponent<Upgrade>();
 

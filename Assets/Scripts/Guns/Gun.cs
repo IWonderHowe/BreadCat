@@ -302,18 +302,14 @@ public class Gun : MonoBehaviour
     public void SpawnBulletFrom(Vector3 origin, Vector3 destination)
     {
         TrailRenderer bulletTrail = Instantiate(_trailRenderer, origin, Quaternion.identity);
-
-        RaycastHit hit;
-        Vector3 directionOfBullet = destination - origin;
-
         StartCoroutine(SpawnBulletTrail(bulletTrail, origin, destination));
         
     }
 
-    public void HitEnemy(RaycastHit hit)
+    public void HitEnemy(GameObject enemy)
     {
         // store the enemy script of the hit enemy
-        Enemy enemyHit = hit.collider.gameObject.GetComponentInParent<Enemy>();
+        Enemy enemyHit = enemy.GetComponentInParent<Enemy>();
 
         // if there is an on hit effect active, apply it
         if (_onHitActive)
@@ -323,7 +319,7 @@ public class Gun : MonoBehaviour
 
         // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
         float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
-        if (hit.collider.gameObject.tag == "EnemyCrit")
+        if (enemy.tag == "EnemyCrit")
         {
             _effectiveCritMultiplier = _baseCritMultiplier;
 
@@ -335,7 +331,7 @@ public class Gun : MonoBehaviour
         }
 
         // apply damage to the enemy
-        hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
+        enemy.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
     }
 
     public void ModifyClipSize(float magSizeToAdd)

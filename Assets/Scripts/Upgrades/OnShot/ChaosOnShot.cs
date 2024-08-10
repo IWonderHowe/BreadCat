@@ -10,7 +10,9 @@ public class ChaosOnShot : OnBulletShotUpgrade
     private string _upgradeName = "ChaosOnShot";
 
     [SerializeField] private float _ricochetRange = 400f;
-    [SerializeField] private LayerMask _ricochetableLayers;
+    [SerializeField] private LayerMask _ricochetTargetLayers;
+    [SerializeField] private float _ricochetPercentChance = 30f;
+
     public override void ApplyUpgrade(GameObject player)
     {
         player.GetComponent<PlayerController>().CurrentGun.ApplyUpgrade(gameObject);
@@ -23,21 +25,45 @@ public class ChaosOnShot : OnBulletShotUpgrade
 
     public override void ApplyOnShotEffect(GameObject player, RaycastHit hit)
     {
-        Debug.Log("On shot applied");
-        if (hit.collider.gameObject.layer != _ricochetableLayers)
+
+        if(UnityEngine.Random.Range(0, 100) > _ricochetPercentChance)
+        {
+            return;
+        }
+
+        if (hit.collider.gameObject.layer != _ricochetTargetLayers)
         {
             // make an array for the enemy colliders in range
             Collider[] ricochetPotentialHits;
 
             // fill list of all enemies in range
-            ricochetPotentialHits = Physics.OverlapSphere(player.transform.position, _ricochetRange, _ricochetableLayers);
+            ricochetPotentialHits = Physics.OverlapSphere(hit.point, _ricochetRange, _ricochetTargetLayers);
             Debug.Log(ricochetPotentialHits.Length);
 
             // if an enemy is found, "ricochet" a shot towards it
-            if (ricochetPotentialHits.Length <= 1) 
+            if (ricochetPotentialHits.Length >= 1) 
             {
-                player.GetComponent<PlayerController>().CurrentGun.SpawnBulletFrom(hit.point, ricochetPotentialHits[0].transform.position);
-                Debug.Log("Enemy hit by ricochet");
+                // store info for target to ricochet to
+                GameObject target = ricochetPotentialHits[0].gameObject;
+                float closestDistance = _ricochetRange;
+
+                // find the target that is nearest to the player
+                foreach(Collider potentialTarget in ricochetPotentialHits)
+                {
+                    float targetDistance = (potentialTarget.gameObject.transform.position - hit.point).magnitude;
+                    
+                    // set this to be the nearest target t
+                    if ((targetDistance < closestDistance))
+                    {
+                        target = potentialTarget.gameObject;
+                        closestDistance = targetDistance;   
+                    }
+                }
+                
+
+                Gun gun = player.GetComponent<PlayerController>().CurrentGun;
+                gun.SpawnBulletFrom(hit.point, target.transform.position);
+                gun.HitEnemy(target);
             }
 
         }
