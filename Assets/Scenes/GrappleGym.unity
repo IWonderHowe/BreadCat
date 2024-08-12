@@ -6775,6 +6775,18 @@ PrefabInstance:
       propertyPath: _sprintSpeedMultiplier
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5672730441921532949, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _breakAngle
+      value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672730441921532949, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _breakType.Array.data[1]
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5672730441921532949, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
+      propertyPath: _breakType.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6814549703366877200, guid: 12b0e7bf0e47f00468be89c0b508d317, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -10400,6 +10412,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 2098487426}
   - {fileID: 12869408}
+  - {fileID: 1249901005}
   - {fileID: 968308408}
   - {fileID: 201251457}
   - {fileID: 841695843}
@@ -10419,5 +10432,4 @@ SceneRoots:
   - {fileID: 565354779}
   - {fileID: 797940993}
   - {fileID: 1361770923}
-  - {fileID: 1249901005}
   - {fileID: 880849709}

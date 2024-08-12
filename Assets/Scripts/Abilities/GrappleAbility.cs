@@ -17,21 +17,38 @@ public class GrappleAbility : CharacterAbility
     // variables to get/set info about player
     [SerializeField] private GameObject _playerObject;
     private PlayerMovement _playerMovement;
+    private Camera _playerCam;
 
-    // grappling hook variables
+    // store info about the grapple point
     private Vector3[] _grappleInfo = new Vector3[2];
     private Vector3 _grapplePosition;
     private Vector3 _grappleNormal;
+    
+    
+    // grappling hook variables
     [SerializeField] private float _retractionSpeed = 5f;
     [SerializeField] private float _maxGrappleSpeed = 20f;
     [SerializeField] private float _grappleRange = 100f;
     [SerializeField] private LayerMask _grappleableLayers;
     [SerializeField] private float _grappleRetractDistanceBuffer = 1f;
+
+    // grapple break variables
     [SerializeField] private float _minimumBreakAngle = 30f;
     [SerializeField] private float _breakAngleTolerance = 5f;
+    [SerializeField] private float _camBreakAngle = 30f;
+    private Vector3 _camForwadVector;
+
+    private float _grappleRotation = 0f;
+    [SerializeField] private float _breakAngle = 270;
+    private Vector3 _previousPlayerToGrappleVector;
+
+    [SerializeField] private bool[] _breakType = new bool[3];
+
+
 
     private float _distanceToGrapplePoint = 0;
-    [SerializeField] private float _initialGrappleAngle;
+
+    [SerializeField] private float _initialPointToPlayerAngle;
     [SerializeField] private float _currentGrappleAngle;
     private bool _isGrappling = false;
     public bool IsGrappling => _isGrappling;
@@ -57,29 +74,79 @@ public class GrappleAbility : CharacterAbility
         _playerMovement = _playerObject.GetComponent<PlayerMovement>();
         _grappleRenderer = GetComponent<LineRenderer>();
         _grappleRenderer.enabled = false;
+        _playerCam = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // update the cameras forward vector
+        _camForwadVector = _playerCam.transform.forward;
+
+        // if the grapple joint exists, update the current grapple angle
         if (_grappleJoint != null)
         {
-            //Debug.Log("grappled");
             _currentGrappleAngle = Vector3.Angle(Vector3.up, _grappleJoint.connectedAnchor - _playerObject.transform.position);
         }
-        //Debug.Log("Initial angle: " + _initialGrappleAngle + "             Current angle: " + _currentGrappleAngle);
-        // stop grappling if the player goes beyond their able grapple angle 
-        if (IsGrappling && _currentGrappleAngle > _initialGrappleAngle)
-        {
-            StopMovementAbility();
-            Debug.Log("Exit velocity: " + _playerObject.GetComponent<PlayerMovement>().CurrentSpeed);
-        }
+
+        CheckBreakGrapple();
+
 
         if(IsGrappling && !IsRetracting && _distanceToGrapplePoint > (_grapplePosition - _playerObject.transform.position).magnitude)
         {
             _distanceToGrapplePoint = ((_grapplePosition - _playerObject.transform.position).magnitude * 0.95f);
             SetGrappleJointBounds();
         }
+    }
+
+    private void CheckBreakGrapple()
+    {
+        // if the player isnt grappling, dont worry about it
+        if (!IsGrappling) return;
+
+        // depending on which grapple break type, break the grapple
+        // break grapple on initial grapple angle
+        if (_breakType[0] == true)
+        {
+            if (_currentGrappleAngle > _initialPointToPlayerAngle)
+            {
+                StopMovementAbility();
+                Debug.Log("Exit velocity: " + _playerObject.GetComponent<PlayerMovement>().CurrentSpeed);
+            }
+        }
+
+        // break the grapple based on the angle between the grapple angle vs the players look direction
+        else if (_breakType[1] == true)
+        {
+            Debug.Log(Vector3.Angle(_camForwadVector, _grapplePosition));
+            // get angle between player cam forward and grapple point
+            float grappleAngle = Vector3.Angle(_camForwadVector, _grappleJoint.connectedAnchor - _playerObject.transform.position);
+
+            if (grappleAngle >= _camBreakAngle)
+            {
+                StopMovementAbility();
+                Debug.Log("Exit velocity: " + _playerObject.GetComponent<PlayerMovement>().CurrentSpeed);
+            }
+        }
+
+        // break based on a fixed angle from the start point
+        else if (_breakType[2] == true)
+        {
+            // update the angle tracker
+            _grappleRotation += Vector3.Angle(_previousPlayerToGrappleVector, _grapplePosition - _playerObject.transform.position);
+
+            if(_grappleRotation >= _breakAngle)
+            {
+                StopMovementAbility();
+                Debug.Log("Exit velocity: " + _playerObject.GetComponent<PlayerMovement>().CurrentSpeed);
+            }
+
+            _previousPlayerToGrappleVector = _grapplePosition - _playerObject.transform.position;
+            Debug.Log(_grappleRotation);
+
+
+        }
+
     }
 
     public override void UseAbility()
@@ -144,7 +211,6 @@ public class GrappleAbility : CharacterAbility
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, _grappleRange, _grappleableLayers))
         {
             return hit;
-
         }
 
         return hit;
@@ -162,8 +228,13 @@ public class GrappleAbility : CharacterAbility
         _grappleJoint.spring = 100f;
         _grappleJoint.tolerance = 0.05f;
 
-        // set the initial angle of the grapple to define the grapple limits
-        _initialGrappleAngle = Vector3.Angle(Vector3.up, grapplePoint - _playerObject.transform.position);
+        // set the initial angles of the grapple to define the grapple limits
+        _previousPlayerToGrappleVector = grapplePoint - _playerObject.transform.position;
+        _initialPointToPlayerAngle = Vector3.Angle(Vector3.up, grapplePoint - _playerObject.transform.position);
+
+
+        // reset the angle tracker for the grapple
+        _grappleRotation = 0f;
 
         SetGrappleJointBounds();
         SetRenderGrapple(true);
