@@ -92,13 +92,26 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        // if not grounded, apply player input to adjust in air movement
+        else if (!IsGrounded)
+        {
+            targetVelocity = ((forward * _speed) + Velocity).normalized * _speedLimit;
+        }
+
+
+        // do not have a target velcocity that is greater than the speed limit
+        if (targetVelocity.magnitude > _speedLimit)
+        {
+            targetVelocity.Normalize();
+            targetVelocity *= _speedLimit;
+        }
+
         // Find the difference in velocity between the current and target velocity (flattened)
         Vector3 velocityDiff = targetVelocity - Velocity;
         velocityDiff.y = 0f;
 
         // Calculate the acceleration and apply to character
         Vector3 acceleration = velocityDiff * _acceleration;
-
 
         // add gravity's acceleration then apply the acceleration to the player
         acceleration += GroundNormal * _gravity;
