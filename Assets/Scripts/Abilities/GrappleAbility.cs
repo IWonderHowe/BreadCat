@@ -23,9 +23,10 @@ public class GrappleAbility : CharacterAbility
     private Vector3[] _grappleInfo = new Vector3[2];
     private Vector3 _grapplePosition;
     private Vector3 _grappleNormal;
-    
-    
+
+
     // grappling hook variables
+    [Header("Grappling Variables")]
     [SerializeField] private float _retractionSpeed = 5f;
     [SerializeField] private float _maxGrappleSpeed = 20f;
     [SerializeField] private float _grappleRange = 100f;
@@ -33,23 +34,24 @@ public class GrappleAbility : CharacterAbility
     [SerializeField] private float _grappleRetractDistanceBuffer = 1f;
 
     // grapple break variables
+    [Header("Grapple Breaking")]
     [SerializeField] private float _minimumBreakAngle = 30f;
     [SerializeField] private float _breakAngleTolerance = 5f;
     [SerializeField] private float _camBreakAngle = 30f;
-    private Vector3 _camForwadVector;
-
-    private float _grappleRotation = 0f;
     [SerializeField] private float _breakAngle = 270;
+    private Vector3 _camForwadVector;
+    private float _grappleRotation = 0f;
     private Vector3 _previousPlayerToGrappleVector;
 
+    [Header("Grapple break style. 0: Initial angle 1: Camera angle 2: Set angle")]
     [SerializeField] private bool[] _breakType = new bool[3];
 
 
+    [SerializeField] private float _initialPointToPlayerAngle;
+    [SerializeField] private float _currentGrappleAngle;
 
     private float _distanceToGrapplePoint = 0;
 
-    [SerializeField] private float _initialPointToPlayerAngle;
-    [SerializeField] private float _currentGrappleAngle;
     private bool _isGrappling = false;
     public bool IsGrappling => _isGrappling;
 

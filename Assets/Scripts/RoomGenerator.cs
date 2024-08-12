@@ -688,5 +688,4 @@ public class RoomGenerator : MonoBehaviour
         if (_enemiesInLevel.Count == 0) _levelExit.SetExitActive();
     }
 
-
 }
