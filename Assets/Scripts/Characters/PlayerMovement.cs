@@ -50,6 +50,7 @@ public class PlayerMovement : MonoBehaviour
     // debug variables
     [SerializeField] private Vector3 _debugVelocity;
     [SerializeField] private double _currentSpeed;
+    [SerializeField] private double _flattenedSpeed;
     public double CurrentSpeed => _currentSpeed;
 
     // Start is called before the first frame update
@@ -79,6 +80,8 @@ public class PlayerMovement : MonoBehaviour
             targetVelocity = forward * _speedLimit;
         }*/
         
+
+        
         // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability
         // acceleration is only added to already established velocity, will not increase magnitude of velocity (magnitude increase needs to come from abilities)
         if(IsUsingMovementAbility)
@@ -92,11 +95,27 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // if not grounded, apply player input to adjust in air movement
+        
+        // if not grounded
         else if (!IsGrounded)
         {
-            targetVelocity = ((forward * _speed) + Velocity).normalized * _speedLimit;
+            
+
+            if(new Vector3(Velocity.x, 0, Velocity.z).magnitude <= _speed)
+            {
+                targetVelocity = forward * _speed;
+            }
+            else
+            {
+                targetVelocity = forward * new Vector3(Velocity.x, 0, Velocity.z).magnitude;
+            }
+
+            
+            
         }
+
+
+
 
 
         // do not have a target velcocity that is greater than the speed limit
@@ -117,10 +136,12 @@ public class PlayerMovement : MonoBehaviour
         acceleration += GroundNormal * _gravity;
         _rigidbody.AddForce(acceleration);
 
-        _debugVelocity = new Vector3(Velocity.x, 0, Velocity.z);
+        _debugVelocity = Velocity;
 
 
         _currentSpeed = System.Math.Round(_debugVelocity.magnitude, 2);
+
+        _flattenedSpeed = System.Math.Round(new Vector3(_debugVelocity.x, 0, _debugVelocity.z).magnitude, 2);
 
         
 
