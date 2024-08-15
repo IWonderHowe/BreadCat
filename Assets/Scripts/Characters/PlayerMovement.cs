@@ -27,7 +27,12 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _gravity = -20f;
     [SerializeField] private float _jumpHeight = 2f;
     [SerializeField] private float _airControl = 0.1f;
-            
+    [SerializeField] private float _bunnyhopGraceTime = 0.25f;
+    [SerializeField] private float _bunnyhopExiryTime;
+
+    private bool _canBunnyHop = false;
+    private bool _canBunnyCheck = false;
+
     // ground checks
     [SerializeField] private float _groundCheckOffset = 0.1f;
     [SerializeField] private float _groundCheckDistance = 0.4f;
@@ -62,8 +67,14 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
+
         // Check to see if the character is grounded
         IsGrounded = CheckGrounded();
+
+        
+
+
 
         // take the movement input and calculate what is forward in relation to input and player
         Vector3 input = MoveInput;
@@ -79,14 +90,14 @@ public class PlayerMovement : MonoBehaviour
         {
             targetVelocity = forward * _speedLimit;
         }*/
-        
 
-        
+
+
         // just add acceleration to player direclty in relation to their input (rather than current velocity) if in air or using movement ability
         // acceleration is only added to already established velocity, will not increase magnitude of velocity (magnitude increase needs to come from abilities)
-        if(IsUsingMovementAbility)
+        if (IsUsingMovementAbility)
         {
-            if(targetVelocity.magnitude < Velocity.magnitude)
+            if (targetVelocity.magnitude < Velocity.magnitude)
             {
                 Vector3 targetTechVelocity = targetVelocity + Velocity;
 
@@ -95,13 +106,10 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        
-        // if not grounded
-        else if (!IsGrounded)
-        {
-            
-
-            if(new Vector3(Velocity.x, 0, Velocity.z).magnitude <= _speed)
+        // if not grounded or can bunnyhop, set the targetvelocity in the relevant way
+        else if (!IsGrounded || _canBunnyHop)
+        { 
+            if (new Vector3(Velocity.x, 0, Velocity.z).magnitude <= _speed)
             {
                 targetVelocity = forward * _speed;
             }
@@ -109,14 +117,10 @@ public class PlayerMovement : MonoBehaviour
             {
                 targetVelocity = forward * new Vector3(Velocity.x, 0, Velocity.z).magnitude;
             }
-
-            
-            
         }
 
-
-
-
+        // set the bunnyhop expiry time if possible
+        SetBunnyhopExpiryTime();
 
         // do not have a target velcocity that is greater than the speed limit
         if (targetVelocity.magnitude > _speedLimit)
@@ -149,6 +153,33 @@ public class PlayerMovement : MonoBehaviour
         SetCharacterFacing(Camera.main.transform.rotation.eulerAngles);
 
 
+
+    }
+
+    private void SetBunnyhopExpiryTime()
+    {
+        // allow to check for bunnyhop if not grounded
+        if (!IsGrounded)
+        {
+            _canBunnyCheck = true;
+            return;
+        }
+
+        // set the bunnyhop expiry time if the player can
+        if(_canBunnyCheck)
+        {
+            _bunnyhopExiryTime = Time.timeSinceLevelLoad + _bunnyhopGraceTime;
+            _canBunnyHop = true;
+            _canBunnyCheck = false;
+            return;
+        }
+
+        // stop being able to bunny hop if the bunnyhop expiry time has passed
+        if(_bunnyhopExiryTime < Time.timeSinceLevelLoad) 
+        {
+            _canBunnyHop = false;
+            return;
+        }
 
     }
 
