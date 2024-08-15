@@ -80,9 +80,16 @@ public class PlayerController : MonoBehaviour
     // try to jump if the player presses the jump button
     public void OnJump(InputValue value)
     {
+        if (_ability1.IsMovementAbility)
+        {
+            _ability1.StopMovementAbility();
+        }    
+        if(_ability2.IsMovementAbility)
+        {
+            _ability2.StopMovementAbility();
+        }
+
         _movement.Jump();
-        if (_ability1.IsMovementAbility) _ability1.StopMovementAbility();
-        if(_ability2.IsMovementAbility) _ability2.StopMovementAbility();
     }
 
     // reload if the player presses the reload button

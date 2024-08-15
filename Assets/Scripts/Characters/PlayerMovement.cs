@@ -8,7 +8,7 @@ using UnityEngine.ProBuilder;
 
 // Note: Base architecture of this class is reliant on scripts from VFS tutors Scott and Quinn
 public class PlayerMovement : MonoBehaviour
-{ 
+{
     // make some information pbulic
     public Vector3 MoveInput { get; private set; }
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
@@ -27,6 +27,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _gravity = -20f;
     [SerializeField] private float _jumpHeight = 2f;
     [SerializeField] private float _airControl = 0.1f;
+    private bool _canDoubleJump = true;
+    private bool _canDoubleJumpCheck = true;
+
+    //bunnyhop variables
     [SerializeField] private float _bunnyhopGraceTime = 0.25f;
     [SerializeField] private float _bunnyhopExiryTime;
 
@@ -67,12 +71,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+
 
         // Check to see if the character is grounded
         IsGrounded = CheckGrounded();
 
-        
+
 
 
 
@@ -97,6 +101,8 @@ public class PlayerMovement : MonoBehaviour
         // acceleration is only added to already established velocity, will not increase magnitude of velocity (magnitude increase needs to come from abilities)
         if (IsUsingMovementAbility)
         {
+            _canDoubleJump = true;
+
             if (targetVelocity.magnitude < Velocity.magnitude)
             {
                 Vector3 targetTechVelocity = targetVelocity + Velocity;
@@ -108,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
 
         // if not grounded or can bunnyhop, set the targetvelocity in the relevant way
         else if (!IsGrounded || _canBunnyHop)
-        { 
+        {
             if (new Vector3(Velocity.x, 0, Velocity.z).magnitude <= _speed)
             {
                 targetVelocity = forward * _speed;
@@ -147,7 +153,7 @@ public class PlayerMovement : MonoBehaviour
 
         _flattenedSpeed = System.Math.Round(new Vector3(_debugVelocity.x, 0, _debugVelocity.z).magnitude, 2);
 
-        
+
 
         // make the character face where the player is aiming
         SetCharacterFacing(Camera.main.transform.rotation.eulerAngles);
@@ -222,10 +228,16 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
+    private void ToggleCanDoubleJump()
+    {
+        _canDoubleJump = !_canDoubleJump;
+    }
+
     // Jump if the player is able to
     public void Jump()
     {
-        if (!IsFudgeGrounded) return;
+        if (!IsFudgeGrounded && !_canDoubleJump) return;
+        ToggleCanDoubleJump();
         float jumpVelocity = Mathf.Sqrt(2f * -_gravity * _jumpHeight);
         Velocity = new Vector3(Velocity.x, jumpVelocity, Velocity.z);
     }
