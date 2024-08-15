@@ -15,6 +15,12 @@ public class EnemyGun : MonoBehaviour
     [SerializeField] private GameObject _projectileOrigin;
     [SerializeField] private float _projectileSpeed;
 
+    // projectile pattern variables
+    [SerializeField] private Vector2Int _projectileRowsAndColumns = new Vector2Int(1,1);
+    [SerializeField] private int _shotsInARow = 1;
+    [SerializeField] private float _timeBetweenShots = 0.5f;
+    [SerializeField] private float _projectileSpacing;
+
     // debugging
     [SerializeField] private GameObject _debugTarget;
 
@@ -25,11 +31,23 @@ public class EnemyGun : MonoBehaviour
 
     public void Shoot(GameObject target)
     {
+        
         if (_usesProjectile)
         {
-            ShootProjectile(target);
+            StartCoroutine(ShootPattern(target));
         }
     }
+
+    private IEnumerator ShootPattern(GameObject target)
+    {
+        // for every shot in a row, shoot, then wait for the time between shots and shoot again
+        for(int i = 0; i < _shotsInARow; i++)
+        {
+            ShootProjectile(target);
+            yield return new WaitForSeconds(_timeBetweenShots);
+        }
+    }
+    
 
     private void ShootProjectile(GameObject target)
     {

@@ -68,7 +68,7 @@ public class EnemyCombat : MonoBehaviour
         while (_hasTargetLoS)
         {
             // if the enemy can move, do movement stuffs
-            if (_canMove) ;
+            if (_canMove);
 
             // shoot at the target then wait for the proper time between shots
             _gun.Shoot(_target);
