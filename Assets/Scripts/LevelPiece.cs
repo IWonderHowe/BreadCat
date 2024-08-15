@@ -19,6 +19,7 @@ public class LevelPiece : MonoBehaviour
 
     //properties for debugging
     [SerializeField] public bool IsCourtyard;
+    [SerializeField] public bool IsOpenPiece;
 
 
 }
