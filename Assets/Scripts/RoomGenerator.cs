@@ -15,6 +15,7 @@ public class RoomGenerator : MonoBehaviour
     [SerializeField] private List<GameObject> _roomPieces = new List<GameObject>();
     [SerializeField] private Vector3Int _roomSize;
     [SerializeField] private Vector2Int _courtyard;
+    [SerializeField] private bool[] _openFloors = new bool[1];
 
     // a 3D array to store chosen peices for each filled cell
     private GameObject[,,] _roomLayout;
@@ -186,9 +187,17 @@ public class RoomGenerator : MonoBehaviour
                     // instantiate a list for the given grid coordinates
                     _availablePieces[x, y, z] = new List<GameObject>();
 
+
+
                     // add each room piece to possible pieces for the given grid coordinates
                     foreach (GameObject roomPiece in _roomPieces)
                     {
+                        // if the floor is open, dont add not open pieces
+                        if(!roomPiece.GetComponent<LevelPiece>().IsOpenPiece && _openFloors[y] == true)
+                        {
+                            continue;
+                        }
+
                         // dont add level piece to potential pieces if it is part of cthe courtyard and not open on all sides except ground
                         if (isPartOfCourtyard && !CheckIfOpenOnAllSides(roomPiece.GetComponent<LevelPiece>())) continue;
 
