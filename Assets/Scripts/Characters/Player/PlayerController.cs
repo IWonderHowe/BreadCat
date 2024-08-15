@@ -80,15 +80,21 @@ public class PlayerController : MonoBehaviour
     // try to jump if the player presses the jump button
     public void OnJump(InputValue value)
     {
-        if (_ability1.IsMovementAbility)
+        // stop the movement ability if jump is pressed
+        if (_movement.IsUsingMovementAbility)
         {
-            _ability1.StopMovementAbility();
-        }    
-        if(_ability2.IsMovementAbility)
-        {
-            _ability2.StopMovementAbility();
+            if (_ability1.IsMovementAbility)
+            {
+                _ability1.StopMovementAbility();
+            }    
+            if(_ability2.IsMovementAbility)
+            {
+                _ability2.StopMovementAbility();
+            }
+            return;
         }
 
+        // jump
         _movement.Jump();
     }
 
