@@ -12,6 +12,8 @@ public class UpgradeAquisitionButton : MonoBehaviour
     
     // get a reference to the button that will be used
     [SerializeField] private GameObject _buttonUpgrade;
+    public GameObject CurrentUpgrade => _buttonUpgrade;
+
     //public Upgrade ButtonUpgrade => _buttonUpgrade;
 
     [SerializeField] private GameObjectEvent _upgradeEvent;
@@ -33,6 +35,7 @@ public class UpgradeAquisitionButton : MonoBehaviour
 
     public void AquireUpgrade()
     {
+
         _upgradeEvent.Invoke(_buttonUpgrade);
     }
 

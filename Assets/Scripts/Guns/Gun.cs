@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class Gun : MonoBehaviour
 {
@@ -89,6 +90,15 @@ public class Gun : MonoBehaviour
     public bool OnReloadActive => _onReloadActive;
 
     private UpgradeManager _upgradeManager;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoad;
+    }
+    private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        _timeOfLastShot = 0f;
+    }
 
     private void Awake()
     {

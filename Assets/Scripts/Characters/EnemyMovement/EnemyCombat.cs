@@ -49,15 +49,15 @@ public class EnemyCombat : MonoBehaviour
         // see if the enemy can currently see the player
         _hasTargetLoS = CheckTargetLoS();
 
+        Debug.Log(_hasTargetLoS);
+
         // look at the player if in LoS
         if (_hasTargetLoS) SetEnemyFacing(transform.position - _target.transform.position);
     }
 
     public void GetTargetObject(GameObject player)
     {
-        if (_target == null) return;
-
-        Debug.Log("Get target triggered");
+        //if (_target == null) return;
         _target = player.gameObject;
     }
 
@@ -117,7 +117,7 @@ public class EnemyCombat : MonoBehaviour
 
 
         // stop going to players last seen position but not immediately
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         _thisEnemy.StopMovement();
 
 

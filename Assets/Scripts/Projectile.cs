@@ -7,6 +7,7 @@ public class Projectile : MonoBehaviour
     // set space for all relevant parent colliders and current collider
     private Collider _projectileCollider;
     private GameObject _parentObject;
+    private int _damage;
     private List<Collider> _collidersToIgnore = new List<Collider>();
 
     private void Awake()
@@ -21,7 +22,7 @@ public class Projectile : MonoBehaviour
         // if triggered by player, hit the player
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("hit player");
+            collision.gameObject.GetComponent<PlayerCombat>().TakeDamage(_damage);
         }
 
         // destroy projectile when it hits another collider
@@ -32,11 +33,15 @@ public class Projectile : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("hit player");
+            //Debug.Log("hit player");
         }
         Destroy(this.gameObject);
     }
 
+    public void SetDamage(int damage)
+    {
+        _damage = damage;
+    }
 
     public void SetParentObject(GameObject parent) 
     {

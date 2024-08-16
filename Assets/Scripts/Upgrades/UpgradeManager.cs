@@ -40,6 +40,7 @@ public class UpgradeManager : MonoBehaviour
     // properties to hold the currently aquired upgrades
     [SerializeField] private List<GameObject> _currentUpgrades;
     [SerializeField] private List<GameObject> _availableUpgrades;
+    private List<GameObject> _allUpgrades= new List<GameObject>();
 
     public List<GameObject> CurrentUpgrades => _currentUpgrades;
 
@@ -49,7 +50,12 @@ public class UpgradeManager : MonoBehaviour
     
     private void Awake()
     {
+        Upgrade[] upgrades = GetComponentsInChildren<Upgrade>();
 
+        foreach(Upgrade upgrade in upgrades)
+        {
+            _allUpgrades.Add(upgrade.gameObject);
+        }
 
         _aquisition1 = _upgradeButton1.GetComponent<UpgradeAquisitionButton>();
         _aquisition2 = _upgradeButton2.GetComponent<UpgradeAquisitionButton>();
@@ -66,7 +72,7 @@ public class UpgradeManager : MonoBehaviour
         
 
         // populate the upgrade lists if they are not empty
-        FillUpgradeLists();
+        FilllAvailableUpgradesList();
         FillUpgradeSlots();
 
         /* get the UI components
@@ -116,17 +122,15 @@ public class UpgradeManager : MonoBehaviour
     }
 
 
-    private void FillUpgradeLists()
+    private void FilllAvailableUpgradesList()
     {
-        //_onBulletHitUpgrades = typeof(OnBulletHitUpgrade);
-        _onBulletHitUpgrades.Add(new DoTOnBulletHit(5f, 0.5f));
-        _onBulletHitUpgrades.Add(new ArmorOnBulletHit());
-        _onBulletHitUpgrades.Add(new ChaosOnBulletHit());
-
-
+        foreach(GameObject upgrade in _allUpgrades)
+        {
+            _availableUpgrades.Add(upgrade);
+        }
 
     }
-
+    
     public void StartPlayerUpgradeScreen(bool invoked)
     {
         _upgradeUI.gameObject.SetActive(true);
@@ -142,6 +146,8 @@ public class UpgradeManager : MonoBehaviour
         Time.timeScale = 0;
         
     }
+
+    
 
     private int PatronModSlotsLeft()
     {
@@ -170,11 +176,22 @@ public class UpgradeManager : MonoBehaviour
 
     private GameObject AquireRandomUpgrade()
     {
-        int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
+        int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 3);
 
         if (_availableUpgrades.Count <= 0)
         {
             return null;
+        }
+
+        
+        if(_availableUpgrades.Count >= 3)
+        {
+            while(_upgradeButton1.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
+                  _upgradeButton2.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
+                  _upgradeButton3.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex])
+            {
+                upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
+            }
         }
 
         GameObject upgradeObject = _availableUpgrades[upgradeIndex];
@@ -263,12 +280,14 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
+        _player.GetComponent<PlayerController>().SetPlayerInputActive(true);
         SceneManager.LoadScene(0);
 
         // turn off the ui and start time if stopped
         if (Time.timeScale != 1) Time.timeScale = 1;
         Debug.Log(_upgradeUI.gameObject.name);
-        _player.GetComponent<PlayerController>().SetPlayerInputActive(true);
+        
+        _player.GetComponent<PlayerController>().ResetPlayer();
         _upgradeUI.gameObject.SetActive(false);
 
 

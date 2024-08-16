@@ -13,6 +13,7 @@ public class GameUIManager : MonoBehaviour
 
     // ammo counter variables
     [SerializeField] private TextMeshProUGUI _ammoCounter;
+    [SerializeField] private TextMeshProUGUI _chaosCounter;
     private Gun _currentGun => _playerController.CurrentGun;
 
     // player health bar variables
@@ -32,6 +33,7 @@ public class GameUIManager : MonoBehaviour
     {
         UpdateAmmoCount();
         UpdatePlayerHealth();
+        UpdateChaosCounter();
     }
 
     private void UpdateAmmoCount()
@@ -43,5 +45,10 @@ public class GameUIManager : MonoBehaviour
     {
         _armorSlider.value = _currentHealth / _maxHealth;
         _healthSlider.value = (_currentHealth / _maxHealth) - (_currentArmor / _maxHealth);
+    }
+
+    private void UpdateChaosCounter()
+    {
+        _chaosCounter.SetText("Chaos at: " + ChaosStack.Stacks);
     }
 }

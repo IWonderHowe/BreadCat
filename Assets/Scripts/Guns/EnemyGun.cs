@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemyGun : MonoBehaviour
 {
     // base stats for the enemy gun
-    [SerializeField] private float _damage = 5f;
+    [SerializeField] private int _damage = 5;
     [SerializeField] private float _range = 100f;
     [SerializeField] private float _baseRateOfFire = 1f;
 
@@ -43,14 +43,16 @@ public class EnemyGun : MonoBehaviour
         // for every shot in a row, shoot, then wait for the time between shots and shoot again
         for(int i = 0; i < _shotsInARow; i++)
         {
+            GameObject shotProjectile = ShootProjectile(target);
+            shotProjectile.GetComponent<Projectile>().SetParentObject(gameObject.GetComponentInParent<EnemyCombat>().gameObject);
+            shotProjectile.GetComponent<Projectile>().SetDamage(_damage);
 
-            ShootProjectile(target);
             yield return new WaitForSeconds(_timeBetweenShots);
         }
     }
     
 
-    private void ShootProjectile(GameObject target)
+    private GameObject ShootProjectile(GameObject target)
     {
         // set the projectile to be where the its origin is
         GameObject shotProjectile = Instantiate(_projectile);
@@ -74,5 +76,6 @@ public class EnemyGun : MonoBehaviour
         {
             body.velocity = vectorToTarget * _projectileSpeed;
         }
+        return shotProjectile;
     }
 }

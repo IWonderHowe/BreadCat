@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
     private static PlayerInput _playerInput;
 
     [SerializeField] private GameObjectEvent _playerPing;
-
+    private Vector3 _initialPosition; 
 
 
     private void Awake()
@@ -48,7 +48,9 @@ public class PlayerController : MonoBehaviour
         _ability1 = _ability1Object.GetComponent<CharacterAbility>();
         _ability2 = _ability2Object.GetComponent<CharacterAbility>();
         _movement = GetComponent<PlayerMovement>();
-        
+
+        _initialPosition = transform.position;
+
         // Set the current gun to the first gun
         _currentGun = _gun1.GetComponent<Gun>();
 
@@ -60,6 +62,17 @@ public class PlayerController : MonoBehaviour
 
         // set the main camera to be the player FPS camera
         _playerInput.camera = Camera.main;
+    }
+    
+    public void ResetPlayer()
+    {
+        _ability1.StopMovementAbility();
+        _ability2.StopMovementAbility();
+
+        Debug.Log(_initialPosition);
+        transform.position = _initialPosition;
+       
+        _currentGun.TriggerReload();
     }
 
     private IEnumerator PingRoutine()
@@ -133,6 +146,8 @@ public class PlayerController : MonoBehaviour
     // Swap the current player weapon to the unequipped weapon when mouse is scrolled
     public void OnSwapWeapon(InputValue value)
     {
+        //dont do this currently
+        return;
         if (!value.isPressed) return;
         if (_currentGun == _gun1) _currentGun = _gun2;
         else _currentGun = _gun1;
