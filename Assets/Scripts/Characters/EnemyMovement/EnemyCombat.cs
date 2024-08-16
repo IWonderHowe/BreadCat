@@ -21,7 +21,7 @@ public class EnemyCombat : MonoBehaviour
     [SerializeField] private GameObject _bulletOrigin;
 
     // set a space aside to store the current target and whether LoS is established
-    [SerializeField] private GameObject _target;
+    private GameObject _target;
     private bool _hasTargetLoS = false;
     
     // enemy movement properties
@@ -37,7 +37,7 @@ public class EnemyCombat : MonoBehaviour
     private Coroutine _currentCoroutine;
 
 
-    private void Start()
+    private void Awake()
     {
         // begin enemy in their idle state
         _currentCoroutine = StartCoroutine(IdleState());
@@ -46,17 +46,25 @@ public class EnemyCombat : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Debug.Log(CheckPlayerLoS());
         // see if the enemy can currently see the player
         _hasTargetLoS = CheckTargetLoS();
+        Debug.Log(_hasTargetLoS);
 
         // look at the player if in LoS
         if (_hasTargetLoS) SetEnemyFacing(transform.position - _target.transform.position);
     }
 
+    public void GetTargetObject(GameObject player)
+    {
+        Debug.Log("Get target triggered");
+        _target = player.gameObject;
+    }
+
 
     private IEnumerator IdleState()
     {
+        while (_target == null) yield return null;
+
         Debug.Log("Started idle state");
         // do nothing while the enemy does not have LoS with target
         while(!_hasTargetLoS)
@@ -141,6 +149,7 @@ public class EnemyCombat : MonoBehaviour
         // if the object hit by the raycast is the player, return true
         if(Physics.SphereCast(_bulletOrigin.transform.position, 1f, directionOfPlayer, out hit, _sightRange, _visionLayers))
         {
+            Debug.Log(hit.collider.gameObject.layer.ToString());
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 return true;
@@ -153,12 +162,15 @@ public class EnemyCombat : MonoBehaviour
     private void OnDrawGizmos()
     {
         // show a blue line for enemy LoS
-        Vector3 directionOfPlayer = _target.transform.position - _bulletOrigin.transform.position;
-        if (Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out RaycastHit hit,  _sightRange, _visionLayers))
+        if (_target != null)
         {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawLine(hit.point, _bulletOrigin.transform.position);
+            Vector3 directionOfPlayer = _target.transform.position - _bulletOrigin.transform.position;
+            if (Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out RaycastHit hit,  _sightRange, _visionLayers))
+            {
+                Gizmos.color = Color.blue;
+                Gizmos.DrawLine(hit.point, _bulletOrigin.transform.position);
 
+            }
         }
     }
 }

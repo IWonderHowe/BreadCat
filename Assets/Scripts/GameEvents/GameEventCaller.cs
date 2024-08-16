@@ -53,6 +53,11 @@ public abstract class GameEventCaller<T> : MonoBehaviour
         return ((_raiseEvent & flag) == flag);
     }
 
+    public void CallEvent()
+    {
+        _event.Invoke(_value);
+    }
+
     [System.Flags]
     public enum GameEventRaiseFlag
     {

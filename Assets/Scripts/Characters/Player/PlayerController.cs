@@ -34,10 +34,13 @@ public class PlayerController : MonoBehaviour
 
     private static PlayerInput _playerInput;
 
+    [SerializeField] private GameObjectEvent _playerPing;
+
 
 
     private void Awake()
     {
+        _playerPing.Invoke(gameObject);
 
         // Get necessary components from gameobjects
         _gun1 = _gunObject1.GetComponent<Gun>();
@@ -57,6 +60,12 @@ public class PlayerController : MonoBehaviour
 
         // set the main camera to be the player FPS camera
         _playerInput.camera = Camera.main;
+    }
+
+    public void PingPlayer()
+    {
+        Debug.Log("Player pinged");
+        //_playerPinger.CallEvent();
     }
 
     // adjust moveinput variable based in input

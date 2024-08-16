@@ -36,6 +36,7 @@ public class Gun : MonoBehaviour
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private GameObject _player;
+    [SerializeField] private LayerMask _shootableLayers;
 
     // Accuracy variables
     [SerializeField] private float _baseAccuracy = 0.80f;
@@ -248,7 +249,7 @@ public class Gun : MonoBehaviour
         
 
         // check to see if the player hits anything with a raycast based on gun properties
-        if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range))
+        if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range, _shootableLayers))
         {
             // get on shot effect, apply it to this raycast hit
             if (_onShotActive)
