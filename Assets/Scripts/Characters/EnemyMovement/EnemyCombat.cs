@@ -27,7 +27,8 @@ public class EnemyCombat : MonoBehaviour
     // enemy movement properties
     [SerializeField] private bool _canMove = false;
     private float _navIgnoreDistance = 5f;
-    [SerializeField] private int _navMask;
+    private int _navMask;
+    [SerializeField] private float _strafeDistance = 1f;
 
 
     // a place to store the other scripts on this enemy
@@ -80,6 +81,7 @@ public class EnemyCombat : MonoBehaviour
             // shoot at the target then wait for the proper time between shots
             _gun.Shoot(_target);
             yield return new WaitForSeconds(_timeBetweenShots);
+
         }
 
         
@@ -135,10 +137,9 @@ public class EnemyCombat : MonoBehaviour
 
         // get direction of player in relation to the bullet origin
         Vector3 directionOfPlayer = _target.transform.position - _bulletOrigin.transform.position;
-
         
         // if the object hit by the raycast is the player, return true
-        if(Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out hit, _sightRange, _visionLayers))
+        if(Physics.SphereCast(_bulletOrigin.transform.position, 1f, directionOfPlayer, out hit, _sightRange, _visionLayers))
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
