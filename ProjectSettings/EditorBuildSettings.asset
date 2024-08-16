@@ -5,7 +5,10 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/LevelGenerationGym.unity
     guid: 4a038117fbf78404f89e48930db31cf3
+  - enabled: 1
+    path: Assets/Scenes/EnemiesPresentationLevel.unity
+    guid: 25ee89ae5b160b944a9c05c0ee4c535f
   m_configObjects: {}

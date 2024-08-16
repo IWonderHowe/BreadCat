@@ -29,15 +29,17 @@ public class RoomGenerator : MonoBehaviour
     // a list of all cell coordinates that are empty
     private List<Vector3Int> _openCells;
 
-    [SerializeField] private PlayerSpawn _playerSpawn;
-
+    [SerializeField] private GameObject _levelEntry;
+    private GameObject _player;
+    private GameObject _playerSpawn;
+    
     public List<GameObject> _enemiesInLevel = new List<GameObject>();
     [SerializeField] private GameObject _enemyPrefab;
     [SerializeField] private LevelExit _levelExit;
 
     [SerializeField] List<ProBuilderMesh> _roomMeshes = new List<ProBuilderMesh>();
     private ProBuilderMesh _totalRoomMesh;
-    [SerializeField] private List<ProBuilderMesh> _combindedMeshes;
+    [SerializeField] private List<ProBuilderMesh> _combinedMeshes;
 
 
 
@@ -58,7 +60,13 @@ public class RoomGenerator : MonoBehaviour
         FillAvailableRoomPieces();
         FillOpenCellsList();
 
+        
 
+    }
+
+    public void SetPlayerObject(GameObject player)
+    {
+        _player = player;
     }
 
     private void FillOpenCellsList()
@@ -161,9 +169,9 @@ public class RoomGenerator : MonoBehaviour
         Instantiate(_playerSpawn, new Vector3(startCell.x * 3, startCell.y * 3, startCell.z * 3), Quaternion.identity);
 
         _roomMeshes.Add(_totalRoomMesh);
-        _combindedMeshes = CombineMeshes.Combine(_roomMeshes, _totalRoomMesh);
+        _combinedMeshes = CombineMeshes.Combine(_roomMeshes, _totalRoomMesh);
         _roomMeshes.Remove(_totalRoomMesh);
-        foreach(ProBuilderMesh mesh in _combindedMeshes)
+        foreach(ProBuilderMesh mesh in _combinedMeshes)
         {
             _roomMeshes.Remove(mesh);
         }

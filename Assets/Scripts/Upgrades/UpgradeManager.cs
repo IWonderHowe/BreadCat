@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 //using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Diagnostics;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -13,8 +14,7 @@ public class UpgradeManager : MonoBehaviour
     // make space for any player scripts that may be affected
     private PlayerCombat _playerCombat;
     [SerializeField] private Gun _playerGun;
-    [SerializeField] private GameObject _upgradeHolder;
-    [SerializeField] private GameObject _player;
+    private GameObject _player;
 
     // make a list of all possible upgrades for the player
     private List<OnBulletHitUpgrade> _onBulletHitUpgrades = new List<OnBulletHitUpgrade>();
@@ -29,6 +29,10 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Button _upgradeButton1;
     [SerializeField] private Button _upgradeButton2;
     [SerializeField] private Button _upgradeButton3;
+    private UpgradeAquisitionButton _aquisition1;
+    private UpgradeAquisitionButton _aquisition2;
+    private UpgradeAquisitionButton _aquisition3;
+
 
     // a space to store the upgrade UI
     [SerializeField] private Canvas _upgradeUI;
@@ -42,11 +46,14 @@ public class UpgradeManager : MonoBehaviour
     // make space for a list of upgrade slots and their availablility
     [SerializeField] private List<string> _upgradeSlots = new List<string>();
 
-    private void Start()
+    
+    private void Awake()
     {
-        // get combat and gun scripts attached to player
-        _playerCombat = GetComponent<PlayerCombat>();
-        //_playerGun = GetComponent<Gun>();
+
+
+        _aquisition1 = _upgradeButton1.GetComponent<UpgradeAquisitionButton>();
+        _aquisition2 = _upgradeButton2.GetComponent<UpgradeAquisitionButton>();
+        _aquisition3 = _upgradeButton3.GetComponent<UpgradeAquisitionButton>();
 
         // make sure there is only ever one upgrade manager
         GameObject[] objectManagers = GameObject.FindGameObjectsWithTag("UpgradeManager");
@@ -56,6 +63,7 @@ public class UpgradeManager : MonoBehaviour
             Destroy(this.gameObject);
         }
         DontDestroyOnLoad(this.gameObject);
+        
 
         // populate the upgrade lists if they are not empty
         FillUpgradeLists();
@@ -68,8 +76,10 @@ public class UpgradeManager : MonoBehaviour
         */
         //_upgradeUI.enabled = false;
 
-        Cursor.lockState = CursorLockMode.Confined;
+        Cursor.lockState = CursorLockMode.Locked;
     }
+
+    
 
     // fill the upgrade slots with strings of the types of upgrade slots
     private void FillUpgradeSlots()
@@ -88,10 +98,23 @@ public class UpgradeManager : MonoBehaviour
         _upgradeSlots.Add("PatronMod4");
     }
 
+    private IEnumerator DelayedSetUIActive(bool uiActive)
+    {
+        yield return new WaitForSeconds(1);
+        _upgradeUI.gameObject.SetActive(uiActive);
+    }
+
     public void ShowUpgrades()
     {
         
     }
+
+    public void GetPlayerObject(GameObject playerObject)
+    {
+        Debug.Log(playerObject.name);
+        _player = playerObject;
+    }
+
 
     private void FillUpgradeLists()
     {
@@ -104,12 +127,20 @@ public class UpgradeManager : MonoBehaviour
 
     }
 
-    public static void StartPlayerUpgrade()
+    public void StartPlayerUpgradeScreen(bool invoked)
     {
-        Debug.Log("PlayerHasBeenUpgraded");
-        //_upgradeUI.enabled = true;
+        _upgradeUI.gameObject.SetActive(true);
+
+        _aquisition1.SetUpgrade(AquireRandomUpgrade());
+        _aquisition2.SetUpgrade(AquireRandomUpgrade());
+        _aquisition3.SetUpgrade(AquireRandomUpgrade());
+
+
         Cursor.lockState = CursorLockMode.Confined;
-        PlayerController.SetPlayerInputActive(false);
+        Debug.Log(_player == null);
+        _player.GetComponent<PlayerController>().SetPlayerInputActive(false);
+        Time.timeScale = 0;
+        
     }
 
     private int PatronModSlotsLeft()
@@ -137,27 +168,31 @@ public class UpgradeManager : MonoBehaviour
         return count;
     }
 
-    public void AquireRandomUpgrade()
+    private GameObject AquireRandomUpgrade()
     {
         int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
 
         if (_availableUpgrades.Count <= 0)
         {
-            return;
+            return null;
         }
 
         GameObject upgradeObject = _availableUpgrades[upgradeIndex];
         Upgrade upgradeToAquire = _availableUpgrades[upgradeIndex].GetComponent<Upgrade>();
+        return upgradeObject;
 
-        AquireUpgrade(upgradeToAquire.UpgradeType, upgradeToAquire.UpgradeName);
 
-        Debug.Log("RandomUpgradeAquired");
+        //AquireUpgrade(upgradeToAquire.UpgradeType, upgradeToAquire.UpgradeName);
+
+        //Debug.Log("RandomUpgradeAquired");
 
     }
 
-
-    public void AquireUpgrade(string upgradeType, string name)
+    public void AquireUpgrade(GameObject upgradeObject)
     {
+        string upgradeType = upgradeObject.GetComponent<Upgrade>().GetUpgradeType();
+        string name = upgradeObject.GetComponent<Upgrade>().GetUpgradeName();
+        
         // remove this slot for available upgrades
         switch (upgradeType)
         {
@@ -228,8 +263,19 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
+        SceneManager.LoadScene(0);
+
+        // turn off the ui and start time if stopped
+        if (Time.timeScale != 1) Time.timeScale = 1;
+        Debug.Log(_upgradeUI.gameObject.name);
+        _player.GetComponent<PlayerController>().SetPlayerInputActive(true);
+        _upgradeUI.gameObject.SetActive(false);
+
+
+
+
         //_playerGun.ApplyUpgrade();
-        
+
 
 
         /* NEEDS UPGRADE IN CALL 
@@ -250,7 +296,7 @@ public class UpgradeManager : MonoBehaviour
         SceneManager.LoadScene(scene.name);
         */
 
-        
+
     }
 
 }

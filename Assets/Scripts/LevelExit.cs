@@ -9,7 +9,7 @@ public class LevelExit : MonoBehaviour
     private bool _exitActive = false;
     private GameObject _gameManager;
 
-    public UnityEvent OnExit;
+    [SerializeField] private BoolEvent _exitTriggered;
 
     private void Awake()
     {
@@ -21,8 +21,7 @@ public class LevelExit : MonoBehaviour
     {
         if(_exitActive == true && other.gameObject.GetComponent<PlayerCombat>() != null)
         {
-            Debug.Log("You win this level!");
-            OnExit.Invoke();
+            _exitTriggered.Invoke(true);
         }
     }
 

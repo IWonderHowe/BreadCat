@@ -11,10 +11,10 @@ public class UpgradeAquisitionButton : MonoBehaviour
     private TextMeshProUGUI _buttonText;
     
     // get a reference to the button that will be used
-    [SerializeField] private Upgrade _buttonUpgrade;
-    public Upgrade ButtonUpgrade => _buttonUpgrade;
+    [SerializeField] private GameObject _buttonUpgrade;
+    //public Upgrade ButtonUpgrade => _buttonUpgrade;
 
-    public UnityEvent<Upgrade> OnUpgrade; 
+    [SerializeField] private GameObjectEvent _upgradeEvent;
 
     private void Awake()
     {
@@ -23,15 +23,17 @@ public class UpgradeAquisitionButton : MonoBehaviour
     }
 
     // make this button reference a specific upgrade
-    public void SetUpgrade(Upgrade upgradeSet)
+    public void SetUpgrade(GameObject upgradeSet)
     {
         _buttonUpgrade = upgradeSet;
+        //_buttonUpgrade = upgradeSet.GetComponent<Upgrade>();
         _buttonText.SetText(_buttonUpgrade.ToString());
+        
     }
 
     public void AquireUpgrade()
     {
-        OnUpgrade.Invoke(_buttonUpgrade);
+        _upgradeEvent.Invoke(_buttonUpgrade);
     }
 
     // DEBUGGING

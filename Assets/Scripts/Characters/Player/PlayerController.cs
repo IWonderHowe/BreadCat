@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
-        _playerPing.Invoke(gameObject);
+        StartCoroutine(PingRoutine());
 
         // Get necessary components from gameobjects
         _gun1 = _gunObject1.GetComponent<Gun>();
@@ -62,10 +62,10 @@ public class PlayerController : MonoBehaviour
         _playerInput.camera = Camera.main;
     }
 
-    public void PingPlayer()
+    private IEnumerator PingRoutine()
     {
-        Debug.Log("Player pinged");
-        //_playerPinger.CallEvent();
+        yield return new WaitForSeconds(1f);
+        _playerPing.Invoke(gameObject);
     }
 
     // adjust moveinput variable based in input
@@ -144,8 +144,9 @@ public class PlayerController : MonoBehaviour
         else Cursor.lockState = CursorLockMode.Confined;
     }
 
-    public static void SetPlayerInputActive(bool isActive)
+    public void SetPlayerInputActive(bool isActive)
     {
+        _playerInput = GetComponent<PlayerInput>();
         _playerInput.enabled = isActive;
     }
 

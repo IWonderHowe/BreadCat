@@ -61,7 +61,7 @@ public class Gun : MonoBehaviour
     
     // space for the bullet tracers
     [SerializeField] private TrailRenderer _trailRenderer;
-    private Camera _playerCam;
+    private Camera _playerCam => Camera.main;
 
     // spaces to store gameobjects related to the gun
     [SerializeField] private GameObject _gunMag;
@@ -98,9 +98,6 @@ public class Gun : MonoBehaviour
         _effectiveRateOfFire = _baseRateOfFire;
         _effectiveAccuracy = _baseAccuracy;
 
-
-        // get the players camera
-        _playerCam = Camera.main;
 
         // fill gun to max ammo and allow the player to be able to shoot
         _currentAmmo = _magSize;
@@ -435,7 +432,7 @@ public class Gun : MonoBehaviour
     private Vector3 GetShotDirection()
     {
         // start with the direction the player is looking
-        Vector3 direction = _playerCam.transform.forward;
+        Vector3 direction = Camera.main.transform.forward;
 
         // calculate the current effective accuracy if the player doesnt have perfect accuracy currently
         if (_hasPerfectAccuracy) _effectiveAccuracy = 0f;

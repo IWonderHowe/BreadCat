@@ -5,6 +5,7 @@ using TMPro.EditorUtilities;
 using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
+using UnityEngine.SceneManagement;
 
 public class GrappleAbility : CharacterAbility
 {
@@ -83,7 +84,7 @@ public class GrappleAbility : CharacterAbility
     void Update()
     {
         // update the cameras forward vector
-        _camForwadVector = _playerCam.transform.forward;
+        _camForwadVector = Camera.main.transform.forward;
 
         // if the grapple joint exists, update the current grapple angle
         if (_grappleJoint != null)

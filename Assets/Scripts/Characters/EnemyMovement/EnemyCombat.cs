@@ -48,7 +48,6 @@ public class EnemyCombat : MonoBehaviour
     {
         // see if the enemy can currently see the player
         _hasTargetLoS = CheckTargetLoS();
-        Debug.Log(_hasTargetLoS);
 
         // look at the player if in LoS
         if (_hasTargetLoS) SetEnemyFacing(transform.position - _target.transform.position);
@@ -56,6 +55,8 @@ public class EnemyCombat : MonoBehaviour
 
     public void GetTargetObject(GameObject player)
     {
+        if (_target == null) return;
+
         Debug.Log("Get target triggered");
         _target = player.gameObject;
     }
@@ -65,7 +66,6 @@ public class EnemyCombat : MonoBehaviour
     {
         while (_target == null) yield return null;
 
-        Debug.Log("Started idle state");
         // do nothing while the enemy does not have LoS with target
         while(!_hasTargetLoS)
         {   
@@ -78,7 +78,6 @@ public class EnemyCombat : MonoBehaviour
 
     private IEnumerator AggroState()
     {
-        Debug.Log("Started aggro state");
 
         // while the enemy has LoS on the target
         while (_hasTargetLoS)
@@ -140,6 +139,8 @@ public class EnemyCombat : MonoBehaviour
 
     private bool CheckTargetLoS()
     {
+        if (_target == null) return false;
+
         // store a spot to store hit data
         RaycastHit hit;
 
@@ -149,7 +150,6 @@ public class EnemyCombat : MonoBehaviour
         // if the object hit by the raycast is the player, return true
         if(Physics.SphereCast(_bulletOrigin.transform.position, 1f, directionOfPlayer, out hit, _sightRange, _visionLayers))
         {
-            Debug.Log(hit.collider.gameObject.layer.ToString());
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
                 return true;
