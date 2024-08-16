@@ -345,9 +345,9 @@ MonoBehaviour:
   _visionLayers:
     serializedVersion: 2
     m_Bits: 193
-  _timeBetweenShots: 0.2
+  _timeBetweenShots: 2.5
   _gun: {fileID: 1739263275838395084}
-  _sightRange: 1000
+  _sightRange: 40
   _bulletOrigin: {fileID: 5964415605181369951}
   _canMove: 0
   _strafeDistance: 1
@@ -701,7 +701,7 @@ Transform:
   m_GameObject: {fileID: 5964415605181369951}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.033, y: 1.528, z: 0.4}
+  m_LocalPosition: {x: -0.033, y: 1.528, z: 0.911}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1085,13 +1085,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4084191802765826499, guid: d70c831f0b25a5b489851b2fb573f291, type: 3}
     - target: {fileID: 7270405755553991616, guid: af704c423c5da8d47b0c7a59a3732536, type: 3}
+      propertyPath: _shotsInARow
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7270405755553991616, guid: af704c423c5da8d47b0c7a59a3732536, type: 3}
       propertyPath: _projectileSpeed
-      value: 15
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7270405755553991616, guid: af704c423c5da8d47b0c7a59a3732536, type: 3}
       propertyPath: _projectileOrigin
       value: 
       objectReference: {fileID: 5964415605181369951}
+    - target: {fileID: 7270405755553991616, guid: af704c423c5da8d47b0c7a59a3732536, type: 3}
+      propertyPath: _projectileSpacing
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -35,8 +36,17 @@ public class PlayerController : MonoBehaviour
     private static PlayerInput _playerInput;
 
     [SerializeField] private GameObjectEvent _playerPing;
-    private Vector3 _initialPosition; 
+    private Vector3 _initialPosition;
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoad;
+    }
+
+    private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+    {
+        if(this != null) StartCoroutine(PingRoutine());
+    }
 
     private void Awake()
     {

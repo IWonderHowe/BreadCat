@@ -67,6 +67,8 @@ public class Gun : MonoBehaviour
     // spaces to store gameobjects related to the gun
     [SerializeField] private GameObject _gunMag;
     [SerializeField] private Vector3 _throwablesOrigin;
+    [SerializeField] private GameObject _bulletOrigin;
+    [SerializeField] private GameObject _gunObject;
     [SerializeField] private float _throwForce;
 
     // Create an area on the gun that will implement gun upgrades. Using object oriented upgrades, so they can be prefabbed
@@ -129,7 +131,7 @@ public class Gun : MonoBehaviour
         // DEBUGGING
         //Debug.Log(ChaosStack.Stacks);
 
-
+        
 
         // update the rate of fire based on any changes to the RoF multiplier
         _effectiveRateOfFire = _baseRateOfFire * (1 + _rateOfFireMultiplier);
@@ -297,8 +299,8 @@ public class Gun : MonoBehaviour
             
 
             // Create a trail to show where the shot actually went (expose recoil)
-            TrailRenderer bulletTrail = Instantiate(_trailRenderer, _playerCam.gameObject.transform.position, Quaternion.identity);
-            StartCoroutine(SpawnBulletTrail(bulletTrail, _player.transform.position, hit.point));
+            TrailRenderer bulletTrail = Instantiate(_trailRenderer, _bulletOrigin.transform.position, Quaternion.identity);
+            StartCoroutine(SpawnBulletTrail(bulletTrail, _bulletOrigin.transform.position, hit.point));
         }
 
         // do this on a miss

@@ -8,12 +8,15 @@ public class EnemyGun : MonoBehaviour
     [SerializeField] private int _damage = 5;
     [SerializeField] private float _range = 100f;
     [SerializeField] private float _baseRateOfFire = 1f;
+    private bool isShooting = false;
+
 
     // stats for if gun is it is a projectile weapon
     [SerializeField] private bool _usesProjectile = false;
     [SerializeField] private GameObject _projectile;
     [SerializeField] private GameObject _projectileOrigin;
     [SerializeField] private float _projectileSpeed;
+    
 
     // projectile pattern variables
     [SerializeField] private Vector2Int _projectileRowsAndColumns = new Vector2Int(1,1);
@@ -31,7 +34,6 @@ public class EnemyGun : MonoBehaviour
 
     public void Shoot(GameObject target)
     {
-        
         if (_usesProjectile)
         {
             StartCoroutine(ShootPattern(target));
@@ -40,15 +42,21 @@ public class EnemyGun : MonoBehaviour
 
     private IEnumerator ShootPattern(GameObject target)
     {
-        // for every shot in a row, shoot, then wait for the time between shots and shoot again
-        for(int i = 0; i < _shotsInARow; i++)
+        if (!isShooting)
         {
-            GameObject shotProjectile = ShootProjectile(target);
-            shotProjectile.GetComponent<Projectile>().SetParentObject(gameObject.GetComponentInParent<EnemyCombat>().gameObject);
-            shotProjectile.GetComponent<Projectile>().SetDamage(_damage);
+            isShooting = true;
+            // for every shot in a row, shoot, then wait for the time between shots and shoot again
+            for (int i = 0; i < _shotsInARow; i++)
+            {
+                GameObject shotProjectile = ShootProjectile(target);
+                shotProjectile.GetComponent<Projectile>().SetParentObject(gameObject.GetComponentInParent<EnemyCombat>().gameObject);
+                shotProjectile.GetComponent<Projectile>().SetDamage(_damage);
 
-            yield return new WaitForSeconds(_timeBetweenShots);
+                yield return new WaitForSeconds(_timeBetweenShots);
+            }
         }
+        
+        isShooting = false;
     }
     
 

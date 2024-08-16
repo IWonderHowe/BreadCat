@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerCombat : MonoBehaviour
     // health variables
     [SerializeField] private float _maxPlayerHealth = 150f;
     [SerializeField] private float _currentPlayerHealth = 0f;
+    [SerializeField] private TextMeshProUGUI _deathText;
     public float MaxHealth => _maxPlayerHealth;
     public float CurrentHealth => _currentPlayerHealth;
 
@@ -49,6 +51,11 @@ public class PlayerCombat : MonoBehaviour
 
         // reduce the player health by the effective damage taken
         _currentPlayerHealth -= effectiveDamage;
+
+        if(_currentPlayerHealth <= 0)
+        {
+            _deathText.gameObject.SetActive(true);
+        }
     }
 
     public void AddArmor(float armorToAdd)

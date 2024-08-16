@@ -86,7 +86,7 @@ public class EnemyCombat : MonoBehaviour
             if (_canMove);
 
             // shoot at the target then wait for the proper time between shots
-            _gun.Shoot(_target);
+            _gun.Shoot(_target.GetComponentInChildren<PlayerCombat>().gameObject);
             yield return new WaitForSeconds(_timeBetweenShots);
 
         }
