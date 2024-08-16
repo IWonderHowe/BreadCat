@@ -1,3 +1,4 @@
+using Cinemachine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -142,8 +143,9 @@ public class UpgradeManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Confined;
         Debug.Log(_player == null);
+        Time.timeScale = 0.001f;
         _player.GetComponent<PlayerController>().SetPlayerInputActive(false);
-        Time.timeScale = 0;
+        //_player.GetComponentInChildren<CinemachineVirtualCamera>().get
         
     }
 
@@ -184,15 +186,16 @@ public class UpgradeManager : MonoBehaviour
         }
 
         
-        if(_availableUpgrades.Count >= 3)
+        if(_availableUpgrades.Count > 3)
         {
-            while(_upgradeButton1.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
+            /*while(_upgradeButton1.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
                   _upgradeButton2.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
                   _upgradeButton3.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex])
             {
-                upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
-            }
+            }*/
+            upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
         }
+
 
         GameObject upgradeObject = _availableUpgrades[upgradeIndex];
         Upgrade upgradeToAquire = _availableUpgrades[upgradeIndex].GetComponent<Upgrade>();
@@ -275,6 +278,7 @@ public class UpgradeManager : MonoBehaviour
             // only remove upgrade if it is of same type of this upgrades name
             if (upgradeOfType.GetComponent<Upgrade>().GetUpgradeType() == upgradeType)
             {
+                Debug.Log("Removed Upgrade");
                 _availableUpgrades.Remove(upgradeOfType);
                 break;
             }
