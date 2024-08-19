@@ -31,6 +31,11 @@ public abstract class CharacterAbility : MonoBehaviour
 
     public abstract void ApplyUpgrade(GameObject upgrade);
 
+    public virtual void UseAbility(bool isPressed)
+    {
+        StartCoroutine(AbilityCooldown());
+    }
+
     public virtual void UseAbility()
     {
         // start the cooldown timer when the ability is used

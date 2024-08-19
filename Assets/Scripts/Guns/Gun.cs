@@ -372,9 +372,9 @@ public class Gun : MonoBehaviour
         // Set the initial variables for the bullet trail
         float time = 0;
 
+        // if the player has a chaos upgrade, make the tracers random colors
         if (_upgradeManager.PatronsAquired.Contains("Chaos"))
         {
-            Debug.Log("end color");
             trail.endColor = GetRandomColor();
             trail.startColor = GetRandomColor();
         }
