@@ -49,8 +49,6 @@ public class EnemyCombat : MonoBehaviour
         // see if the enemy can currently see the player
         _hasTargetLoS = CheckTargetLoS();
 
-        Debug.Log(_hasTargetLoS);
-
         // look at the player if in LoS
         if (_hasTargetLoS) SetEnemyFacing(transform.position - _target.transform.position);
     }

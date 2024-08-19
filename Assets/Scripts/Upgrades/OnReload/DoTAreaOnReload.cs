@@ -6,6 +6,9 @@ using UnityEngine;
 public class DoTAreaOnReload : OnReloadUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
+
+    public override string UpgradePatron => throw new System.NotImplementedException();
+
     private string _upgradeName = "DoTOnReload";
 
     public override void ApplyUpgrade(GameObject player)

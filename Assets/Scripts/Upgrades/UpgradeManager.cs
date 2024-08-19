@@ -38,11 +38,12 @@ public class UpgradeManager : MonoBehaviour
     // a space to store the upgrade UI
     [SerializeField] private Canvas _upgradeUI;
 
-    // properties to hold the currently aquired upgrades
+    // lists to find details about current and potential upgrades
     [SerializeField] private List<GameObject> _currentUpgrades;
     [SerializeField] private List<GameObject> _availableUpgrades;
     private List<GameObject> _allUpgrades= new List<GameObject>();
-
+    private List<string> _patronsAquired = new List<string>();
+    public List<string> PatronsAquired => _patronsAquired;
     public List<GameObject> CurrentUpgrades => _currentUpgrades;
 
     // make space for a list of upgrade slots and their availablility
@@ -208,63 +209,15 @@ public class UpgradeManager : MonoBehaviour
 
     }
 
+
     public void AquireUpgrade(GameObject upgradeObject)
     {
         string upgradeType = upgradeObject.GetComponent<Upgrade>().GetUpgradeType();
         string name = upgradeObject.GetComponent<Upgrade>().GetUpgradeName();
         
-        // remove this slot for available upgrades
-        switch (upgradeType)
-        {
-            // remove the on enemy crit order by taking away on enemy crit 1 first
-            case "OnEnemyCrit":
-                if (_upgradeSlots.Contains("OnEnemyCrit1"))
-                {
-                    _upgradeSlots.Remove("OnEnemyCrit1");
-                    break;
-                }
-                _upgradeSlots.Remove("OnEnemyCrit2");
-                break;
-            
-            // remove patron mods in counting order
-            case "PatronMod":
-                if (_upgradeSlots.Contains("PatronMod1"))
-                {
-                    _upgradeSlots.Remove("PatronMod1");
-                    break;
-                }
-                else if (_upgradeSlots.Contains("PatronMod2"))
-                {
-                    _upgradeSlots.Remove("PatronMod2");
-                    break;
-                }
-                else if (_upgradeSlots.Contains("PatronMod3"))
-                {
-                    _upgradeSlots.Remove("PatronMod3");
-                    break;
-                }
-                _upgradeSlots.Remove("PatronMod4");
-                break;
-            
-            // if not a patron or crit upgrade, just remove this upgrade type from the upgrade slots
-            default:
-                _upgradeSlots.Remove(upgradeType);
-                break;
-        }
+        RemoveTypeAvailable(upgradeType);
 
-        // find the upgrade with this name, add it to current upgrades
-        foreach(GameObject upgrade in _availableUpgrades)
-        {
-            if (upgrade.GetComponent<Upgrade>().UpgradeName == name)
-            {
-                // add the upgrade to the current upgrades list
-                _currentUpgrades.Add(upgrade);
-
-                // apply the upgrade
-                upgrade.GetComponent<Upgrade>().ApplyUpgrade(_player);
-                break;
-            }
-        }
+        AddUpgradeToLists(name);
 
         // remove all upgrades of this type from available upgrades
         foreach(GameObject upgradeOfType in _availableUpgrades)
@@ -278,7 +231,6 @@ public class UpgradeManager : MonoBehaviour
             // only remove upgrade if it is of same type of this upgrades name
             if (upgradeOfType.GetComponent<Upgrade>().GetUpgradeType() == upgradeType)
             {
-                Debug.Log("Removed Upgrade");
                 _availableUpgrades.Remove(upgradeOfType);
                 break;
             }
@@ -289,12 +241,11 @@ public class UpgradeManager : MonoBehaviour
 
         // turn off the ui and start time if stopped
         if (Time.timeScale != 1) Time.timeScale = 1;
-        Debug.Log(_upgradeUI.gameObject.name);
         
         _player.GetComponent<PlayerController>().ResetPlayer();
         _upgradeUI.gameObject.SetActive(false);
 
-
+        Debug.Log(_patronsAquired.Count);
 
 
         //_playerGun.ApplyUpgrade();
@@ -320,6 +271,68 @@ public class UpgradeManager : MonoBehaviour
         */
 
 
+    }
+    private void RemoveTypeAvailable(string upgradeType)
+    {
+        // remove this slot for available upgrades
+        switch (upgradeType)
+        {
+            // remove the on enemy crit order by taking away on enemy crit 1 first
+            case "OnEnemyCrit":
+                if (_upgradeSlots.Contains("OnEnemyCrit1"))
+                {
+                    _upgradeSlots.Remove("OnEnemyCrit1");
+                    break;
+                }
+                _upgradeSlots.Remove("OnEnemyCrit2");
+                break;
+
+            // remove patron mods in counting order
+            case "PatronMod":
+                if (_upgradeSlots.Contains("PatronMod1"))
+                {
+                    _upgradeSlots.Remove("PatronMod1");
+                    break;
+                }
+                else if (_upgradeSlots.Contains("PatronMod2"))
+                {
+                    _upgradeSlots.Remove("PatronMod2");
+                    break;
+                }
+                else if (_upgradeSlots.Contains("PatronMod3"))
+                {
+                    _upgradeSlots.Remove("PatronMod3");
+                    break;
+                }
+                _upgradeSlots.Remove("PatronMod4");
+                break;
+
+            // if not a patron or crit upgrade, just remove this upgrade type from the upgrade slots
+            default:
+                _upgradeSlots.Remove(upgradeType);
+                break;
+        }
+    }
+    private void AddUpgradeToLists(string upgradeName)
+    {
+        // find the upgrade with this name, add it to current upgrades
+        foreach (GameObject upgrade in _availableUpgrades)
+        {
+            if (upgrade.GetComponent<Upgrade>().UpgradeName == upgradeName)
+            {
+                // add the upgrade to the current upgrades list
+                _currentUpgrades.Add(upgrade);
+
+                // if the patron list doesnt have this patron yet, add it to the list
+                string patron = upgrade.GetComponent<Upgrade>().UpgradePatron;
+                Debug.Log(patron);
+                if (!_patronsAquired.Contains(patron)) _patronsAquired.Add(patron);
+
+                // apply the upgrade
+                upgrade.GetComponent<Upgrade>().ApplyUpgrade(_player);
+                break;
+            }
+        }
     }
 
 }

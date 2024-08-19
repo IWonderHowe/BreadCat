@@ -6,6 +6,8 @@ public class ChaosOnDamageAbility : OnDamageAbilityUpgrade
 {
     public override string UpgradeName{ get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnDamageAbility";
+    public override string UpgradePatron { get { return _upgradePatron; } }
+    private string _upgradePatron = "Chaos";
 
     public override void ApplyUpgrade(GameObject player)
     {

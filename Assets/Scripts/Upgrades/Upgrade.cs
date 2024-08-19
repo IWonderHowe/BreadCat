@@ -7,6 +7,7 @@ public abstract class Upgrade : MonoBehaviour
 {
     abstract public string UpgradeName { get; }
     abstract public string UpgradeType { get; }
+    abstract public string UpgradePatron { get; }
 
     public abstract void ApplyUpgrade(GameObject player);
 

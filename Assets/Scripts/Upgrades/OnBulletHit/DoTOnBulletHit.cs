@@ -6,6 +6,8 @@ public class DoTOnBulletHit : OnBulletHitUpgrade
 {
     public override string UpgradeName => throw new System.NotImplementedException();
 
+    public override string UpgradePatron => throw new System.NotImplementedException();
+
     // set spaces for duration and proportional damage of DoT
     private float _totalDoTTime;
     private float _percentOfBulletDamage;

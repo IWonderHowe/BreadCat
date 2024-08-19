@@ -6,6 +6,8 @@ public class ChaosOnKill : OnKillUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnKill";
+    public override string UpgradePatron { get { return _upgradePatron; } }
+    private string _upgradePatron = "Chaos";
 
     public override void ApplyKillEffect(GameObject player, GameObject enemyKilled)
     {

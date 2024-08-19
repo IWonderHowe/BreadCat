@@ -9,6 +9,8 @@ public class OnBulletShotDoTRoFIncrease : OnBulletShotUpgrade
     private float _multiplierPerEnemy = 0f;
     public float RoFMultiplier => DoTStack.EnemiesAffected.Count * _multiplierPerEnemy;
 
+    public override string UpgradePatron => throw new System.NotImplementedException();
+
     public OnBulletShotDoTRoFIncrease(float multiplierPerEnemyAffected)
     {
         _multiplierPerEnemy = multiplierPerEnemyAffected;

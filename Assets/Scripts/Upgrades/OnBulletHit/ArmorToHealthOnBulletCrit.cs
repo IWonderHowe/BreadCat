@@ -6,6 +6,8 @@ public class ArmorToHealthOnBulletCrit : OnBulletCritUpgrade
 {
     public override string UpgradeName => throw new System.NotImplementedException();
 
+    public override string UpgradePatron => throw new System.NotImplementedException();
+
     public override void ApplyCritEffect(GameObject player)
     {
         player.GetComponent<PlayerCombat>().ArmorToHealth();

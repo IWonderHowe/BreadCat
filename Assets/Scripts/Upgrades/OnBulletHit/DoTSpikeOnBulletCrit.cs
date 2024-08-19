@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public  class DoTSpikeOnBulletCrit : OnBulletCritUpgrade
+public class DoTSpikeOnBulletCrit : OnBulletCritUpgrade
 {
     public override string UpgradeName => throw new System.NotImplementedException();
+
+    public override string UpgradePatron => throw new System.NotImplementedException();
 
     // contructor (empty) for the DoT spike on crit
     public DoTSpikeOnBulletCrit()

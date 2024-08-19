@@ -8,6 +8,8 @@ public class ChaosOnShot : OnBulletShotUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnShot";
+    public override string UpgradePatron { get { return _upgradePatron; } }
+    private string _upgradePatron = "Chaos";
 
     [SerializeField] private float _ricochetRange = 400f;
     [SerializeField] private LayerMask _ricochetTargetLayers;

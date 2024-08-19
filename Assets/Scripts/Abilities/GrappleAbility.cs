@@ -145,7 +145,6 @@ public class GrappleAbility : CharacterAbility
             }
 
             _previousPlayerToGrappleVector = _grapplePosition - _playerObject.transform.position;
-            Debug.Log(_grappleRotation);
 
 
         }

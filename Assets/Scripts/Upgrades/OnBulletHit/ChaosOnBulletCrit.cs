@@ -7,6 +7,8 @@ public class ChaosOnBulletCrit : OnBulletCritUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnBulletCrit";
+    public override string UpgradePatron { get { return _upgradePatron; } }
+    private string _upgradePatron = "Chaos";
 
     public override void ApplyCritEffect(GameObject player)
     {

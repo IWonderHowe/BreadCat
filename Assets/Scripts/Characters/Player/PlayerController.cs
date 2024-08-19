@@ -79,7 +79,6 @@ public class PlayerController : MonoBehaviour
         _ability1.StopMovementAbility();
         _ability2.StopMovementAbility();
 
-        Debug.Log(_initialPosition);
         transform.position = _initialPosition;
        
         _currentGun.TriggerReload();

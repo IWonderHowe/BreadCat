@@ -8,8 +8,10 @@ public class ChaosOnBulletHit : OnBulletHitUpgrade
     // set the upgrade name
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnBulletHit";
+    public override string UpgradePatron { get { return _upgradePatron; } }
+    private string _upgradePatron = "Chaos";
 
-    
+
     public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
     {
         // when the player is hit, add a stack of chaos

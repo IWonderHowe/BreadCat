@@ -109,6 +109,7 @@ public class Gun : MonoBehaviour
         // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
         _effectiveAccuracy = _baseAccuracy;
+        _upgradeManager = FindObjectOfType<UpgradeManager>();
 
 
         // fill gun to max ammo and allow the player to be able to shoot
@@ -371,6 +372,13 @@ public class Gun : MonoBehaviour
         // Set the initial variables for the bullet trail
         float time = 0;
 
+        if (_upgradeManager.PatronsAquired.Contains("Chaos"))
+        {
+            Debug.Log("end color");
+            trail.endColor = GetRandomColor();
+            trail.startColor = GetRandomColor();
+        }
+
         // while the trail is up, adjust the trail position to go between where it was shot from and where it hits
         while(time < 1)
         {
@@ -382,6 +390,11 @@ public class Gun : MonoBehaviour
         // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail
         trail.transform.position = hitPoint;
         Destroy(trail.gameObject, trail.time);
+    }
+
+    private Color GetRandomColor()
+    {
+        return Random.ColorHSV(0, 1, 0.8f, 1, 0.8f, 1);
     }
 
     protected virtual void ShootProjectile()
