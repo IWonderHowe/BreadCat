@@ -9,17 +9,6 @@ public class Enemy : MonoBehaviour
     // Variables that define the enemy
     [SerializeField] private float _maxHealth;
 
-    public bool IsGrounded { get; private set; }
-    public Vector3 GroundNormal { get; private set; } = Vector3.up;
-    // ground checks
-    [SerializeField] private float _groundCheckOffset = 0.1f;
-    [SerializeField] private float _groundCheckDistance = 0.4f;
-    [SerializeField] private float _groundedFudgeTime = 0.25f;
-    [SerializeField] private LayerMask _groundMask = 1 << 0;
-
-    [SerializeField] private bool _isGrounded;
-    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
-    private float _lastGroundedTime;
 
 
     // space to store varaibles regarding enemy status
@@ -36,8 +25,21 @@ public class Enemy : MonoBehaviour
 
     [SerializeField] private GameObjectEvent _onDeath;
 
+    // grounded properties
+    public bool IsGrounded { get; private set; }
+    public Vector3 GroundNormal { get; private set; } = Vector3.up;
+    [SerializeField] private float _groundCheckOffset = 0.1f;
+    [SerializeField] private float _groundCheckDistance = 0.4f;
+    [SerializeField] private float _groundedFudgeTime = 0.25f;
+    [SerializeField] private LayerMask _groundMask = 1 << 0;
+
+    [SerializeField] private bool _isGrounded;
+    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
+    private float _lastGroundedTime;
+
     // set space for the navmesh agent
     private NavMeshAgent _agent;
+    public NavMeshAgent Agent => _agent;
 
     // space for rigidbody
     private Rigidbody _enemyRB;
@@ -109,6 +111,7 @@ public class Enemy : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
+        
         // unhalt the movement
         if (_agent.isStopped) _agent.isStopped = false;
 

@@ -160,6 +160,8 @@ public class EnemyCombat : MonoBehaviour
     {
         _currentState = "ChaseState";
 
+        while (!_thisEnemy.Agent.isActiveAndEnabled) yield return new WaitForEndOfFrame();
+
         // move the player towards the players last seen location
         NavMeshHit destinationHit;
 
