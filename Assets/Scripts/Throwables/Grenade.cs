@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class Grenade : MonoBehaviour
     private GameObject _upgrade;
 
     private GameObject _abilityObject;
+    private float _explosionForce;
 
 
     private void Awake()
@@ -27,6 +29,8 @@ public class Grenade : MonoBehaviour
     {
         // set initial grenade variables when thrown
         float timeSinceFuse = 0f;
+
+        
         
         // Wait for the desired time until the grenade explodes
         while(timeSinceFuse < timeToExplosion)
@@ -38,33 +42,48 @@ public class Grenade : MonoBehaviour
         // See which objects are within the explosion radius and damage objects that are tagged as an enemy
         _objectsHit = Physics.OverlapSphere(this.transform.position, explosionRadius, interactableLayers);
         List<GameObject> enemiesHit = new List<GameObject>();
-        foreach(Collider hit in _objectsHit)
+        foreach (Collider hit in _objectsHit)
         {
             GameObject hitObject = hit.gameObject.transform.parent.gameObject;
 
-            if(hit.gameObject.layer == LayerMask.NameToLayer("Enemy") && !enemiesHit.Contains(hitObject))
-            { 
+            if (hit.gameObject.layer == LayerMask.NameToLayer("Enemy") && !enemiesHit.Contains(hitObject))
+            {
                 hit.gameObject.GetComponentInParent<Enemy>().TakeDamage(damage);
 
                 // add the enemy gameobject to the list
                 enemiesHit.Add(hitObject);
+                // allow physics to affect the enemy
+                hitObject.GetComponent<Enemy>().PauseEnemyAgent(3f);
+
+                //damage enemy
+                hitObject.GetComponent<Enemy>().TakeDamage(damage);
+                hitObject.GetComponent<Rigidbody>().AddForce((hit.transform.position - transform.position).normalized * _explosionForce, ForceMode.Impulse);
+                hitObject.GetComponent<EnemyCombat>().SetEnemyState("FlungState");
+
                 Debug.Log("enemy hit");
             }
 
-            // damage enemy with base damage
+            // set the player object to not be the player container but rather the player
+            if (hit.gameObject.layer == LayerMask.NameToLayer("Player"))
+            {
+                hitObject = hit.gameObject.GetComponentInChildren<PlayerCombat>().gameObject;
+                hitObject.GetComponent<PlayerMovement>().PopUsingMovementAbility();
 
 
-            // apply ability upgrade if necessary
-            //if (hit.gameObject.CompareTag("Enemy") && _hasOnEnemyHitUpgrade) _grenadeHitEnemyUpgrade.ApplyOnAbilityHit(hit.gameObject.GetComponentInParent<Enemy>(), damage);
+                hitObject.GetComponent<Rigidbody>().AddForce((hit.transform.position - transform.position).normalized * _explosionForce, ForceMode.Impulse);
+            }
+            
+            // send the hit object outwards from grenade
+            else hitObject.GetComponent<Rigidbody>().AddForce((hit.transform.position - transform.position).normalized * _explosionForce, ForceMode.Impulse);
+
+            // apply upgrade to enemies hit
+            if (_hasUpgrade) _upgrade.GetComponent<OnDamageAbilityUpgrade>().InvokeUpgrade(enemiesHit.ToArray());
+
+            // Show gizmo and wait for a second before destroying the grenade
+            _grenadeExploded = true;
+            yield return new WaitForSeconds(1f);
+            Destroy(this.gameObject);
         }
-
-
-        if(_hasUpgrade) _upgrade.GetComponent<OnDamageAbilityUpgrade>().InvokeUpgrade(_objectsHit);
-
-        // Show gizmo and wait for a second before destroying the grenade
-        _grenadeExploded = true;
-        yield return new WaitForSeconds(1f);
-        Destroy(this.gameObject);
     }
 
     public void SetUpgrade(GameObject upgrade)
@@ -74,9 +93,10 @@ public class Grenade : MonoBehaviour
     }
 
     // a method to allow the start of the grenade coroutine from another script
-    public void LightFuse(float explosionRadius, float timeToExplosion, float damage, LayerMask damageableLayers, GameObject parentObject)
+    public void LightFuse(float explosionRadius, float timeToExplosion, float damage, float explosionForce, LayerMask damageableLayers, GameObject parentObject)
     {
         StartCoroutine(LiveGrenade(explosionRadius, timeToExplosion, damage, damageableLayers));
+        _explosionForce = explosionForce;
         _abilityObject = parentObject;
     }
 

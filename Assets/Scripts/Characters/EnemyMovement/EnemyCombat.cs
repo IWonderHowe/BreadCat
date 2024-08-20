@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.AI;
@@ -22,6 +23,7 @@ public class EnemyCombat : MonoBehaviour
 
     // set a space aside to store the current target and whether LoS is established
     private GameObject _target;
+    private Vector3 _targetLastSeenPosition;
     private bool _hasTargetLoS = false;
     
     // enemy movement properties
@@ -36,6 +38,9 @@ public class EnemyCombat : MonoBehaviour
 
     private Coroutine _currentCoroutine;
 
+
+    // debugging
+    [SerializeField] private string _currentState;
 
     private void Awake()
     {
@@ -59,9 +64,65 @@ public class EnemyCombat : MonoBehaviour
         _target = player.gameObject;
     }
 
+    public void SetEnemyState(string state)
+    {
+        switch (state)
+        {
+            case "FlungState":
+                StopAllCoroutines();
+                StartCoroutine(FlungState());
+                return;
+
+            case "IdleState":
+                StopAllCoroutines();
+                StartCoroutine(IdleState());
+                return;
+
+            case "AggroState":
+                StopAllCoroutines();
+                StartCoroutine(AggroState());
+                return;
+
+            case "ChaseState":
+                StopAllCoroutines();
+                StartCoroutine(ChaseState(_target.transform.position));
+                return;
+
+            default:
+                Debug.Log("InvalidState");
+                return;
+
+        }
+    }
+
+    private IEnumerator FlungState()
+    {
+        yield return new WaitForEndOfFrame();
+
+        _currentState = "FlungState";
+
+        while (!_thisEnemy.IsGrounded)
+        {
+            Debug.Log("FlungStateFrame");
+            yield return new WaitForEndOfFrame();
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        if (CheckTargetLoS())
+        {
+            StartCoroutine(AggroState()); 
+        }
+
+        
+        else StartCoroutine(ChaseState(_targetLastSeenPosition));
+
+    }
 
     private IEnumerator IdleState()
     {
+        _currentState = "IdleState";
+
         while (_target == null) yield return null;
 
         // do nothing while the enemy does not have LoS with target
@@ -76,6 +137,7 @@ public class EnemyCombat : MonoBehaviour
 
     private IEnumerator AggroState()
     {
+        _currentState = "AggroState";
 
         // while the enemy has LoS on the target
         while (_hasTargetLoS)
@@ -96,7 +158,7 @@ public class EnemyCombat : MonoBehaviour
 
     private IEnumerator ChaseState(Vector3 playerLastSeen) 
     {
-
+        _currentState = "ChaseState";
 
         // move the player towards the players last seen location
         NavMeshHit destinationHit;
@@ -150,6 +212,7 @@ public class EnemyCombat : MonoBehaviour
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Player"))
             {
+                _targetLastSeenPosition = hit.collider.gameObject.transform.position;
                 return true;
             }
         };

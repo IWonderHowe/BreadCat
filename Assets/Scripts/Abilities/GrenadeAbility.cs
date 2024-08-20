@@ -13,7 +13,7 @@ public class GrenadeAbility : CharacterAbility
     [SerializeField] private float _explosionRadius = 3f;
     [SerializeField] private float _timeToExplosion = 2f;
     [SerializeField] private float _damage = 30f;
-    [SerializeField] private LayerMask _damageableLayers;
+    [SerializeField] private LayerMask _interactableLayers;
 
     // Throwing variables
     [SerializeField] private float _throwForce = 4f;
@@ -26,6 +26,7 @@ public class GrenadeAbility : CharacterAbility
     private bool _hasUpgrade;
     private GameObject _lastFusedGrenade;
     private bool _isCooking = false;
+    [SerializeField] private float _explosionForce;
 
     protected override void Start()
     {
@@ -64,7 +65,7 @@ public class GrenadeAbility : CharacterAbility
 
 
             // light the grenade fuse
-            thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _damageableLayers, gameObject);
+            thrownGrenade.GetComponent<Grenade>().LightFuse(_explosionRadius, _timeToExplosion, _damage, _explosionForce, _interactableLayers, gameObject);
             return;
         }
 
@@ -77,6 +78,8 @@ public class GrenadeAbility : CharacterAbility
 
     }
 
+
+    // set the position of the grenade to be at the throw position while being cooked
     private IEnumerator FollowThrowPosition(GameObject thrownObject)
     {
         while (_isCooking)

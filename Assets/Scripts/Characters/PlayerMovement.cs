@@ -2,6 +2,7 @@ using Palmmedia.ReportGenerator.Core;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.ProBuilder;
 
@@ -256,5 +257,25 @@ public class PlayerMovement : MonoBehaviour
     public void SetUsingMovementAbility(bool isUsingAbility)
     {
         _isUsingMovementAbility = isUsingAbility;
+    }
+
+    public void PopUsingMovementAbility()
+    {
+        StartCoroutine(UsingMovementAbilityPopRoutine());
+    }
+
+    private IEnumerator UsingMovementAbilityPopRoutine()
+    {
+        _isUsingMovementAbility = true;
+
+        float time = 0;
+
+        while(time <= 0.25f)
+        {
+            time += Time.deltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+
+        _isUsingMovementAbility = false;
     }
 }

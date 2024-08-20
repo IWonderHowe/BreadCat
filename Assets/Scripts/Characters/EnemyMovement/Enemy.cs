@@ -9,6 +9,19 @@ public class Enemy : MonoBehaviour
     // Variables that define the enemy
     [SerializeField] private float _maxHealth;
 
+    public bool IsGrounded { get; private set; }
+    public Vector3 GroundNormal { get; private set; } = Vector3.up;
+    // ground checks
+    [SerializeField] private float _groundCheckOffset = 0.1f;
+    [SerializeField] private float _groundCheckDistance = 0.4f;
+    [SerializeField] private float _groundedFudgeTime = 0.25f;
+    [SerializeField] private LayerMask _groundMask = 1 << 0;
+
+    [SerializeField] private bool _isGrounded;
+    private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
+    private float _lastGroundedTime;
+
+
     // space to store varaibles regarding enemy status
     [SerializeField] private float _currentHealth;
     [SerializeField] private bool _isDead;
@@ -25,6 +38,10 @@ public class Enemy : MonoBehaviour
 
     // set space for the navmesh agent
     private NavMeshAgent _agent;
+
+    // space for rigidbody
+    private Rigidbody _enemyRB;
+    private EnemyCombat _enemyCombat;
     public int NavMeshAreaMask => _agent.areaMask;
 
 
@@ -33,6 +50,8 @@ public class Enemy : MonoBehaviour
     // Start is called before the first frame update 
     void Start()
     {
+        _enemyCombat = GetComponent<EnemyCombat>();
+        _enemyRB = GetComponent<Rigidbody>();
         // get this enemies nav mesh agent
         _agent = GetComponent<NavMeshAgent>();
 
@@ -44,15 +63,49 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        _isGrounded = IsGrounded;
+
         float dotDamageLeft = 0;
         foreach (DoTStack i in _dotStacks)
         {
             dotDamageLeft += i.DoTDamageRemaining;
         }
 
+        // check grounded
+        IsGrounded = CheckGrounded();
+
+        // set is kinematic and gravity based on if grounded
+        if (IsGrounded && !_enemyRB.isKinematic)
+        {
+            _enemyRB.isKinematic = true;
+            _enemyRB.useGravity = false;
+            _enemyCombat.SetEnemyState("ChaseState");
+        }
 
         UpdateHealthBar();
+
     }
+
+    // Check to see if the player is on the ground by raycasting downwards
+    private bool CheckGrounded()
+    {
+        // shoot a ray downwards and store hit information
+        bool hit = Physics.Raycast(_groundCheckStart, -transform.up, out RaycastHit hitInfo, _groundCheckDistance, _groundMask);
+        GroundNormal = Vector3.up;
+
+        // if there is no ray hit, return the player isnt grounded
+        if (!hit) return false;
+
+        // if the raycast hits the ground, return the player is grounded (and the most recent time they were grounded for coyote time)
+        if (hit)
+        {
+            _lastGroundedTime = Time.timeSinceLevelLoad;
+            return true;
+        }
+
+        return false;
+    }
+
 
     public void MoveTo(Vector3 destination)
     {
@@ -137,6 +190,34 @@ public class Enemy : MonoBehaviour
     public void SetRoom(RoomGenerator roomResided)
     {
         _roomResided = roomResided;
+    }
+
+    public void AddForceToEnemy(Vector3 force)
+    {
+        
+    }
+
+    public void PauseEnemyAgent(float time)
+    {
+        StartCoroutine(PauseNavMesh(time));
+    }
+    // pause the nav mesh for a set time
+    private IEnumerator PauseNavMesh(float time)
+    {
+        // an end time and disable navmesh
+        float endTime = Time.timeSinceLevelLoad + time;
+        _agent.enabled = false;
+        _enemyRB.isKinematic = false;
+        _enemyRB.useGravity = true;
+
+        while (Time.timeSinceLevelLoad <= endTime)
+        {
+            yield return null;
+        }
+
+        _enemyRB.isKinematic = true;
+        _enemyRB.useGravity = false;
+        _agent.enabled = true;
     }
 
 }

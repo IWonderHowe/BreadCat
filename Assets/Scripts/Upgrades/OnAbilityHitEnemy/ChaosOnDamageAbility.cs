@@ -14,7 +14,7 @@ public class ChaosOnDamageAbility : OnDamageAbilityUpgrade
         player.GetComponent<PlayerController>().Ability1Object.GetComponent<CharacterAbility>().ApplyUpgrade(gameObject);
     }
 
-    public override void InvokeUpgrade(Collider[] enemiesHit)
+    public override void InvokeUpgrade(GameObject[] enemiesHit)
     {
         Debug.Log(enemiesHit.Length + " stacks added for enemies hit by nade");
         ChaosStack.AddStacks(enemiesHit.Length);
