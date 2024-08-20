@@ -25,15 +25,19 @@ public class Grenade : MonoBehaviour
     {
     }
 
+    // blow up grenade on touching enemy
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.gameObject.layer != LayerMask.NameToLayer("Enemy")) _grenadeExploded = true;
+    }
+
     private IEnumerator LiveGrenade(float explosionRadius, float timeToExplosion, float damage, LayerMask interactableLayers)
     {
         // set initial grenade variables when thrown
         float timeSinceFuse = 0f;
-
-        
         
         // Wait for the desired time until the grenade explodes
-        while(timeSinceFuse < timeToExplosion)
+        while(timeSinceFuse < timeToExplosion && _grenadeExploded == false)
         {
             timeSinceFuse += Time.deltaTime;
             yield return null;
@@ -44,7 +48,7 @@ public class Grenade : MonoBehaviour
         List<GameObject> enemiesHit = new List<GameObject>();
         foreach (Collider hit in _objectsHit)
         {
-            GameObject hitObject = hit.gameObject.transform.parent.gameObject;
+            GameObject hitObject = hit?.gameObject.transform.parent.gameObject;
 
             if (hit.gameObject.layer == LayerMask.NameToLayer("Enemy") && !enemiesHit.Contains(hitObject))
             {
