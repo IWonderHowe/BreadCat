@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +83,7 @@ public class RoomGenerator : MonoBehaviour
             }
         }
     }
-
+    
     private void RemoveAllEntrances()
     {
 
@@ -566,20 +567,20 @@ public class RoomGenerator : MonoBehaviour
         switch (startWall)
         {
             case "North":
-                startCell.x = Random.Range(0, (int)_roomSize.x);
+                startCell.x = UnityEngine.Random.Range(0, (int)_roomSize.x);
                 startCell.z = _roomSize.z - 1;
                 break;
             case "South":
-                startCell.x = Random.Range(0, (int)_roomSize.x);
+                startCell.x = UnityEngine.Random.Range(0, (int)_roomSize.x);
                 startCell.z = 0;
                 break;
             case "East":
                 startCell.x = _roomSize.x - 1;
-                startCell.z = Random.Range(0, (int)_roomSize.z);
+                startCell.z = UnityEngine.  Random.Range(0, (int)_roomSize.z);
                 break;
             case "West":
                 startCell.x = 0;
-                startCell.z = Random.Range(0, (int)_roomSize.z);
+                startCell.z = UnityEngine.Random.Range(0, (int)_roomSize.z);
                 break;
             default:
                 Debug.Log("Whoops");
@@ -620,20 +621,20 @@ public class RoomGenerator : MonoBehaviour
         switch (exitWall)
         {
             case "North":
-                exitCell.x = Random.Range(0, (int)_roomSize.x);
+                exitCell.x = UnityEngine.Random.Range(0, (int)_roomSize.x);
                 exitCell.z = _roomSize.z - 1;
                 break;
             case "South":
-                exitCell.x = Random.Range(0, (int)_roomSize.x);
+                exitCell.x = UnityEngine.Random.Range(0, (int)_roomSize.x);
                 exitCell.z = 0;
                 break;
             case "East":
                 exitCell.x = _roomSize.x - 1;
-                exitCell.z = Random.Range(0, (int)_roomSize.z);
+                exitCell.z = UnityEngine.Random.Range(0, (int)_roomSize.z);
                 break;
             case "West":
                 exitCell.x = 0;
-                exitCell.z = Random.Range(0, (int)_roomSize.z);
+                exitCell.z = UnityEngine.Random.Range(0, (int)_roomSize.z);
                 break;
             default:
                 Debug.Log("Whoops");
@@ -658,8 +659,10 @@ public class RoomGenerator : MonoBehaviour
         Vector3 spawnLocation = new Vector3(cell.x * 3, cell.y * 3, (cell.z + 1) * 3);
 
         // get a random piece to place based on available pieces
-        int randomIndex = Random.Range(0, _availablePieces[cell.x, cell.y, cell.z].Count - 1);
+        int randomIndex = UnityEngine.Random.Range(0, _availablePieces[cell.x, cell.y, cell.z].Count - 1);
 
+        // get the a reference the piece to place
+        if (randomIndex < 0 || _availablePieces.GetLength(1) >= randomIndex) return ;
         GameObject pieceToPlace = _availablePieces[cell.x, cell.y, cell.z][randomIndex];
 
         // add the cell into the room layout array
@@ -671,7 +674,7 @@ public class RoomGenerator : MonoBehaviour
         if (placedPiece.GetComponent<LevelPiece>().IsExit) _levelExit = placedPiece.GetComponent<LevelExit>();
 
 
-        if (Random.Range(0, 10) == 2 || _enemiesInLevel.Count == 0)
+        if (UnityEngine.Random.Range(0, 10) == 2 || _enemiesInLevel.Count == 0)
         {
             if (!placedPiece.GetComponent<LevelPiece>().CenterOccupied && !placedPiece.GetComponent<LevelPiece>().IsEntrance && !placedPiece.GetComponent<LevelPiece>().IsExit)
             {
