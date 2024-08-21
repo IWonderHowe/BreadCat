@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &429784753051391793
+--- !u!1 &2580165090830109440
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,12 +8,12 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7472697969707613748}
-  - component: {fileID: 3190794014032824486}
-  - component: {fileID: 5221378137254661412}
-  - component: {fileID: 7352245410048136160}
-  - component: {fileID: 7429347027688362280}
-  - component: {fileID: 5167001841594818185}
+  - component: {fileID: 8692595092753074684}
+  - component: {fileID: 2374518761620480494}
+  - component: {fileID: 5242827279040378220}
+  - component: {fileID: 5638750064589662649}
+  - component: {fileID: 3140807128014300666}
+  - component: {fileID: 9055794026885469341}
   m_Layer: 0
   m_Name: ForwardWall
   m_TagString: Wall
@@ -21,28 +21,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7472697969707613748
+--- !u!4 &8692595092753074684
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.125, z: 1.375}
+  m_LocalPosition: {x: 0.5, y: 0.875, z: 1.375}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1753145088511923351}
+  m_Father: {fileID: 2880125911391724201}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3190794014032824486
+--- !u!114 &2374518761620480494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8233d90336aea43098adf6dbabd606a2, type: 3}
@@ -163,55 +163,55 @@ MonoBehaviour:
   - m_Vertices: 0b0000000e00000012000000
   m_SharedTextures: []
   m_Positions:
-  - {x: -1.5, y: -1, z: 0.125}
-  - {x: 1.5, y: -1, z: 0.125}
-  - {x: -1.5, y: 1.75, z: 0.125}
-  - {x: 1.5, y: 1.75, z: 0.125}
-  - {x: 1.5, y: -1, z: 0.125}
-  - {x: 1.5, y: -1, z: -0.125}
-  - {x: 1.5, y: 1.75, z: 0.125}
-  - {x: 1.5, y: 1.75, z: -0.125}
-  - {x: 1.5, y: -1, z: -0.125}
-  - {x: -1.5, y: -1, z: -0.125}
-  - {x: 1.5, y: 1.75, z: -0.125}
-  - {x: -1.5, y: 1.75, z: -0.125}
-  - {x: -1.5, y: -1, z: -0.125}
-  - {x: -1.5, y: -1, z: 0.125}
-  - {x: -1.5, y: 1.75, z: -0.125}
-  - {x: -1.5, y: 1.75, z: 0.125}
-  - {x: -1.5, y: 1.75, z: 0.125}
-  - {x: 1.5, y: 1.75, z: 0.125}
-  - {x: -1.5, y: 1.75, z: -0.125}
-  - {x: 1.5, y: 1.75, z: -0.125}
-  - {x: -1.5, y: -1, z: -0.125}
-  - {x: 1.5, y: -1, z: -0.125}
-  - {x: -1.5, y: -1, z: 0.125}
-  - {x: 1.5, y: -1, z: 0.125}
+  - {x: -2, y: -1, z: 0.125}
+  - {x: 1, y: -1, z: 0.125}
+  - {x: -2, y: 2, z: 0.125}
+  - {x: 1, y: 2, z: 0.125}
+  - {x: 1, y: -1, z: 0.125}
+  - {x: 1, y: -1, z: -0.125}
+  - {x: 1, y: 2, z: 0.125}
+  - {x: 1, y: 2, z: -0.125}
+  - {x: 1, y: -1, z: -0.125}
+  - {x: -2, y: -1, z: -0.125}
+  - {x: 1, y: 2, z: -0.125}
+  - {x: -2, y: 2, z: -0.125}
+  - {x: -2, y: -1, z: -0.125}
+  - {x: -2, y: -1, z: 0.125}
+  - {x: -2, y: 2, z: -0.125}
+  - {x: -2, y: 2, z: 0.125}
+  - {x: -2, y: 2, z: 0.125}
+  - {x: 1, y: 2, z: 0.125}
+  - {x: -2, y: 2, z: -0.125}
+  - {x: 1, y: 2, z: -0.125}
+  - {x: -2, y: -1, z: -0.125}
+  - {x: 1, y: -1, z: -0.125}
+  - {x: -2, y: -1, z: 0.125}
+  - {x: 1, y: -1, z: 0.125}
   m_Textures0:
-  - {x: 1.5, y: -1}
-  - {x: -1.5, y: -1}
-  - {x: 1.5, y: 1.75}
-  - {x: -1.5, y: 1.75}
+  - {x: 2, y: -1}
+  - {x: -1, y: -1}
+  - {x: 2, y: 2}
+  - {x: -1, y: 2}
   - {x: 0.125, y: -1}
   - {x: -0.125, y: -1}
-  - {x: 0.125, y: 1.75}
-  - {x: -0.125, y: 1.75}
-  - {x: 1.5, y: -1}
-  - {x: -1.5, y: -1}
-  - {x: 1.5, y: 1.75}
-  - {x: -1.5, y: 1.75}
+  - {x: 0.125, y: 2}
+  - {x: -0.125, y: 2}
+  - {x: 1, y: -1}
+  - {x: -2, y: -1}
+  - {x: 1, y: 2}
+  - {x: -2, y: 2}
   - {x: 0.125, y: -1}
   - {x: -0.125, y: -1}
-  - {x: 0.125, y: 1.75}
-  - {x: -0.125, y: 1.75}
-  - {x: -1.5, y: 0.125}
-  - {x: 1.5, y: 0.125}
-  - {x: -1.5, y: -0.125}
-  - {x: 1.5, y: -0.125}
-  - {x: 1.5, y: -0.125}
-  - {x: -1.5, y: -0.125}
-  - {x: 1.5, y: 0.125}
-  - {x: -1.5, y: 0.125}
+  - {x: 0.125, y: 2}
+  - {x: -0.125, y: 2}
+  - {x: -2, y: 0.125}
+  - {x: 1, y: 0.125}
+  - {x: -2, y: -0.125}
+  - {x: 1, y: -0.125}
+  - {x: 2, y: -0.125}
+  - {x: -1, y: -0.125}
+  - {x: 2, y: 0.125}
+  - {x: -1, y: 0.125}
   m_Textures2: []
   m_Textures3: []
   m_Tangents:
@@ -248,18 +248,18 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 3226
+  m_VersionIndex: 3399
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
   m_SelectedVertices: 
---- !u!114 &5221378137254661412
+--- !u!114 &5242827279040378220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ca002da428252441b92f28d83c8a65f, type: 3}
@@ -281,13 +281,13 @@ MonoBehaviour:
     - rid: 2760340906165141623
       type: {class: Cube, ns: UnityEngine.ProBuilder.Shapes, asm: Unity.ProBuilder}
       data: 
---- !u!23 &7352245410048136160
+--- !u!23 &5638750064589662649
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -323,21 +323,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!33 &7429347027688362280
+--- !u!33 &3140807128014300666
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   m_Mesh: {fileID: 0}
---- !u!64 &5167001841594818185
+--- !u!64 &9055794026885469341
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 429784753051391793}
+  m_GameObject: {fileID: 2580165090830109440}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -353,7 +353,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
---- !u!1 &3466333175511045248
+--- !u!1 &7793385628312816690
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,8 +361,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1753145088511923351}
-  - component: {fileID: 511717744169250852}
+  - component: {fileID: 2880125911391724201}
+  - component: {fileID: 1245140223928117161}
   m_Layer: 0
   m_Name: WallUnfloored
   m_TagString: Untagged
@@ -370,29 +370,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1753145088511923351
+--- !u!4 &2880125911391724201
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466333175511045248}
+  m_GameObject: {fileID: 7793385628312816690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.5, y: 0.125, z: 1.5}
+  m_LocalPosition: {x: 3.7558863, y: 0, z: -2.549916}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7472697969707613748}
+  - {fileID: 8692595092753074684}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &511717744169250852
+--- !u!114 &1245140223928117161
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3466333175511045248}
+  m_GameObject: {fileID: 7793385628312816690}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32e6bfc218b5fc4468663848b0afe713, type: 3}
