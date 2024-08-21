@@ -21,21 +21,23 @@ public class LevelPieceManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> _flooredPieces;
 
-    public GameObject GetLevelPieceForCell(CellProperties properties)
+    public GameObject GetLevelPieceForCell(CellProperties cellProperties)
     {
-        // start with all level pieces
-        List<GameObject> potentialPieces = _levelPieces;
+        // make a list of potential pieces for the cell
+        List<GameObject> potentialPieces = new List<GameObject>();
 
-        // remove pieces based on if thier properties match with the cell properties
-        foreach(GameObject piece in potentialPieces)
+        // add potential pieces based on if thier properties match with the cell properties
+        foreach (GameObject piece in _levelPieces)
         {
             LevelPiece pieceProperties = piece.GetComponent<LevelPiece>();
 
             // remove unfloored pieces if needed
-            if (pieceProperties.BelowOpen != properties.BelowOpen) potentialPieces.Remove(piece);
+            if (pieceProperties.BelowOpen != cellProperties.BelowOpen) continue;
 
             // if the piece type doesnt fit with the needed type, remove it
-            if (pieceProperties.WallType != properties.WallType) potentialPieces.Remove(piece);
+            if (pieceProperties.WallType != cellProperties.WallType) continue;
+
+            potentialPieces.Add(piece);
         }
 
         return potentialPieces[0];
