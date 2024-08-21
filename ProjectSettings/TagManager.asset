@@ -8,6 +8,8 @@ TagManager:
   - EnemyCrit
   - Ground
   - UpgradeManager
+  - Wall
+  - Floor
   layers:
   - Default
   - TransparentFX

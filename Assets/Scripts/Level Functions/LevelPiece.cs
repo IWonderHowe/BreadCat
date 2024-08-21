@@ -4,11 +4,9 @@ using UnityEngine;
 
 public class LevelPiece : MonoBehaviour
 {
+
+    [SerializeField] public WallLayout WallType;
     [SerializeField] public Vector3 Size;
-    [SerializeField] public bool NorthOpen;
-    [SerializeField] public bool SouthOpen;
-    [SerializeField] public bool EastOpen;
-    [SerializeField] public bool WestOpen;
     [SerializeField] public bool AboveOpen;
     [SerializeField] public bool BelowOpen;
     [SerializeField] public bool IsEntrance;
@@ -20,6 +18,5 @@ public class LevelPiece : MonoBehaviour
     //properties for debugging
     [SerializeField] public bool IsCourtyard;
     [SerializeField] public bool IsOpenPiece;
-
 
 }

@@ -58,7 +58,7 @@ public class RoomGenerator : MonoBehaviour
         PopluateCourtyardGrid();
 
         // populate the lists for open cells and potential room pieces
-        FillAvailableRoomPieces();
+        //FillAvailableRoomPieces();
         FillOpenCellsList();
 
         
@@ -146,13 +146,13 @@ public class RoomGenerator : MonoBehaviour
         // determine the cell with the room entrance and instantiate a piece for it
         Vector3Int startCell = FindStartCell("North");
         SpawnRoomPiece(startCell);
-        UpdateAvailableRoomPieces(startCell);
+        //UpdateAvailableRoomPieces(startCell);
         RemoveAllEntrances();
 
         // determine the cell for the roome exit and instantiate a piece for it
         Vector3Int exitCell = FindExitCell("North");
         SpawnRoomPiece(exitCell);
-        UpdateAvailableRoomPieces(exitCell);
+        //UpdateAvailableRoomPieces(exitCell);
         RemoveAllExits();
 
         // create a space to store the next cell to find the piece for, and find the next piece to generate
@@ -163,7 +163,7 @@ public class RoomGenerator : MonoBehaviour
         for (int x = 0; x < _roomLayout.Length - 2; x++)
         {
             SpawnRoomPiece(nextCell);
-            UpdateAvailableRoomPieces(nextCell);
+            //UpdateAvailableRoomPieces(nextCell);
             nextCell = GetNextCell(nextCell);
         }
 
@@ -183,7 +183,7 @@ public class RoomGenerator : MonoBehaviour
         
     }
 
-    private void FillAvailableRoomPieces()
+    /*private void FillAvailableRoomPieces()
     {
         for (int x = 0; x < _roomSize.x; x++)
         {
@@ -233,15 +233,16 @@ public class RoomGenerator : MonoBehaviour
                 }
             }
         }
-    }
+    }*/
 
     // Courtyard methods
+    /*
     private bool CheckIfOpenOnAllSides(LevelPiece piece)
     {
         if (piece.WestOpen && piece.EastOpen && piece.NorthOpen && piece.SouthOpen && piece.AboveOpen) return true;
         //if (!piece.IsCourtyard) return false;
         return false;
-    }
+    }*/
 
     private void PopluateCourtyardGrid()
     {
@@ -355,7 +356,7 @@ public class RoomGenerator : MonoBehaviour
         return adjacentCells;
     }
 
-    private void UpdateAvailableRoomPieces(Vector3Int cellPlaced)
+    /*private void UpdateAvailableRoomPieces(Vector3Int cellPlaced)
     {
         // set space for variables needed up update which pieces are available
         List<Vector3Int> adjacjentCells = GetAdjacentEmptyCells(cellPlaced);
@@ -532,7 +533,7 @@ public class RoomGenerator : MonoBehaviour
         }
         
     }
-
+    */
     private Vector3Int GetNextCell(Vector3Int lastCell)
     {
         // have a place to store the information for the next cell
