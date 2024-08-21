@@ -179,7 +179,7 @@ public class NewRoomGenerator : MonoBehaviour
         // update the potential piece count from the piece list
         cellProperties.UpdatePotentialPieces(_pieceList);
 
-
+        Debug.Log(cellProperties.Coordinate + " " + cellProperties.WallType + " " + cellProperties.BelowOpen);
 
         // set the coordinates properties to be these properties
         _cellProperties[coordinate.x, coordinate.y, coordinate.z] = cellProperties;
