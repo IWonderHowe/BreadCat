@@ -6,7 +6,7 @@ public class LevelPiece : MonoBehaviour
 {
 
     [SerializeField] public WallLayout WallType;
-    [SerializeField] public Vector3 Size;
+    [SerializeField] public Vector3Int Size;
     [SerializeField] public bool AboveOpen;
     [SerializeField] public bool BelowOpen;
     [SerializeField] public bool IsEntrance;

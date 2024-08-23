@@ -43,6 +43,7 @@ public class CellProperties
         AboveOpen = true;
         PieceChosen = false;
         _coordinate = coordinate;
+        
     }
 
     // find all potential pieces withing the level piece manager
@@ -54,13 +55,21 @@ public class CellProperties
         // go through all level pieces and if it matches this cells needs, add to the potential piece count
         foreach(GameObject piece in pieceManager.LevelPieces)
         {
-            if(piece.GetComponent<LevelPiece>().WallType == WallType)
+            if (piece.GetComponent<LevelPiece>().WallType == WallType && DoesPieceFit(piece.GetComponent<LevelPiece>().Size)) 
             {
                 potentialCount++;
             }
         }
 
         _potentialPieces = potentialCount;
+    }
+
+    private bool DoesPieceFit(Vector3Int pieceSize)
+    {
+
+        // Check to see if a piece can fit into the possible sizes for this cell
+        if (pieceSize.x <= PossibleSizes.GetLength(0) && pieceSize.y <= PossibleSizes.GetLength(1) && pieceSize.z <= PossibleSizes[pieceSize.x - 1, pieceSize.y - 1]) return true;
+        return false;
     }
 
     // get the proper rotation for a north based level piece to apply to this cell

@@ -53,6 +53,8 @@ public class NewRoomGenerator : MonoBehaviour
 
         FillCellAvailableSizes();
 
+        FillCellAvailablePieceCount();
+
         GenerateRoom();
 
     }
@@ -91,6 +93,7 @@ public class NewRoomGenerator : MonoBehaviour
 
     private Vector3Int GetCellToFill()
     {
+        // start with a vector 3 int of all -1s so errors are easy to spot
         Vector3Int cellToFill = Vector3Int.one * -1;
 
         // get the lowest possible pieces for each cell, aka the full total number of available pieces for generation
@@ -178,19 +181,20 @@ public class NewRoomGenerator : MonoBehaviour
                 break;
         }
 
-        // update the potential piece count from the piece list
-        cellProperties.UpdatePotentialPieces(_pieceList);
-
-
         //Debug.Log(cellProperties.Coordinate + " " + cellProperties.WallType + " " + cellProperties.BelowOpen);
 
         // set the coordinates properties to be these properties
         _cellProperties[coordinate.x, coordinate.y, coordinate.z] = cellProperties;
     }
 
-    private void FillCellAvailableSizes()
+    private void FillCellAvailablePieceCount()
     {
-        CallForAllCells(SetCellAvailableSize, _roomSize);
+        CallForAllCells(UpdateCellAvailablePieces, _roomSize);
+    }
+
+    private void UpdateCellAvailablePieces(CellProperties properties)
+    {
+        properties.UpdatePotentialPieces(_pieceList);
     }
 
     /*public bool DoesPieceFit(LevelPiece piece, Vector3Int origin)
@@ -209,7 +213,12 @@ public class NewRoomGenerator : MonoBehaviour
 
     }*/
 
-    // 
+    // methods to get available size data for cells
+    private void FillCellAvailableSizes()
+    {
+        CallForAllCells(SetCellAvailableSize, _roomSize);
+    }
+
     private void SetCellAvailableSize(CellProperties properties)
     {
         // Method 2: find the max length of every coordinate going from its origin
@@ -341,21 +350,6 @@ public class NewRoomGenerator : MonoBehaviour
     {
         return coordsEast == 0;
     }
-
-
-    // find all avaialable pieces for a given room generation
-    private void FillRoomAvailablePieces()
-    {
-        CallForAllCells(FillCellAvailablePieces, _roomSize);
-    }
-
-    private void FillCellAvailablePieces(Vector3Int cell)
-    {
-        //_availablePieces[cell.x, cell.y, cell.z] = new List<GameObject>();
-        //_availablePieces[cell.x, cell.y, cell.z].Add(_pieceList.LevelPieces[0]);
-    }
-
-
 
 
     // cycle through all cells based on their coordinates
