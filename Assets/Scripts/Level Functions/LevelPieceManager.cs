@@ -21,6 +21,13 @@ public class LevelPieceManager : MonoBehaviour
 
     [SerializeField] private List<GameObject> _flooredPieces;
 
+    [SerializeField] private NewRoomGenerator _generator;
+
+    private void Start()
+    {
+        _generator = GetComponent<NewRoomGenerator>();
+    }
+
     public GameObject GetLevelPieceForCell(CellProperties cellProperties)
     {
         // make a list of potential pieces for the cell
@@ -36,6 +43,8 @@ public class LevelPieceManager : MonoBehaviour
 
             // if the piece type doesnt fit with the needed type, remove it
             if (pieceProperties.WallType != cellProperties.WallType) continue;
+
+            // check to see if this level piece size fits the cell
 
             potentialPieces.Add(piece);
         }

@@ -9,7 +9,7 @@ public class CellProperties
     private Vector3Int _coordinate;
     public Vector3Int Coordinate => _coordinate;
 
-    public Vector3Int SizeAvailable;
+    public int[,] PossibleSizes;
 
     public List<CellSide> AllOpenSides;
 
@@ -35,7 +35,6 @@ public class CellProperties
     // contstructor
     public CellProperties(Vector3Int coordinate)
     {
-        AllOpenSides = new List<CellSide>();
         NorthOpen = true;
         SouthOpen = true;
         EastOpen = true;
@@ -76,8 +75,6 @@ public class CellProperties
         // if the piece is a single wall, return the rotation relating to which wall it needs to be
         if(pieceProperties.WallType == WallLayout.Wall)
         {
-            Debug.Log("Choose wall rotation");
-            Debug.Log(EastOpen);
             if (!NorthOpen) return 0f;
             if (!EastOpen) return 90f;
             if (!SouthOpen) return 180f;

@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder;
+using static UnityEngine.UI.Image;
 
 public class NewRoomGenerator : MonoBehaviour
 {
@@ -32,7 +34,7 @@ public class NewRoomGenerator : MonoBehaviour
     //private List<GameObject>[,,] _availablePieces;
 
     // a count of empty cells left, used to determine how many iterations of generation
-    private int _emptyCellCount;
+    private int _emptyCellCount; 
 
     private void Start()
     {
@@ -48,6 +50,8 @@ public class NewRoomGenerator : MonoBehaviour
 
         //FillRoomAvailablePieces();
         FillRoomProperties();
+
+        FillCellAvailableSizes();
 
         GenerateRoom();
 
@@ -117,15 +121,13 @@ public class NewRoomGenerator : MonoBehaviour
 
     private void FillRoomProperties()
     {
-        CallForAllCells(SetBaseCellProperties);
+        CallForAllCells(SetBaseCellProperties, _roomSize);
     }
-
 
     private void SetBaseCellProperties(Vector3Int coordinate)
     {
         // add a new cell property object to the list
         CellProperties cellProperties = new CellProperties(coordinate);
-
 
         // if on base level of room set the cell to need to have a room
         if(coordinate.y == 0)
@@ -134,10 +136,10 @@ public class NewRoomGenerator : MonoBehaviour
         }
 
         // get which room walls this cell is touching
-        cellProperties.NorthOpen = !OnNorthWall(coordinate.z);
-        cellProperties.SouthOpen = !OnSouthWall(coordinate.z);
-        cellProperties.EastOpen = !OnEastWall(coordinate.x);
-        cellProperties.WestOpen = !OnWestWall(coordinate.x);
+        cellProperties.NorthOpen = !OnNorthRoomWall(coordinate.z);
+        cellProperties.SouthOpen = !OnSouthRoomWall(coordinate.z);
+        cellProperties.EastOpen = !OnEastRoomWall(coordinate.x);
+        cellProperties.WestOpen = !OnWestRoomWall(coordinate.x);
 
 
         // count the touching room walls
@@ -148,7 +150,7 @@ public class NewRoomGenerator : MonoBehaviour
         if (!cellProperties.WestOpen) wallCount++;
         
 
-        // get the wall type based on wall count
+        // get the necessary wall type based on wall count
         switch (wallCount)
         {
             case 0:
@@ -179,38 +181,172 @@ public class NewRoomGenerator : MonoBehaviour
         // update the potential piece count from the piece list
         cellProperties.UpdatePotentialPieces(_pieceList);
 
-        Debug.Log(cellProperties.Coordinate + " " + cellProperties.WallType + " " + cellProperties.BelowOpen);
+
+        //Debug.Log(cellProperties.Coordinate + " " + cellProperties.WallType + " " + cellProperties.BelowOpen);
 
         // set the coordinates properties to be these properties
         _cellProperties[coordinate.x, coordinate.y, coordinate.z] = cellProperties;
-
-        
     }
 
-    private bool OnEastWall(int coordsEast)
+    private void FillCellAvailableSizes()
+    {
+        CallForAllCells(SetCellAvailableSize, _roomSize);
+    }
+
+    /*public bool DoesPieceFit(LevelPiece piece, Vector3Int origin)
+    {
+
+        // see if it fits on the x origin
+        // piece doesnt fit if size of piece goes over size of room from point
+        if (origin.x + piece.Size.x >= _roomSize.x) return false;
+
+        // piece doesnt fit if any of the spaces in the x row are 
+        for (int i = 1; i < piece.Size.x; i++)
+        {
+            if (_cellProperties[origin.x + i, origin.y, origin.z].PieceChosen) return false;
+        }
+
+
+    }*/
+
+    // 
+    private void SetCellAvailableSize(CellProperties properties)
+    {
+        // Method 2: find the max length of every coordinate going from its origin
+
+        Vector3Int originCoordinate = properties.Coordinate;
+
+        Vector3Int originEmptyCellsLength = GetEmptyCellsLengthFromPoint(originCoordinate);
+
+        // get x empty cells legnth along all z coordinates. Do this for each y level possible within origin empty cells length
+        // set space for the cell size available data
+        properties.PossibleSizes = new int[originEmptyCellsLength.x, originEmptyCellsLength.y];
+
+        // for every y level
+        for (int k = 0; k < originEmptyCellsLength.y; k++)
+        {
+            // loop through all x cells
+            for(int i = 0; i < originEmptyCellsLength.x; i++)
+            {
+                int zSizeAtX = 0;
+                // for each x cell, check the length of empty cells from that grid point, up to the z origin empty cells length
+                for(int j = 0; j < originEmptyCellsLength.z; j++)
+                {
+                    // if a piece isnt chosen, iterate on the z size
+                    if (_cellProperties[originCoordinate.x + i, k, j].PieceChosen) break;
+                    zSizeAtX++;
+                }
+
+                // set the z size at the xy coordinate
+                properties.PossibleSizes[i, k] = zSizeAtX;
+            }
+        }
+
+
+        // Method 1: iterate a box
+        /*
+        // create the initial available dimensions of the cell
+        int cellXSize = 1;
+        int cellYSize = 1;
+        int cellZSize = 1;
+
+        // store whether more iteration is possible in each direction
+        bool xCanIterate = true;
+        bool yCanIterate = true;
+        bool zCanIterate = true;
+
+        // create a list to store the new cells added to check if available
+        List<Vector3Int> newCellsToCheck = new List<Vector3Int>();
+
+        // while iteration in any dimension is still possible
+        while(xCanIterate || yCanIterate || zCanIterate)
+        {
+            if (xCanIterate)
+            {
+                // if the x coordinate of the cell is greater than or equal to the x legnth dont allow the cell to iterate its x size
+                if (properties.Coordinate.x + cellXSize - 1 >= _roomSize.x)
+                {
+                    xCanIterate = false;
+                }
+                // if not, iterate on the x size
+                else
+                {
+                    cellXSize++;
+                }
+                
+                // check the cells added to the max size cube
+                // if the cells are all 
+
+
+
+
+            }
+            
+            
+
+        }*/
+
+
+
+
+
+    }
+
+    private Vector3Int GetEmptyCellsLengthFromPoint(Vector3Int origin)
+    {
+        // get the x available length
+        int xFromOriginLength = 1;
+        for (int i = 1; i < _roomSize.x - origin.x; i++)
+        {
+            if (_cellProperties[origin.x + i, origin.y, origin.z].PieceChosen) break;
+            xFromOriginLength++;
+        }
+
+        // get the y available length
+        int yFromOriginLength = 1;
+        for (int i = 1; i < _roomSize.y - origin.y; i++)
+        {
+            if (_cellProperties[origin.x, origin.y + 1, origin.z].PieceChosen) break;
+            yFromOriginLength++;
+        }
+
+        // get the z available length
+        int zFromOriginLength = 1;
+        for (int i = 1; i < _roomSize.z - origin.z; i++)
+        {
+            if (_cellProperties[origin.x, origin.y, origin.z + i].PieceChosen) break;
+            zFromOriginLength++;
+        }
+
+        return new Vector3Int(xFromOriginLength, yFromOriginLength, zFromOriginLength);
+    }
+
+    // A collection of methods to check which rpo
+    private bool OnEastRoomWall(int coordsEast)
     {
         return coordsEast == _roomSize.x - 1;
     }
 
-    private bool OnNorthWall(int coordsNorth)
+    private bool OnNorthRoomWall(int coordsNorth)
     {
         return coordsNorth == _roomSize.z - 1;
     }
 
-    private bool OnSouthWall(int coordsNorth)
+    private bool OnSouthRoomWall(int coordsNorth)
     {
         return coordsNorth == 0;
     }
 
-    private bool OnWestWall(int coordsEast)
+    private bool OnWestRoomWall(int coordsEast)
     {
         return coordsEast == 0;
     }
 
+
     // find all avaialable pieces for a given room generation
     private void FillRoomAvailablePieces()
     {
-        CallForAllCells(FillCellAvailablePieces);
+        CallForAllCells(FillCellAvailablePieces, _roomSize);
     }
 
     private void FillCellAvailablePieces(Vector3Int cell)
@@ -224,26 +360,27 @@ public class NewRoomGenerator : MonoBehaviour
 
     // cycle through all cells based on their coordinates
     // uses different inputs based on need
-    private void CallForAllCells(System.Action methodToCall)
+    private void CallForAllCells(System.Action methodToCall, Vector3Int gridToIterate)
     {
-        for (int x = 0; x < _roomSize.x; x++)
+        for (int x = 0; x < gridToIterate.x; x++)
         {
-            for (int y = 0; y < _roomSize.y; y++)
+            for (int y = 0; y < gridToIterate.y; y++)
             {
-                for (int z = 0; z < _roomSize.z; z++)
+                for (int z = 0; z < gridToIterate.z; z++)
                 {
                     methodToCall();
                 }
             }
         }
     }
-    private void CallForAllCells(System.Action<Vector3Int> methodToCall)
+
+    private void CallForAllCells(System.Action<Vector3Int> methodToCall, Vector3Int gridToIterate)
     {
-        for (int x = 0; x < _roomSize.x; x++)
+        for (int x = 0; x < gridToIterate.x; x++)
         {
-            for (int y = 0; y < _roomSize.y; y++)
+            for (int y = 0; y < gridToIterate.y; y++)
             {
-                for (int z = 0; z < _roomSize.z; z++)
+                for (int z = 0; z < gridToIterate.z; z++)
                 {
                     Vector3Int cell = new Vector3Int(x, y, z);
                     methodToCall(cell);
@@ -252,5 +389,22 @@ public class NewRoomGenerator : MonoBehaviour
         }
     }
 
+    private void CallForAllCells(System.Action<CellProperties> methodToCall, Vector3Int gridToIterate)
+    {
+        for (int x = 0; x < gridToIterate.x; x++)
+        {
+            for (int y = 0; y < gridToIterate.y; y++)
+            {
+                for (int z = 0; z < gridToIterate.z; z++)
+                {
+                    methodToCall(_cellProperties[x,y,z]);
+                }
+            }
+        }
+
+    }
+
 
 }
+
+public enum GridDimension { x, y, z }
