@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +44,7 @@ public class LevelPieceManager : MonoBehaviour
             if (pieceProperties.WallType != cellProperties.WallType) continue;
 
             // check to see if this level piece size fits the cell
+            if (!cellProperties.DoesPieceFit(pieceProperties.Size)) continue;
 
             potentialPieces.Add(piece);
         }

@@ -64,13 +64,15 @@ public class CellProperties
         _potentialPieces = potentialCount;
     }
 
-    private bool DoesPieceFit(Vector3Int pieceSize)
+    public bool DoesPieceFit(Vector3Int pieceSize)
     {
-
         // Check to see if a piece can fit into the possible sizes for this cell
         if (pieceSize.x <= PossibleSizes.GetLength(0) && pieceSize.y <= PossibleSizes.GetLength(1) && pieceSize.z <= PossibleSizes[pieceSize.x - 1, pieceSize.y - 1]) return true;
+
         return false;
     }
+
+    //check all 
 
     // get the proper rotation for a north based level piece to apply to this cell
     public float GetPieceRotation(GameObject levelPiece)

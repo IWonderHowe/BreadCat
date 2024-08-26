@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.ProBuilder;
@@ -68,6 +69,13 @@ public class NewRoomGenerator : MonoBehaviour
             // find the best possible cell to try to fill
             Vector3Int cellToFill = GetCellToFill();
 
+            // testing for larger pieces
+            //if (!_cellProperties[0, 0, 0].PieceChosen) cellToFill = new Vector3Int(0, 0, 0);
+
+            Debug.Log(cellToFill);
+
+            Debug.Log(_cellProperties[cellToFill.x, cellToFill.y, cellToFill.z].PossibleSizes.GetLength(0) + " " +  _cellProperties[cellToFill.x, cellToFill.y, cellToFill.z].PossibleSizes.GetLength(1) + " " + _cellProperties[cellToFill.x, cellToFill.y, cellToFill.z].PossibleSizes[0,0]) ;
+
             // get the level piece to spawn in this cell
             GameObject pieceToSpawn = _pieceList.GetLevelPieceForCell(_cellProperties[cellToFill.x, cellToFill.y, cellToFill.z]);
 
@@ -83,11 +91,21 @@ public class NewRoomGenerator : MonoBehaviour
             GameObject spawnedPiece = Instantiate(pieceToSpawn, spawnPos, Quaternion.Euler(0, pieceRotation, 0));
 
 
-            // set the cells properties to have a piece chosen
-            _cellProperties[cellToFill.x, cellToFill.y, cellToFill.z].PieceChosen = true;
+            // set the cells properties to have a piece chosen based on the size of piece placed
+            CallForAllCells(SetPieceChosen, spawnedPiece.GetComponent<LevelPiece>().Size, _cellProperties[cellToFill.x, cellToFill.y, cellToFill.z]);
+
+            // update available sizes for each cell
+            CallForAllCells(SetCellAvailableSize, _roomSize);
+
+            //_cellProperties[cellToFill.x, cellToFill.y, cellToFill.z].PieceChosen = true;
             _emptyCellCount--;
         }
 
+    }
+
+    private void SetPieceChosen(Vector3Int coordinate)
+    {
+        _cellProperties[coordinate.x, coordinate.y, coordinate.z].PieceChosen = true;
     }
 
 
@@ -242,7 +260,7 @@ public class NewRoomGenerator : MonoBehaviour
                 for(int j = 0; j < originEmptyCellsLength.z; j++)
                 {
                     // if a piece isnt chosen, iterate on the z size
-                    if (_cellProperties[originCoordinate.x + i, k, j].PieceChosen) break;
+                    if (_cellProperties[originCoordinate.x + i, originCoordinate.y + k, originCoordinate.z + j].PieceChosen) break;
                     zSizeAtX++;
                 }
 
@@ -397,7 +415,37 @@ public class NewRoomGenerator : MonoBehaviour
         }
 
     }
+    
+    private void CallForAllCells(System.Action<Vector3Int> methodToCall, Vector3Int gridToIterate, CellProperties cell)
+    {
+        for (int x = 0; x < gridToIterate.x; x++)
+        {
+            for(int y = 0; y < gridToIterate.y; y++)
+            {
+                for(int z = 0; z < gridToIterate.z; z++)
+                {
 
+                    Vector3Int cellToSetChosen = new Vector3Int();
+                    cellToSetChosen.x = x + cell.Coordinate.x;
+                    cellToSetChosen.y = y + cell.Coordinate.y;
+                    cellToSetChosen.z = z + cell.Coordinate.z;
+
+                    //Debug.Log(cellToSetChosen);
+                    SetPieceChosen(cellToSetChosen);
+                }
+            }
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        foreach(CellProperties property in _cellProperties)
+        {
+            Gizmos.color = UnityEngine.Color.green;
+            if (property.PieceChosen) Gizmos.color = UnityEngine.Color.red;
+            Gizmos.DrawCube((property.Coordinate * 3) + (Vector3.one * 1.5f), Vector3.one);
+        }
+    }
 
 }
 
