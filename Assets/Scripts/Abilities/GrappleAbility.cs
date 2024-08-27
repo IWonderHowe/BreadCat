@@ -9,8 +9,8 @@ using UnityEngine.SceneManagement;
 
 public class GrappleAbility : CharacterAbility
 {
-    public override string AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
-    private string _abilityBaseMechanic = "Point";
+    public override AbilityType AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
+    private AbilityType _abilityBaseMechanic = AbilityType.PointBased;
 
     private bool _hasUpgrade = false;
     private GameObject _upgrade;

@@ -441,6 +441,7 @@ public class NewRoomGenerator : MonoBehaviour
     {
         foreach(CellProperties property in _cellProperties)
         {
+
             Gizmos.color = UnityEngine.Color.green;
             if (property.PieceChosen) Gizmos.color = UnityEngine.Color.red;
             Gizmos.DrawCube((property.Coordinate * 3) + (Vector3.one * 1.5f), Vector3.one);

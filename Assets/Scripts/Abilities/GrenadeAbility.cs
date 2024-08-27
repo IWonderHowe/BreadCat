@@ -6,8 +6,8 @@ using UnityEngine;
 
 public class GrenadeAbility : CharacterAbility
 {
-    public override string AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
-    private string _abilityBaseMechanic = "Throwable";
+    public override AbilityType AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
+    private AbilityType _abilityBaseMechanic = AbilityType.Throwable;
 
     // Explosion variables
     [SerializeField] private float _explosionRadius = 3f;
@@ -85,7 +85,7 @@ public class GrenadeAbility : CharacterAbility
         while (_isCooking)
         {
             thrownObject.transform.position = _throwOrigin.transform.position;
-            yield return new WaitForEndOfFrame();
+            yield return null;
         }
     }
 

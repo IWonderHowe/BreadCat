@@ -9,7 +9,7 @@ public abstract class CharacterAbility : MonoBehaviour
     [SerializeField] protected bool _abilityOnCooldown;
 
     // set space to define the style of ability via keywords
-    abstract public string AbilityBaseMechanic { get; }
+    abstract public AbilityType AbilityBaseMechanic { get; }
 
 
     // ability info
@@ -64,4 +64,10 @@ public abstract class CharacterAbility : MonoBehaviour
     {
 
     }
+}
+
+public enum AbilityType
+{
+    Throwable,
+    PointBased
 }
