@@ -8,8 +8,7 @@ public class Enemy : MonoBehaviour
 {
     // Variables that define the enemy
     [SerializeField] private float _maxHealth;
-
-
+    private EnemyCombat _enemyCombat;
 
     // space to store varaibles regarding enemy status
     [SerializeField] private float _currentHealth;
@@ -19,10 +18,14 @@ public class Enemy : MonoBehaviour
     private List<DoTStack> _dotStacks = new List<DoTStack>();
     public List<DoTStack> DoTStacks => _dotStacks;
 
+    // UI properties
     [SerializeField] private Slider _healthSlider;
     [SerializeField] private Slider _dotSlider;
+
+    // space to store which room the enemy spawned into
     private RoomGenerator _roomResided;
 
+    // a game event for when the enemy dies
     [SerializeField] private GameObjectEvent _onDeath;
 
     // grounded properties
@@ -32,7 +35,6 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _groundCheckDistance = 0.4f;
     [SerializeField] private float _groundedFudgeTime = 0.25f;
     [SerializeField] private LayerMask _groundMask = 1 << 0;
-
     [SerializeField] private bool _isGrounded;
     private Vector3 _groundCheckStart => transform.position + transform.up * _groundCheckOffset;
     private float _lastGroundedTime;
@@ -40,21 +42,17 @@ public class Enemy : MonoBehaviour
     // set space for the navmesh agent
     private NavMeshAgent _agent;
     public NavMeshAgent Agent => _agent;
+    public int NavMeshAreaMask => _agent.areaMask;
 
     // space for rigidbody
     private Rigidbody _enemyRB;
-    private EnemyCombat _enemyCombat;
-    public int NavMeshAreaMask => _agent.areaMask;
-
-
-
 
     // Start is called before the first frame update 
     void Start()
     {
+        // get necessary components from the enemy
         _enemyCombat = GetComponent<EnemyCombat>();
         _enemyRB = GetComponent<Rigidbody>();
-        // get this enemies nav mesh agent
         _agent = GetComponent<NavMeshAgent>();
 
         // set the enemy to be alive and at full health
@@ -65,8 +63,10 @@ public class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // TODO: refactor grounding for enemies
         _isGrounded = IsGrounded;
 
+        // TODO: refactor how DoT stacks are applied to enemies (maybe apart from the enemy object?)
         float dotDamageLeft = 0;
         foreach (DoTStack i in _dotStacks)
         {
@@ -81,9 +81,12 @@ public class Enemy : MonoBehaviour
         {
             _enemyRB.isKinematic = true;
             _enemyRB.useGravity = false;
+
+            // TODO: refactor which state the enemy goes into after landing
             _enemyCombat.SetEnemyState("ChaseState");
         }
 
+        // update the enemy health UI
         UpdateHealthBar();
 
     }
@@ -122,6 +125,7 @@ public class Enemy : MonoBehaviour
 
     public void StopMovement()
     {
+        // stop enemy movement
         _agent.isStopped = true;
     }
 
@@ -134,6 +138,7 @@ public class Enemy : MonoBehaviour
 
     private void UpdateHealthBar()
     {
+        // TODO: refactor how DoT shows up on enemy health bar
         float remainingDoT = GetRemainingDoT();
         if (remainingDoT == 0) _dotSlider.gameObject.SetActive(false);
         else
@@ -142,12 +147,13 @@ public class Enemy : MonoBehaviour
             _dotSlider.value = GetRemainingDoT() / _maxHealth;
         }
 
+        // update the health bar to show current health in relation to the max health
         _healthSlider.value = _currentHealth / _maxHealth;
         
     }
 
     
-
+    // TODO: refactor how the DoT stacks end and are accounted for
     public void EndDoTStack(DoTStack stackToEnd)
     {
         // remove a finished stack of DoT from the enemy. remove it from the DoT affected enemies list if it has no more DoT stacks left
@@ -155,6 +161,7 @@ public class Enemy : MonoBehaviour
         if (_dotStacks.Count == 0) DoTStack.RemoveEnemyFromDoTList(this.gameObject);
     }
 
+    // TODO: refactor where this method is from, conglomerate the DoT within one area rather than on each enemy
     public float GetRemainingDoT()
     {
         float dotRemaining = 0f;
@@ -169,20 +176,25 @@ public class Enemy : MonoBehaviour
         return dotRemaining;
     }
 
+
     private void OnDeath()
     {
-        
-
+        // remove the enemy from the list of enemies in the room
         _roomResided?.RemoveFromEnemyList(this.gameObject);
+        
+        // set the enemy to being dead
         _isDead = true;
 
+        // call the death event
         _onDeath.Invoke(this.gameObject);
 
+        // destroy this enemy
         Destroy(this.gameObject);
     }
 
     public void SetRoom(RoomGenerator roomResided)
     {
+        // set the enemies room based on given room generator
         _roomResided = roomResided;
     }
 
@@ -195,20 +207,26 @@ public class Enemy : MonoBehaviour
     {
         StartCoroutine(PauseNavMesh(time));
     }
+
     // pause the nav mesh for a set time
+    // TODO: refactor how the enemy swaps between using navmesh and physics
     private IEnumerator PauseNavMesh(float time)
     {
         // an end time and disable navmesh
         float endTime = Time.timeSinceLevelLoad + time;
+
+        // disable the enemy navmesh agent, and set the enemy to use physics instead
         _agent.enabled = false;
         _enemyRB.isKinematic = false;
         _enemyRB.useGravity = true;
 
+        // keep doing this until the end time
         while (Time.timeSinceLevelLoad <= endTime)
         {
             yield return null;
         }
 
+        // reset the enemy to use its navmesh again instead of physics
         _enemyRB.isKinematic = true;
         _enemyRB.useGravity = false;
         _agent.enabled = true;

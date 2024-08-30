@@ -40,6 +40,7 @@ public class DoTStack
         {
             // damage the enemy based on the DPS and apply it based on the tick time, then wait for the tick time
             _attachedEnemy.TakeDamage(_damagePerSecond * Time.deltaTime);
+            
             yield return null;
         }
 

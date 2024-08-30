@@ -10,6 +10,7 @@ TagManager:
   - UpgradeManager
   - Wall
   - Floor
+  - DoTUI
   layers:
   - Default
   - TransparentFX

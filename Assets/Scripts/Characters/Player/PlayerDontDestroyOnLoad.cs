@@ -6,39 +6,22 @@ using UnityEngine.SceneManagement;
 public class PlayerDontDestroyOnLoad : MonoBehaviour
 {
 
-    private GameObject _player;
-    [SerializeField] private GameObjectEvent _playerPing;
-
-    private void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        //_playerPing.Invoke(_player);
-        //_player.GoToEntrance();
-    }
-
-    private IEnumerator DelayedPlayerPing(float seconds)
-    {
-        yield return new WaitForSeconds(seconds);
-        _playerPing.Invoke(_player);
-    }
+    //[SerializeField] private GameObjectEvent _playerPing;
 
     // Start is called before the first frame update
     void Start()
     {
-        // make sure there is only ever one upgrade manager
+        // make sure there is only ever one upgrade manager, as it is the only object tagged upgrade manager under the player
         GameObject[] playerContainers = GameObject.FindGameObjectsWithTag("UpgradeManager");
 
+        // destroy this object if theres more than one player object in the scene
         if (playerContainers.Length > 1)
         {
             Destroy(this.gameObject);
         }
+        
+        // add this playerobject to not be destroyed on scene loads
         DontDestroyOnLoad(this.gameObject);
-
-        _player = GetComponentInChildren<PlayerController>().gameObject;
     }
 
     // Update is called once per frame

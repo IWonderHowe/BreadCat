@@ -16,12 +16,9 @@ public abstract class CharacterAbility : MonoBehaviour
     [SerializeField] protected bool _isMovementAbility;
     public bool IsMovementAbility => _isMovementAbility;
 
-    [SerializeField] protected bool _isThrowableBased;
-    public bool IsThrowableBased => _isThrowableBased;
-
-    [SerializeField] protected bool _isPointBased;
-    public bool IsPointBased => _isPointBased;
-
+    // space to store the upgrade and wether an upgrade has been aquired
+    protected GameObject _upgradeObject;
+    protected bool _hasUpgrade = false;
 
     protected virtual void Start()
     {
@@ -29,8 +26,10 @@ public abstract class CharacterAbility : MonoBehaviour
         _abilityOnCooldown = false;
     }
 
+    // method to call the application of this upgrade
     public abstract void ApplyUpgrade(GameObject upgrade);
 
+    // begin the cooldown if the ability is used. virtual to allow for overriding
     public virtual void UseAbility(bool isPressed)
     {
         StartCoroutine(AbilityCooldown());
@@ -60,12 +59,14 @@ public abstract class CharacterAbility : MonoBehaviour
         _abilityOnCooldown = false;
     }
 
+    // a virtual method to stop the movement ability
     public virtual void StopMovementAbility()
     {
 
     }
 }
 
+// types of abilities based on how their targeting works
 public enum AbilityType
 {
     Throwable,

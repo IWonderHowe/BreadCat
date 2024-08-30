@@ -7,10 +7,6 @@ using UnityEngine.AI;
 
 public class EnemyCombat : MonoBehaviour
 {
-    // To do: make idle state and combat state
-    // in idle state: Check to see if the player is in visual range of the enemy (or check to see if got hit by player)
-    // in combat state: Move to a good position, shoot, idle, repeat
-
     // get relevant layers for sightlines
     [SerializeField] private LayerMask _playerLayer;
     [SerializeField] private LayerMask _visionLayers;
@@ -64,6 +60,7 @@ public class EnemyCombat : MonoBehaviour
         _target = player.gameObject;
     }
 
+    // TODO: refactor the enemy states to use an enum rather than strings
     public void SetEnemyState(string state)
     {
         switch (state)
@@ -95,6 +92,7 @@ public class EnemyCombat : MonoBehaviour
         }
     }
 
+
     private IEnumerator FlungState()
     {
         yield return new WaitForEndOfFrame();
@@ -119,10 +117,13 @@ public class EnemyCombat : MonoBehaviour
 
     }
 
+
     private IEnumerator IdleState()
     {
+        // set the current state to be idle
         _currentState = "IdleState";
 
+        // while the enemy doesn't have a target, do nothing
         while (_target == null) yield return null;
 
         // do nothing while the enemy does not have LoS with target
@@ -137,6 +138,7 @@ public class EnemyCombat : MonoBehaviour
 
     private IEnumerator AggroState()
     {
+        // set the current state to be aggro
         _currentState = "AggroState";
 
         // while the enemy has LoS on the target
@@ -150,35 +152,37 @@ public class EnemyCombat : MonoBehaviour
             yield return new WaitForSeconds(_timeBetweenShots);
 
         }
-
         
-        // upon breaking LoS, return to the idle state
+        // upon breaking LoS, try to chase the player
         StartCoroutine(ChaseState(_target.transform.position));
     }
 
     private IEnumerator ChaseState(Vector3 playerLastSeen) 
     {
+        // set the current state to be chase
         _currentState = "ChaseState";
 
+        // if the enemy navmesh agent isnt active and enabled, do nothing
         while (!_thisEnemy.Agent.isActiveAndEnabled) yield return new WaitForEndOfFrame();
 
         // move the player towards the players last seen location
         NavMeshHit destinationHit;
 
+        // if the players last seen position is close to a navmesh area point, go to that point to try to find the player
         if (NavMesh.SamplePosition(playerLastSeen, out destinationHit, _navIgnoreDistance, NavMesh.AllAreas))
         {
             Debug.Log("theres a destination");
             _thisEnemy.MoveTo(destinationHit.position);
         }
 
-        // if the enemy doesnt have LoS keep chasing
+        // if the enemy doesnt have LoS keep moving toward last seen point
         while (!_hasTargetLoS)
         {
             yield return new WaitForFixedUpdate();
         }
 
 
-        // stop going to players last seen position but not immediately
+        // upon seeing the player, stop going to players last seen position but not immediately
         yield return new WaitForSeconds(0.2f);
         _thisEnemy.StopMovement();
 
@@ -201,6 +205,7 @@ public class EnemyCombat : MonoBehaviour
 
     private bool CheckTargetLoS()
     {
+        // if the enemy doesnt have a target, there can't be LoS
         if (_target == null) return false;
 
         // store a spot to store hit data
@@ -222,18 +227,9 @@ public class EnemyCombat : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos()
-    {
-        // show a blue line for enemy LoS
-        if (_target != null)
-        {
-            Vector3 directionOfPlayer = _target.transform.position - _bulletOrigin.transform.position;
-            if (Physics.Raycast(_bulletOrigin.transform.position, directionOfPlayer, out RaycastHit hit,  _sightRange, _visionLayers))
-            {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawLine(hit.point, _bulletOrigin.transform.position);
+}
 
-            }
-        }
-    }
+public enum EnemyState
+{
+
 }

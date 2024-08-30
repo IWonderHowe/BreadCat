@@ -6,9 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
+    // store the cursor lock mode
     [SerializeField] private CursorLockMode _cursorMode = CursorLockMode.Locked;
 
-
+    // TODO: refactor player to only have one gun
     // Space for the gun gameobjects that are equipped to the player, as well as specific references to the gun scripts attached
     [SerializeField] private GameObject _gunObject1;
     [SerializeField] private GameObject _gunObject2;
@@ -26,17 +27,19 @@ public class PlayerController : MonoBehaviour
     // space for the abilities to be equipped/stored
     [SerializeField] GameObject _ability1Object;
     [SerializeField] GameObject _ability2Object;
-
     public GameObject Ability1Object => _ability1Object;
     public GameObject Ability2Object => _ability2Object;
     
     private CharacterAbility _ability1;
     private CharacterAbility _ability2;
 
+    // get the player input
     private static PlayerInput _playerInput;
 
+    // a ping to let other gameobjects know of the players existence
     [SerializeField] private GameObjectEvent _playerPing;
     private Vector3 _initialPosition;
+
 
     private void OnEnable()
     {
@@ -45,11 +48,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
+        // when a new scene is loaded, ping the player out to all objects
         if(this != null) StartCoroutine(PingRoutine());
     }
 
     private void Awake()
     {
+        // ping the player on waking
         StartCoroutine(PingRoutine());
 
         // Get necessary components from gameobjects
@@ -59,6 +64,7 @@ public class PlayerController : MonoBehaviour
         _ability2 = _ability2Object.GetComponent<CharacterAbility>();
         _movement = GetComponent<PlayerMovement>();
 
+        // set the players initial position
         _initialPosition = transform.position;
 
         // Set the current gun to the first gun
@@ -74,6 +80,8 @@ public class PlayerController : MonoBehaviour
         _playerInput.camera = Camera.main;
     }
     
+    // TODO: change the player reset to be a part of the on death event
+    // reset the player back to the entry of the room
     public void ResetPlayer()
     {
         _ability1.StopMovementAbility();
@@ -86,6 +94,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator PingRoutine()
     {
+        // wait for a second to ping the player to the other objects in the scene
+        // used to get around load orders
         yield return new WaitForSeconds(1f);
         _playerPing.Invoke(gameObject);
     }
@@ -153,6 +163,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Swap the current player weapon to the unequipped weapon when mouse is scrolled
+    // TODO: get rid of weapon swaps as a part of the single weapon current functionality
     public void OnSwapWeapon(InputValue value)
     {
         //dont do this currently
@@ -162,12 +173,14 @@ public class PlayerController : MonoBehaviour
         else _currentGun = _gun1;
     }
 
+    // toggle the mouse lock state for debug purposes/buttons
     public void OnToggleLockMouse(InputValue value)
     {
         if (Cursor.lockState != CursorLockMode.Locked) Cursor.lockState = CursorLockMode.Locked;
         else Cursor.lockState = CursorLockMode.Confined;
     }
 
+    // set whether the player can input anything
     public void SetPlayerInputActive(bool isActive)
     {
         _playerInput = GetComponent<PlayerInput>();

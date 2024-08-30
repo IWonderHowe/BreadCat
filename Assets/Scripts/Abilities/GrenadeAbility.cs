@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class GrenadeAbility : CharacterAbility
 {
+    // set the ability type
     public override AbilityType AbilityBaseMechanic { get { return _abilityBaseMechanic; } }
     private AbilityType _abilityBaseMechanic = AbilityType.Throwable;
 
@@ -13,20 +14,21 @@ public class GrenadeAbility : CharacterAbility
     [SerializeField] private float _explosionRadius = 3f;
     [SerializeField] private float _timeToExplosion = 2f;
     [SerializeField] private float _damage = 30f;
+    [SerializeField] private float _explosionForce;
     [SerializeField] private LayerMask _interactableLayers;
 
     // Throwing variables
     [SerializeField] private float _throwForce = 4f;
     [SerializeField] private Transform _throwOrigin;
 
-   
+    // space for the grenade object
     [SerializeField] private GameObject _grenadePrefab;
 
-    private GameObject _abilityUpgrade;
-    private bool _hasUpgrade;
+    // space to store the most recent grenade that has its fusue lit
     private GameObject _lastFusedGrenade;
+    
+    // store whether the grenade is being cooked in player hand
     private bool _isCooking = false;
-    [SerializeField] private float _explosionForce;
 
     protected override void Start()
     {
@@ -53,7 +55,7 @@ public class GrenadeAbility : CharacterAbility
             // Spawn a grenade
             GameObject thrownGrenade = Instantiate(_grenadePrefab);
             thrownGrenade.transform.position = _throwOrigin.position;
-            if (_hasUpgrade) thrownGrenade.GetComponent<Grenade>().SetUpgrade(_abilityUpgrade);
+            if (_hasUpgrade) thrownGrenade.GetComponent<Grenade>().SetUpgrade(_upgradeObject);
             _lastFusedGrenade = thrownGrenade;
 
             // dont move grenade if being cooked
@@ -92,7 +94,7 @@ public class GrenadeAbility : CharacterAbility
     public override void ApplyUpgrade(GameObject upgrade)
     {
         // get a reference to the upgrade applied, and set has upgrade to true
-        _abilityUpgrade = upgrade;
+        _upgradeObject = upgrade;
         _hasUpgrade = true;
     }
 }
