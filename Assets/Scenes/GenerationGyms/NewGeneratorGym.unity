@@ -164,7 +164,7 @@ MonoBehaviour:
   _walledPieces: []
   _openPieces: []
   _flooredPieces: []
-  _generator: {fileID: 0}
+  _generator: {fileID: 278295949}
 --- !u!114 &278295949
 MonoBehaviour:
   m_ObjectHideFlags: 0
