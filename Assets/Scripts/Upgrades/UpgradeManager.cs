@@ -42,8 +42,8 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private List<GameObject> _currentUpgrades;
     [SerializeField] private List<GameObject> _availableUpgrades;
     private List<GameObject> _allUpgrades= new List<GameObject>();
-    private List<string> _patronsAquired = new List<string>();
-    public List<string> PatronsAquired => _patronsAquired;
+    private List<Patron> _patronsAquired = new List<Patron>();
+    public List<Patron> PatronsAquired => _patronsAquired;
     public List<GameObject> CurrentUpgrades => _currentUpgrades;
 
     // make space for a list of upgrade slots and their availablility
@@ -324,7 +324,7 @@ public class UpgradeManager : MonoBehaviour
                 _currentUpgrades.Add(upgrade);
 
                 // if the patron list doesnt have this patron yet, add it to the list
-                string patron = upgrade.GetComponent<Upgrade>().UpgradePatron;
+                Patron patron = upgrade.GetComponent<Upgrade>().UpgradePatron;
                 Debug.Log(patron);
                 if (!_patronsAquired.Contains(patron)) _patronsAquired.Add(patron);
 

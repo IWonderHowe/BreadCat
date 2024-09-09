@@ -10,7 +10,7 @@ public class DoTOnAbilityHit : OnAbilityUpgrade
 
     public override string UpgradeName => throw new System.NotImplementedException();
 
-    public override string UpgradePatron => throw new System.NotImplementedException();
+    public override Patron UpgradePatron => throw new System.NotImplementedException();
 
     public override void ApplyUpgrade(GameObject player)
     {

@@ -373,7 +373,7 @@ public class Gun : MonoBehaviour
         float time = 0;
 
         // if the player has a chaos upgrade, make the tracers random colors
-        if (_upgradeManager.PatronsAquired.Contains("Chaos"))
+        if (_upgradeManager.PatronsAquired.Contains(Patron.Chaos))
         {
             trail.endColor = GetRandomColor();
             trail.startColor = GetRandomColor();

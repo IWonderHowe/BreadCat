@@ -8,8 +8,8 @@ public class ChaosCritMuliplierOnBulletCrit : OnBulletCritUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosCritMultiplierOnBulletCrit";
-    public override string UpgradePatron { get { return _upgradePatron; } }
-    private string _upgradePatron = "Chaos";
+    public override Patron UpgradePatron { get { return _upgradePatron; } }
+    private Patron _upgradePatron = Patron.Chaos;
 
 
     public override void ApplyCritEffect(GameObject player)

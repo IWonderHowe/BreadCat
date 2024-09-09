@@ -7,7 +7,7 @@ public abstract class Upgrade : MonoBehaviour
 {
     abstract public string UpgradeName { get; }
     abstract public string UpgradeType { get; }
-    abstract public string UpgradePatron { get; }
+    abstract public Patron UpgradePatron { get; }
 
     public abstract void ApplyUpgrade(GameObject player);
 
@@ -21,4 +21,11 @@ public abstract class Upgrade : MonoBehaviour
         return UpgradeType;
     }
 
+}
+
+public enum Patron
+{
+    Chaos,
+    DoT,
+    Armor
 }
