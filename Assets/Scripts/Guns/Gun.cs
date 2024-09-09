@@ -42,7 +42,7 @@ public class Gun : MonoBehaviour
     // Accuracy variables
     [SerializeField] private float _baseAccuracy = 0.80f;
     [SerializeField] private float _minAccuracySpread = 1f;
-    [SerializeField] private float _effectiveAccuracy;
+    [SerializeField] private float _effectiveAccuracySpread;
 
 
     // expose info in relation to gun and shooting
@@ -109,7 +109,7 @@ public class Gun : MonoBehaviour
 
         // begin the effective rate of fire and bullet spread to be at the base stats
         _effectiveRateOfFire = _baseRateOfFire;
-        _effectiveAccuracy = _baseAccuracy;
+        _effectiveAccuracySpread = _baseAccuracy;
         _upgradeManager = FindObjectOfType<UpgradeManager>();
 
 
@@ -337,6 +337,24 @@ public class Gun : MonoBehaviour
         }
     }
 
+    private void UpdateAccuracyPenalty()
+    {
+        // give the player perfect accuracy if thats the case
+        if (_hasPerfectAccuracy)
+        {
+            _effectiveAccuracySpread = 0f;
+            return;
+        }
+
+        // Set base effective accuracy
+        _effectiveAccuracySpread = _minAccuracySpread - _baseAccuracy;
+
+        // update the spread with the chaos pentalty if applicable
+        if (_upgradeManager.PatronsAquired.Contains(Patron.Chaos)) _effectiveAccuracySpread -= (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks);
+
+
+    }
+
     public void SpawnBulletFrom(Vector3 origin, Vector3 destination)
     {
         TrailRenderer bulletTrail = Instantiate(_trailRenderer, origin, Quaternion.identity);
@@ -370,16 +388,6 @@ public class Gun : MonoBehaviour
 
         // apply damage to the enemy
         enemy.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
-    }
-
-    public void ModifyClipSize(float magSizeToAdd)
-    {
-
-    }
-
-    public void ModifyFireRate(float fireRateToAdd)
-    {
-
     }
 
     public void ModifyCritMultiplier(float critMultiToAdd)
@@ -482,11 +490,11 @@ public class Gun : MonoBehaviour
         Vector3 direction = Camera.main.transform.forward;
 
         // calculate the current effective accuracy if the player doesnt have perfect accuracy currently
-        if (_hasPerfectAccuracy) _effectiveAccuracy = 0f;
-        else _effectiveAccuracy = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks));
+        if (_hasPerfectAccuracy) _effectiveAccuracySpread = 0f;
+        else _effectiveAccuracySpread = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks));
 
         // set the direction for the player to shoot to deviate by accuracy
-        direction += new Vector3(Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy), Random.Range(-_effectiveAccuracy, _effectiveAccuracy));
+        direction += new Vector3(Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread), Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread), Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread));
         return direction;
     }
 
@@ -499,7 +507,7 @@ public class Gun : MonoBehaviour
     // reset the gun accuracy to its base stat
     private void ResetAccuracy()
     {
-        _effectiveAccuracy = _baseAccuracy;
+        _effectiveAccuracySpread = _baseAccuracy;
     }
 
     // set the player to be shooting (for automatic weapon functionality)
