@@ -12,7 +12,11 @@ public class ChaosPatronDamage : PatronUpgrade
 
     public override void ApplyUpgrade(GameObject player)
     {
+        // replace choas affecting RoF to affecting damage
         ChaosStack.SetAffectsDamage(true);
+        ChaosStack.SetAffectsRoF(false);
+
+        // add multiplier to 
     }
 
     // Start is called before the first frame update
