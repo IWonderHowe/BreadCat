@@ -337,7 +337,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void UpdateAccuracyPenalty()
+    private void UpdateAccuracySpread()
     {
         // give the player perfect accuracy if thats the case
         if (_hasPerfectAccuracy)
@@ -489,9 +489,8 @@ public class Gun : MonoBehaviour
         // start with the direction the player is looking
         Vector3 direction = Camera.main.transform.forward;
 
-        // calculate the current effective accuracy if the player doesnt have perfect accuracy currently
-        if (_hasPerfectAccuracy) _effectiveAccuracySpread = 0f;
-        else _effectiveAccuracySpread = _minAccuracySpread - (_baseAccuracy - (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks));
+        // update the effective accuracy
+        UpdateAccuracySpread();
 
         // set the direction for the player to shoot to deviate by accuracy
         direction += new Vector3(Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread), Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread), Random.Range(-_effectiveAccuracySpread, _effectiveAccuracySpread));
