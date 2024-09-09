@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 public static class ChaosStack
@@ -13,9 +14,14 @@ public static class ChaosStack
     public static int Stacks => _stacks;
     public static float CurrentChaosMultiplier => _stacksMultiplier * _stacks;
 
-    private static bool _perfectAccuracy = false;
-
+    private static bool _affectsRoF = true;
+    public static bool AffectsRoF => _affectsRoF;
+    private static bool _affectsDamage = false;
+    public static bool AffectsDamage => _affectsDamage;
+   
     public static bool PerfectAccuracy => _perfectAccuracy;
+    private static bool _perfectAccuracy = false;
+    
 
     public static void ResetStacks()
     {
@@ -47,4 +53,13 @@ public static class ChaosStack
     {
         _perfectAccuracy = perfectAccuracy;
     }
+    public static void SetAffectsDamage(bool affectsDamage)
+    {
+        _affectsDamage = affectsDamage;
+    }
+    public static void SetAffectsRoF(bool affectsRoF)
+    {
+        _affectsRoF = affectsRoF;
+    }
+
 }

@@ -59,6 +59,7 @@ public class Gun : MonoBehaviour
     private float _secondsBetweenShots => 1 / _effectiveRateOfFire;
     private float _effectiveRateOfFire;
     private float _rateOfFireMultiplier = 1f;
+    private float _damageMultiplier = 1f;
     
     // space for the bullet tracers
     [SerializeField] private TrailRenderer _trailRenderer;
@@ -132,10 +133,10 @@ public class Gun : MonoBehaviour
         // DEBUGGING
         //Debug.Log(ChaosStack.Stacks);
 
-        
+
 
         // update the rate of fire based on any changes to the RoF multiplier
-        _effectiveRateOfFire = _baseRateOfFire * (1 + _rateOfFireMultiplier);
+        UpdateRoFMultiplier();
 
         // Reload the gun if the player isnt currently and 
         if(_currentAmmo == 0 && !_isReloading) TriggerReload();
@@ -274,14 +275,10 @@ public class Gun : MonoBehaviour
                 // store the enemy script of the hit enemy
                 Enemy enemyHit = hit.collider.gameObject.GetComponentInParent<Enemy>();
 
-                // if there is an on hit effect active, apply it
-                if (_onHitActive)
-                {
-                    _onHitObject.GetComponent<OnBulletHitUpgrade>().ApplyOnHit(enemyHit, _player, _damage);
-                }                
+                // update the base damage taken by the enemy
+                UpdateDamageMultiplier();
+                float damageToTake = _damage * (_damageMultiplier);
 
-                // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
-                float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
                 if (hit.collider.gameObject.tag == "EnemyCrit")
                 {
                     _effectiveCritMultiplier = _baseCritMultiplier;
@@ -295,6 +292,12 @@ public class Gun : MonoBehaviour
 
                 // apply damage to the enemy
                 hit.collider.gameObject.GetComponentInParent<Enemy>().TakeDamage(damageToTake);
+
+                // if there is an on hit effect active, apply it
+                if (_onHitActive)
+                {
+                    _onHitObject.GetComponent<OnBulletHitUpgrade>().ApplyOnHit(enemyHit, _player, damageToTake);
+                }
             }
 
             
@@ -314,6 +317,24 @@ public class Gun : MonoBehaviour
         _timeOfLastShot = Time.timeSinceLevelLoad;
         
         //Debug.Log("Shots fired");
+    }
+
+    private void UpdateDamageMultiplier()
+    {
+        _damageMultiplier = 1f;
+        if (ChaosStack.AffectsDamage)
+        {
+            _damageMultiplier += ChaosStack.CurrentChaosMultiplier;
+        }
+    }
+
+    private void UpdateRoFMultiplier()
+    {
+        _rateOfFireMultiplier = 1f;
+        if (ChaosStack.AffectsRoF)
+        {
+            _rateOfFireMultiplier += ChaosStack.CurrentChaosMultiplier;
+        }
     }
 
     public void SpawnBulletFrom(Vector3 origin, Vector3 destination)
@@ -366,6 +387,7 @@ public class Gun : MonoBehaviour
         _effectiveCritMultiplier += critMultiToAdd;
     }
 
+    
     // create a bullet trail to show bullet spread variance due to recoil
     private IEnumerator SpawnBulletTrail(TrailRenderer trail, Vector3 origin,  Vector3 hitPoint)
     {

@@ -12,7 +12,7 @@ public class ChaosPatronDamage : PatronUpgrade
 
     public override void ApplyUpgrade(GameObject player)
     {
-        throw new System.NotImplementedException();
+        ChaosStack.SetAffectsDamage(true);
     }
 
     // Start is called before the first frame update
