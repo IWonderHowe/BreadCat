@@ -334,7 +334,6 @@ public class Gun : MonoBehaviour
         if (ChaosStack.AffectsRoF)
         {
             _rateOfFireMultiplier += ChaosStack.CurrentChaosBoost;
-            Debug.Log(_rateOfFireMultiplier);
         }
     }
 
