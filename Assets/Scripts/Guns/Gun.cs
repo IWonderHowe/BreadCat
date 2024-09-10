@@ -142,7 +142,7 @@ public class Gun : MonoBehaviour
         if(_currentAmmo == 0 && !_isReloading) TriggerReload();
 
         // If the gun is able to shoot while shooting (i.e. time has passed to account for RoF), shoot
-        if (_isShooting && _timeOfLastShot + _secondsBetweenShots <= Time.timeSinceLevelLoad && _canShoot)
+        if (_isShooting && _timeOfLastShot + (_secondsBetweenShots / _rateOfFireMultiplier) <= Time.timeSinceLevelLoad && _canShoot)
         {
             Shoot();
         }
@@ -324,7 +324,7 @@ public class Gun : MonoBehaviour
         _damageMultiplier = 1f;
         if (ChaosStack.AffectsDamage)
         {
-            _damageMultiplier += ChaosStack.CurrentChaosMultiplier;
+            _damageMultiplier += ChaosStack.CurrentChaosBoost;
         }
     }
 
@@ -333,7 +333,8 @@ public class Gun : MonoBehaviour
         _rateOfFireMultiplier = 1f;
         if (ChaosStack.AffectsRoF)
         {
-            _rateOfFireMultiplier += ChaosStack.CurrentChaosMultiplier;
+            _rateOfFireMultiplier += ChaosStack.CurrentChaosBoost;
+            Debug.Log(_rateOfFireMultiplier);
         }
     }
 
@@ -374,7 +375,7 @@ public class Gun : MonoBehaviour
         }
 
         // multiply the damage if hitting a critical weakpoint, as well as crit upgrade effects
-        float damageToTake = _damage * (1 + ChaosStack.CurrentChaosMultiplier);
+        float damageToTake = _damage * (1 + ChaosStack.CurrentChaosBoost);
         if (enemy.tag == "EnemyCrit")
         {
             _effectiveCritMultiplier = _baseCritMultiplier;

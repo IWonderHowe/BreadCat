@@ -119,7 +119,6 @@ public class UpgradeManager : MonoBehaviour
 
     public void GetPlayerObject(GameObject playerObject)
     {
-        Debug.Log(playerObject.name);
         _player = playerObject;
     }
 
@@ -143,7 +142,6 @@ public class UpgradeManager : MonoBehaviour
 
 
         Cursor.lockState = CursorLockMode.Confined;
-        Debug.Log(_player == null);
         Time.timeScale = 0.001f;
         _player.GetComponent<PlayerController>().SetPlayerInputActive(false);
         //_player.GetComponentInChildren<CinemachineVirtualCamera>().get

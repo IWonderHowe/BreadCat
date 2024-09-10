@@ -17,7 +17,6 @@ public class PlayerMovement : MonoBehaviour
     public bool IsFudgeGrounded => Time.timeSinceLevelLoad < _lastGroundedTime + _groundedFudgeTime;
     public bool IsGrounded { get; private set; }
 
-    [SerializeField] protected float _speedLimit = 20f;
 
     // ground movement
     [SerializeField] protected float _baseSpeed = 5f;
@@ -49,6 +48,17 @@ public class PlayerMovement : MonoBehaviour
     // store information about movement
     private bool _isSprinting = false;
     private float _speed = 0f;
+    [SerializeField] private double _flattenedSpeed;
+    [SerializeField] protected float _speedLimit = 20f;
+    public float SpeedLimit => _speedLimit;
+    public float BaseSpeed => _baseSpeed;
+    public double TechMovementSpeed
+    { get
+        {
+            if(_flattenedSpeed <= _baseSpeed) return 0;
+            return _flattenedSpeed - _baseSpeed;
+        }
+    }
 
     // necessary classes for applying force
     private Rigidbody _rigidbody;
@@ -60,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
     // debug variables
     [SerializeField] private Vector3 _debugVelocity;
     [SerializeField] private double _currentSpeed;
-    [SerializeField] private double _flattenedSpeed;
     public double CurrentSpeed => _currentSpeed;
 
     // Start is called before the first frame update

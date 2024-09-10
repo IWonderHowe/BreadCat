@@ -10,12 +10,12 @@ public class ChaosPatronRoF : PatronUpgrade
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
 
-    [SerializeField] private float _stackMultiplierOnUpgrade = 0.75f;
+    [SerializeField] private float _stackMultiplierOnUpgrade = 3f;
     [SerializeField] private float _accuracyPenaltyMultiplier = 2f;
     public override void ApplyUpgrade(GameObject player)
     {
         // make the chaos stacks do this much more per stack
-        ChaosStack.SetStackMultiplier(_stackMultiplierOnUpgrade);
+        ChaosStack.ModifyStackMultiplier(_stackMultiplierOnUpgrade);
 
         // adjust accuracy penalty
         ChaosStack.ModifyStackAccuracyPenalty(_accuracyPenaltyMultiplier);

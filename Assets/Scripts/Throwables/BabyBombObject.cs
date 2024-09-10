@@ -38,8 +38,6 @@ public class BabyBombObject : ThrowableObject
         _explosionNormal = collision.GetContact(0).normal;
         _explosionPoint = collision.GetContact(0).point;
 
-        Debug.Log(Vector3.Angle(Vector3.up, _explosionNormal));
-
         ExplodeIntoBones(_bonesOnExplosion, collision.GetContact(0).normal);
         Destroy(this.gameObject);
 

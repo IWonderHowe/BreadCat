@@ -2,17 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovementUpgrade : MonoBehaviour
+public abstract class MovementUpgrade : Upgrade
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public override string UpgradeType { get { return _upgradeType; } } 
+    private string _upgradeType = "MovementUpgrade";
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

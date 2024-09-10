@@ -5,6 +5,7 @@ using UnityEngine;
 
 public static class ChaosStack
 {
+    
     private static int _stacks;
     private static int _baseMaxStacks = 150;
     private static float _stacksMultiplier = 0.25f;
@@ -14,7 +15,8 @@ public static class ChaosStack
 
     public static int MaxStacks => _maxStacks;
     public static int Stacks => _stacks;
-    public static float CurrentChaosMultiplier => _stacksMultiplier * _stacks;
+    public static float CurrentChaosBoost => _stacksMultiplier * _stacks;
+    public static float PerStackMultiplier => _stacksMultiplier;
 
     private static bool _affectsRoF = true;
     public static bool AffectsRoF => _affectsRoF;
@@ -53,6 +55,11 @@ public static class ChaosStack
     {
         _maxStacks = _baseMaxStacks;
         Debug.Log(_baseMaxStacks);
+    }
+    
+    public static void ModifyStackMultiplier(float stackMultiplier)
+    {
+        _stacksMultiplier *= stackMultiplier;
     }
     
     public static void SetStackMultiplier(float stackMultiplier)

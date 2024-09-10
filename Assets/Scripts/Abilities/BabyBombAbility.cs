@@ -37,7 +37,6 @@ public class BabyBombAbility : CharacterAbility
         base.UseAbility();
 
         // spawn a baby and set its to the throw origin
-        Debug.Log("Instantiate a baby");
         GameObject babyBomb = Instantiate(_babyBombObject);
         babyBomb.transform.position = _throwOrigin.position;
 
