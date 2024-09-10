@@ -350,7 +350,7 @@ public class Gun : MonoBehaviour
         _effectiveAccuracySpread = _minAccuracySpread - _baseAccuracy;
 
         // update the spread with the chaos pentalty if applicable
-        if (_upgradeManager.PatronsAquired.Contains(Patron.Chaos)) _effectiveAccuracySpread -= (ChaosStack.CurrentChaosMultiplier / ChaosStack.MaxStacks);
+        if (_upgradeManager.PatronsAquired.Contains(Patron.Chaos)) _effectiveAccuracySpread -= ChaosStack.AccuracyPenalty;
 
 
     }

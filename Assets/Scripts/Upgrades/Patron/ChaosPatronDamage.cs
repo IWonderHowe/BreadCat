@@ -10,13 +10,16 @@ public class ChaosPatronDamage : PatronUpgrade
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
 
+    [SerializeField] private float _accuracyPenaltyMultiplier = 0.25f;
+
     public override void ApplyUpgrade(GameObject player)
     {
         // replace choas affecting RoF to affecting damage
         ChaosStack.SetAffectsDamage(true);
         ChaosStack.SetAffectsRoF(false);
 
-        // add multiplier to 
+        // Reduce accuracy penalty
+        ChaosStack.ModifyStackAccuracyPenalty(_accuracyPenaltyMultiplier);
     }
 
     // Start is called before the first frame update

@@ -7,8 +7,10 @@ public static class ChaosStack
 {
     private static int _stacks;
     private static int _baseMaxStacks = 150;
-    private static float _stacksMultiplier = 0.5f;
+    private static float _stacksMultiplier = 0.25f;
     private static int _maxStacks = _baseMaxStacks;
+    private static float _perStackAccuracyPenalty = 0.05f;
+    public static float AccuracyPenalty => _perStackAccuracyPenalty * _stacks;
 
     public static int MaxStacks => _maxStacks;
     public static int Stacks => _stacks;
@@ -27,6 +29,11 @@ public static class ChaosStack
     {
         Debug.Log("Chaos reset");
         _stacks = 0;
+    }
+
+    public static void ModifyStackAccuracyPenalty(float penaltyMultiplier)
+    {
+        _perStackAccuracyPenalty *= penaltyMultiplier;
     }
 
     public static void AddStacks(int stacksToAdd)
@@ -48,6 +55,10 @@ public static class ChaosStack
         Debug.Log(_baseMaxStacks);
     }
     
+    public static void SetStackMultiplier(float stackMultiplier)
+    {
+        _stacksMultiplier = stackMultiplier;
+    }
 
     public static void SetHasPerfectAccuracy(bool perfectAccuracy)
     {

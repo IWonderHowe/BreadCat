@@ -2,17 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChaosPatronRoF : MonoBehaviour
+public class ChaosPatronRoF : PatronUpgrade
 {
-    // Start is called before the first frame update
-    void Start()
+    public override string UpgradeName { get { return _upgradeName; } }
+    private string _upgradeName = "ChaosPatronRoF";
+
+    public override Patron UpgradePatron { get { return _upgradePatron; } }
+    private Patron _upgradePatron = Patron.Chaos;
+
+    [SerializeField] private float _stackMultiplierOnUpgrade = 0.75f;
+    [SerializeField] private float _accuracyPenaltyMultiplier = 2f;
+    public override void ApplyUpgrade(GameObject player)
     {
-        
+        // make the chaos stacks do this much more per stack
+        ChaosStack.SetStackMultiplier(_stackMultiplierOnUpgrade);
+
+        // adjust accuracy penalty
+        ChaosStack.ModifyStackAccuracyPenalty(_accuracyPenaltyMultiplier);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -692,6 +692,37 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!1 &3270919099380928560
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2741242893875233653}
+  m_Layer: 0
+  m_Name: ChaosMovement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &2741242893875233653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3270919099380928560}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4898527431594205372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4514245968599171661
 GameObject:
   m_ObjectHideFlags: 0
@@ -840,6 +871,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buttonUpgrade: {fileID: 0}
   _upgradeEvent: {fileID: 11400000, guid: 421c5628f6ba6bd4eacacb8de6878d7f, type: 2}
+--- !u!1 &7317525985798458623
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5870734438894946670}
+  m_Layer: 0
+  m_Name: ChaosPatronRoF
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5870734438894946670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7317525985798458623}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4898527431594205372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7735321667306880270
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,7 +933,39 @@ Transform:
   m_Children:
   - {fileID: 4898527431594205372}
   - {fileID: 7678863247527873346}
+  - {fileID: 252375386216337917}
   m_Father: {fileID: 5288917870258118888}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7822519967172363335
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 252375386216337917}
+  m_Layer: 0
+  m_Name: Chaos Upgrades
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &252375386216337917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822519967172363335}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9198370783917749850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7987373271640983196
 GameObject:
@@ -1044,6 +1138,9 @@ Transform:
   - {fileID: 8772080829120110103}
   - {fileID: 7281380912927068762}
   - {fileID: 527253008420740355}
+  - {fileID: 7875255795959913527}
+  - {fileID: 5870734438894946670}
+  - {fileID: 2741242893875233653}
   m_Father: {fileID: 9198370783917749850}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8420398757812776699
@@ -1194,6 +1291,51 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _buttonUpgrade: {fileID: 0}
   _upgradeEvent: {fileID: 11400000, guid: 421c5628f6ba6bd4eacacb8de6878d7f, type: 2}
+--- !u!1 &9152049267295071527
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7875255795959913527}
+  - component: {fileID: 183861718924244513}
+  m_Layer: 0
+  m_Name: ChaosPatronDamage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7875255795959913527
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152049267295071527}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4898527431594205372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &183861718924244513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9152049267295071527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 299e797a313147d4dbe85fa0781384b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _accuracyPenaltyMultiplier: 0.25
 --- !u!1001 &455445143467346642
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1205,6 +1347,10 @@ PrefabInstance:
     - target: {fileID: 6623678230329107643, guid: 27f67727c7e99dd4299dc7cb84a96c3d, type: 3}
       propertyPath: m_Name
       value: ChaosOnKill
+      objectReference: {fileID: 0}
+    - target: {fileID: 6623678230329107643, guid: 27f67727c7e99dd4299dc7cb84a96c3d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9218483575001420997, guid: 27f67727c7e99dd4299dc7cb84a96c3d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1308,6 +1454,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChaosCritMultiplierOnBulletCrit
       objectReference: {fileID: 0}
+    - target: {fileID: 6424214606762582625, guid: a26b9c01db6f0b345a58010163e84cdb, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1329,6 +1479,10 @@ PrefabInstance:
     - target: {fileID: 6146600807562530178, guid: 80cb774c96fbb5244bb17e6963ffe39a, type: 3}
       propertyPath: m_Name
       value: ChaosOnBulletCrit
+      objectReference: {fileID: 0}
+    - target: {fileID: 6146600807562530178, guid: 80cb774c96fbb5244bb17e6963ffe39a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6285017973186774580, guid: 80cb774c96fbb5244bb17e6963ffe39a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1432,6 +1586,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ChaosOnNonDamageAbility
       objectReference: {fileID: 0}
+    - target: {fileID: 4472652703530955144, guid: 7c09128f4b080374eb656e5f638966c2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1453,6 +1611,10 @@ PrefabInstance:
     - target: {fileID: 488047584571729367, guid: fe0652b9e0765b048ae12c6a5f85e161, type: 3}
       propertyPath: m_Name
       value: ChaosOnShot
+      objectReference: {fileID: 0}
+    - target: {fileID: 488047584571729367, guid: fe0652b9e0765b048ae12c6a5f85e161, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3302853818251638010, guid: fe0652b9e0765b048ae12c6a5f85e161, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1639,6 +1801,10 @@ PrefabInstance:
     - target: {fileID: 2190163749244841671, guid: 7ea59f9f4077384449d2b5e0e4acf579, type: 3}
       propertyPath: m_Name
       value: ChaosOnDamageAbility
+      objectReference: {fileID: 0}
+    - target: {fileID: 2190163749244841671, guid: 7ea59f9f4077384449d2b5e0e4acf579, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6358263557415157512, guid: 7ea59f9f4077384449d2b5e0e4acf579, type: 3}
       propertyPath: m_LocalPosition.x
