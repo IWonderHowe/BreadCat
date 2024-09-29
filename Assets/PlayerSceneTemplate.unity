@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 164136806}
   - component: {fileID: 164136805}
   - component: {fileID: 164136807}
+  - component: {fileID: 164136808}
   m_Layer: 0
   m_Name: LevelManager
   m_TagString: Untagged
@@ -189,6 +190,34 @@ MonoBehaviour:
       - m_Target: {fileID: 164136805}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: AddEnemyToLevel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &164136808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 164136804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbcc5463afaf3224aba97183c7e6a941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameEvent: {fileID: 11400000, guid: 9c17a3d0625473640b03b86b9b4595d9, type: 2}
+  OnInvoke:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 164136805}
+        m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
+        m_MethodName: RemoveEnemyFromLevel
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

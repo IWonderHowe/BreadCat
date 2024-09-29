@@ -20,4 +20,9 @@ public class LevelManager : MonoBehaviour
     {
         _enemiesInLevel.Add(enemy);
     }
+
+    public void RemoveEnemyFromLevel(GameObject enemy)
+    {
+        _enemiesInLevel.Remove(enemy);
+    }
 }

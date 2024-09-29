@@ -182,14 +182,15 @@ public class Enemy : MonoBehaviour
 
     private void OnDeath()
     {
+        // call the death event
+        _onDeath.Invoke(this.gameObject);
+
         // remove the enemy from the list of enemies in the room
         _roomResided?.RemoveFromEnemyList(this.gameObject);
         
         // set the enemy to being dead
         _isDead = true;
 
-        // call the death event
-        _onDeath.Invoke(this.gameObject);
 
         // destroy this enemy
         Destroy(this.gameObject);
