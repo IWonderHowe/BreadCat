@@ -65,25 +65,20 @@ public class EnemyGun : MonoBehaviour
         // set the projectile to be where the its origin is
         GameObject shotProjectile = Instantiate(_projectile);
 
-        _projectile.transform.position = _projectileOrigin.transform.position;
+        shotProjectile.transform.position = _projectileOrigin.transform.position;
 
         // get all projectile objects and set the parent to be the enemy that shot it
-        Projectile[] projectiles = shotProjectile.GetComponentsInChildren<Projectile>();
-        foreach(Projectile projectile in projectiles)
-        {
-            projectile.SetParentObject(this.GetComponentInParent<Enemy>().gameObject);
-        }
+        Projectile projectileFunc = shotProjectile.GetComponentInChildren<Projectile>();
+        projectileFunc.SetParentObject(this.GetComponentInParent<Enemy>().gameObject);
 
 
         // find the direction of the player target to get the normalized vector between the enemy and player
         Vector3 vectorToTarget = (target.transform.position - _projectileOrigin.transform.position).normalized;
 
         // set the projectile to move towards player at set speed
-        Rigidbody[] projectilesBodies = shotProjectile.GetComponentsInChildren<Rigidbody>();
-        foreach(Rigidbody body in projectilesBodies)
-        {
-            body.velocity = vectorToTarget * _projectileSpeed;
-        }
+        Rigidbody projectileBody = shotProjectile.GetComponentInChildren<Rigidbody>();
+        projectileBody.velocity = vectorToTarget * _projectileSpeed;
+
         return shotProjectile;
     }
 }
