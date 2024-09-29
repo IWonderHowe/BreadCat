@@ -28,6 +28,9 @@ public class Enemy : MonoBehaviour
     // a game event for when the enemy dies
     [SerializeField] private GameObjectEvent _onDeath;
 
+    // a game event to ping this enemy
+    [SerializeField] private GameObjectEvent _levelManagerResponse;
+
     // grounded properties
     public bool IsGrounded { get; private set; }
     public Vector3 GroundNormal { get; private set; } = Vector3.up;
@@ -77,6 +80,7 @@ public class Enemy : MonoBehaviour
         IsGrounded = CheckGrounded();
 
         // set is kinematic and gravity based on if grounded
+        /*
         if (IsGrounded && !_enemyRB.isKinematic)
         {
             _enemyRB.isKinematic = true;
@@ -84,7 +88,7 @@ public class Enemy : MonoBehaviour
 
             // TODO: refactor which state the enemy goes into after landing
             _enemyCombat.SetEnemyState("ChaseState");
-        }
+        }*/
 
         // update the enemy health UI
         UpdateHealthBar();
@@ -110,7 +114,6 @@ public class Enemy : MonoBehaviour
 
         return false;
     }
-
 
     public void MoveTo(Vector3 destination)
     {
@@ -190,6 +193,12 @@ public class Enemy : MonoBehaviour
 
         // destroy this enemy
         Destroy(this.gameObject);
+    }
+
+    // invoke the level manager poplulate event
+    public void RespondToLevelManager()
+    {
+        _levelManagerResponse.Invoke(this.gameObject);
     }
 
     public void SetRoom(RoomGenerator roomResided)

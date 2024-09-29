@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c13f9023ef0c0347bc1728c0ef31555, type: 3}
-  m_Name: SendUpgrade
+  m_Script: {fileID: 11500000, guid: e4b1e5deed4a6cb4ea2212e6a22c6d59, type: 3}
+  m_Name: ExitTriggerEvent
   m_EditorClassIdentifier: 
   _log: 0
-  _currentValue: {fileID: 0}
+  _currentValue: 0
   OnInvoked:
     m_PersistentCalls:
       m_Calls: []

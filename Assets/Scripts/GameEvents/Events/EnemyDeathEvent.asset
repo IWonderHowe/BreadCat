@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c13f9023ef0c0347bc1728c0ef31555, type: 3}
-  m_Name: OnEnemyDeath
+  m_Name: EnemyDeathEvent
   m_EditorClassIdentifier: 
   _log: 0
   _currentValue: {fileID: 0}

@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class DoTStack
 {
+    // Necessities to do all DoT functionality
+    // Needs to be able to apply stacking DoT to enemies on certain conditions being filled
+    // Needs to be able to apply all remaining DoT damage at once
+    // Needs to be able to use total stacks to affect RoF
+    // Upgrade properly through established system
+    
+
+
     // variables needed when contstructing a DoT Stack
     private float _totalDamage;
     private float _timeApplied;
@@ -38,7 +46,7 @@ public class DoTStack
         // while within the time range of the DoT
         while(Time.timeSinceLevelLoad <= _endTime)
         {
-            // damage the enemy based on the DPS and apply it based on the tick time, then wait for the tick time
+            // apply DoT based on initial bullet damage
             _attachedEnemy.TakeDamage(_damagePerSecond * Time.deltaTime);
             
             yield return null;
