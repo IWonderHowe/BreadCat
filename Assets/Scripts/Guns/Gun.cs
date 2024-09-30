@@ -412,14 +412,17 @@ public class Gun : MonoBehaviour
         // while the trail is up, adjust the trail position to go between where it was shot from and where it hits
         while(time < 1)
         {
+            if (trail == null) break;
             trail.transform.position = Vector3.Lerp(origin, hitPoint, time);
             time += Time.deltaTime / trail.time;
             yield return null;
         }
-
-        // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail
-        trail.transform.position = hitPoint;
-        Destroy(trail.gameObject, trail.time);
+        if (trail != null)
+        {
+            // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail
+            trail.transform.position = hitPoint;
+            Destroy(trail.gameObject, trail.time);
+        }
     }
 
     private Color GetRandomColor()

@@ -35,7 +35,6 @@ public class UpgradeAquisitionButton : MonoBehaviour
 
     public void AquireUpgrade()
     {
-
         _upgradeEvent.Invoke(_buttonUpgrade);
     }
 

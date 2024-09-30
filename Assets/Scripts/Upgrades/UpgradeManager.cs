@@ -210,6 +210,7 @@ public class UpgradeManager : MonoBehaviour
 
     public void AquireUpgrade(GameObject upgradeObject)
     {
+        Debug.Log("Poop");
         string upgradeType = upgradeObject.GetComponent<Upgrade>().GetUpgradeType();
         string name = upgradeObject.GetComponent<Upgrade>().GetUpgradeName();
         

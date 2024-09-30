@@ -353,10 +353,10 @@ MonoBehaviour:
     m_Bits: 128
   _visionLayers:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 129
   _timeBetweenShots: 2.5
   _gun: {fileID: 1739263275838395084}
-  _sightRange: 40
+  _sightRange: 100
   _bulletOrigin: {fileID: 5964415605181369951}
   _canMove: 0
   _strafeDistance: 1
