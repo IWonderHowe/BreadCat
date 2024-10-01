@@ -140,8 +140,20 @@ public class UpgradeManager : MonoBehaviour
     
     public void StartPlayerUpgradeScreen(bool invoked)
     {
+        // set the ui to be active
         _upgradeUI.gameObject.SetActive(true);
 
+        // get random upgrades for the buttons
+        GameObject button1Upgrade = AquireRandomUpgrade();
+        GameObject button2Upgrade = AquireRandomUpgrade();
+        GameObject button3Upgrade = AquireRandomUpgrade();
+
+        // make sure no buttons show the same upgrade
+        while (button1Upgrade.GetComponent<Upgrade>().UpgradeName == button2Upgrade.GetComponent<Upgrade>().UpgradeName) button2Upgrade = AquireRandomUpgrade();
+        while (button3Upgrade.GetComponent<Upgrade>().UpgradeName == button1Upgrade.GetComponent<Upgrade>().UpgradeName ||
+               button3Upgrade.GetComponent<Upgrade>().UpgradeName == button2Upgrade.GetComponent<Upgrade>().UpgradeName) button3Upgrade = AquireRandomUpgrade();
+
+        // set the selected upgrades to the button
         _aquisition1.SetUpgrade(AquireRandomUpgrade());
         _aquisition2.SetUpgrade(AquireRandomUpgrade());
         _aquisition3.SetUpgrade(AquireRandomUpgrade());
