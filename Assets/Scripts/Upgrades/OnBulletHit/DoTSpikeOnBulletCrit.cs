@@ -8,6 +8,9 @@ public class DoTSpikeOnBulletCrit : OnBulletCritUpgrade
 
     public override Patron UpgradePatron => throw new System.NotImplementedException();
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 1;
+
     // contructor (empty) for the DoT spike on crit
     public DoTSpikeOnBulletCrit()
     {

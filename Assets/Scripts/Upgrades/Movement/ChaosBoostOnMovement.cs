@@ -10,6 +10,10 @@ public class ChaosBoostOnMovement : MovementUpgrade
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 1;
+
+
     private PlayerMovement _playerMovement;
     private Gun _playerGun;
     private bool _hasBoost;

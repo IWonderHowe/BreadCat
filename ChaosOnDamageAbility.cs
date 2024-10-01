@@ -7,6 +7,9 @@ public class ChaosOnDamageAbility : OnDamageAbilityUpgrade
     public override string UpgradeName{ get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnDamageAbility";
     public override Patron UpgradePatron { get { return _upgradePatron; } }
+
+    public override List<GameObject> UpgradeDependecies => throw new System.NotImplementedException();
+
     private Patron _upgradePatron = Patron.Chaos;
 
     public override void ApplyUpgrade(GameObject player)

@@ -10,6 +10,10 @@ public class ChaosPatronRoF : PatronUpgrade
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 1;
+
+
     [SerializeField] private float _stackMultiplierOnUpgrade = 3f;
     [SerializeField] private float _accuracyPenaltyMultiplier = 2f;
     public override void ApplyUpgrade(GameObject player)

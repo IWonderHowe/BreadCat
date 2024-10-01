@@ -9,6 +9,10 @@ public class DoTOnBulletHit : OnBulletHitUpgrade
     private string _upgradeName => ("DoTOnBulletHit");
 
     public override Patron UpgradePatron { get { return _upgradePatron; } }
+
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 0;
+
     private Patron _upgradePatron = Patron.DoT;
 
     // set spaces for duration and proportional damage of DoT

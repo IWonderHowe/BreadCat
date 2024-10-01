@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class UpgradeManager : MonoBehaviour
 {
     // make space for any player scripts that may be affected
-    private PlayerCombat _playerCombat;
+    [SerializeField] private PlayerCombat _playerCombat;
     [SerializeField] private Gun _playerGun;
     private GameObject _player;
 
@@ -52,6 +52,7 @@ public class UpgradeManager : MonoBehaviour
     
     private void Awake()
     {
+
         Upgrade[] upgrades = GetComponentsInChildren<Upgrade>();
 
         foreach(Upgrade upgrade in upgrades)
@@ -125,9 +126,14 @@ public class UpgradeManager : MonoBehaviour
 
     private void FilllAvailableUpgradesList()
     {
+        // go through all upgrades
         foreach(GameObject upgrade in _allUpgrades)
         {
-            _availableUpgrades.Add(upgrade);
+            // add the upgrade to available upgrades if it has no dependencies
+            if(upgrade.GetComponent<Upgrade>().UpgradeDependencies == 0)
+            {
+                _availableUpgrades.Add(upgrade);
+            }
         }
 
     }
@@ -207,12 +213,25 @@ public class UpgradeManager : MonoBehaviour
 
     }
 
+    private GameObject ReturnPossibleUpgrade()
+    {
+        // how to do
+        // only add primary upgrades (upgrades with no dependencies) to the available upgrades area DONE
+        // upon upgrade aquisition, remove same slot upgrades from pool of available upgrades (dont forget patron partner upgrades) DONE
+        // add upgrades which depend on aquired upgrade for their own availability
+
+
+
+        return null;
+    }
+
 
     public void AquireUpgrade(GameObject upgradeObject)
     {
-        Debug.Log("Poop");
-        string upgradeType = upgradeObject.GetComponent<Upgrade>().GetUpgradeType();
-        string name = upgradeObject.GetComponent<Upgrade>().GetUpgradeName();
+        Upgrade upgrade = upgradeObject.GetComponent<Upgrade>();
+        string upgradeType = upgrade.GetUpgradeType();
+        string name = upgrade.GetComponent<Upgrade>().GetUpgradeName();
+                
         
         RemoveTypeAvailable(upgradeType);
 
@@ -235,6 +254,34 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
+        // get the amount of this patron base upgrades the player has already
+        int playerUpgradesOfPatron = 1;
+        foreach (Upgrade playerCurrentUpgrade in _playerCombat.AqcuiredUpgrades)
+        {
+            if (playerCurrentUpgrade.UpgradeDependencies == 0 && playerCurrentUpgrade.UpgradePatron == upgrade.UpgradePatron) playerUpgradesOfPatron++;
+        }
+
+        // add upgrades dependent on this one into available upgrades
+        foreach (GameObject potentialDependent in _allUpgrades)
+        {
+            Upgrade dependentUpgrade = potentialDependent.GetComponent<Upgrade>();
+
+            // ignore if not of type or requires no upgrade
+            if (dependentUpgrade.UpgradePatron != upgrade.UpgradePatron || dependentUpgrade.UpgradeDependencies == 0) continue;
+            Debug.Log("potential dependent");
+
+            // add upgrades if player has the required base upgrades and it isnt already in the available upgrades
+            if (dependentUpgrade.UpgradeDependencies <= playerUpgradesOfPatron && !_playerCombat.AqcuiredUpgrades.Contains(dependentUpgrade))
+            {
+                Debug.Log("dependent added");
+                _availableUpgrades.Add(potentialDependent);
+            }
+        }
+
+
+
+        // reload the scene after getting upgrade
+        // TODO: change this if we want to do different levels for milestone
         _player.GetComponent<PlayerController>().SetPlayerInputActive(true);
         SceneManager.LoadScene(0);
 

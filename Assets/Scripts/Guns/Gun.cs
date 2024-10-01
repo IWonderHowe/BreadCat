@@ -417,6 +417,7 @@ public class Gun : MonoBehaviour
             time += Time.deltaTime / trail.time;
             yield return null;
         }
+
         if (trail != null)
         {
             // end the bullet trail when reaching the point the raycast hit, then destroy the bullet trail

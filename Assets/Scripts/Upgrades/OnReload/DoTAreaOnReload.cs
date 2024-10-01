@@ -10,6 +10,8 @@ public class DoTAreaOnReload : OnReloadUpgrade
 
     public override Patron UpgradePatron => throw new System.NotImplementedException();
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 0;
 
     public override void ApplyUpgrade(GameObject player)
     {
