@@ -1243,7 +1243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6623678230329107643, guid: 27f67727c7e99dd4299dc7cb84a96c3d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9218483575001420997, guid: 27f67727c7e99dd4299dc7cb84a96c3d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1411,7 +1411,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6424214606762582625, guid: a26b9c01db6f0b345a58010163e84cdb, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1437,7 +1437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6146600807562530178, guid: 80cb774c96fbb5244bb17e6963ffe39a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6285017973186774580, guid: 80cb774c96fbb5244bb17e6963ffe39a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1605,7 +1605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4472652703530955144, guid: 7c09128f4b080374eb656e5f638966c2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1631,7 +1631,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 488047584571729367, guid: fe0652b9e0765b048ae12c6a5f85e161, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3302853818251638010, guid: fe0652b9e0765b048ae12c6a5f85e161, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1883,7 +1883,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2190163749244841671, guid: 7ea59f9f4077384449d2b5e0e4acf579, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6358263557415157512, guid: 7ea59f9f4077384449d2b5e0e4acf579, type: 3}
       propertyPath: m_LocalPosition.x

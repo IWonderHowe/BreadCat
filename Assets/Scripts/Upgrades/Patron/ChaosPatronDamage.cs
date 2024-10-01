@@ -8,6 +8,10 @@ public class ChaosPatronDamage : PatronUpgrade
     private string _upgradeName = "ChaosPatronDamage";
 
     public override Patron UpgradePatron { get { return _upgradePatron; } }
+
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 1;
+
     private Patron _upgradePatron = Patron.Chaos;
 
     [SerializeField] private float _accuracyPenaltyMultiplier = 0.25f;

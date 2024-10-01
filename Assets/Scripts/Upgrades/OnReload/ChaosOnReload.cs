@@ -7,8 +7,12 @@ public class ChaosOnReload : OnReloadUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnReload";
+
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
+
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 0;
 
     public override void ApplyReloadEffect(GameObject player)
     {

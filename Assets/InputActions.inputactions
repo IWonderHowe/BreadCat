@@ -94,6 +94,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "OpenDebug",
+                    "type": "Button",
+                    "id": "ccc436a0-88b8-40e1-b99d-393c85ea0514",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -402,6 +411,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "ToggleLockMouse",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ed639f1c-222a-4744-886d-5c5a1d2da25f",
+                    "path": "<Keyboard>/f3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "OpenDebug",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -8,8 +8,13 @@ public class ChaosOnShot : OnBulletShotUpgrade
 {
     public override string UpgradeName { get { return _upgradeName; } }
     private string _upgradeName = "ChaosOnShot";
+    
     public override Patron UpgradePatron { get { return _upgradePatron; } }
     private Patron _upgradePatron = Patron.Chaos;
+
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 0;
+
 
     [SerializeField] private float _ricochetRange = 400f;
     [SerializeField] private LayerMask _ricochetTargetLayers;

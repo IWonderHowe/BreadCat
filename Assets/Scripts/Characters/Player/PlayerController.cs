@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObjectEvent _playerPing;
     private Vector3 _initialPosition;
 
+    // debug object
+    [SerializeField] private DebugMenu _debug;
+
 
     private void OnEnable()
     {
@@ -147,6 +150,15 @@ public class PlayerController : MonoBehaviour
 
         // set the reload to be a manual reload
         _currentGun.SetIsManualReloading(true);
+    }
+
+    public void OnOpenDebug(InputValue value)
+    {
+        _debug.gameObject.SetActive(!_debug.gameObject.activeInHierarchy);
+
+        if (_debug.gameObject.activeInHierarchy) Cursor.lockState = CursorLockMode.Confined;
+        else Cursor.lockState = CursorLockMode.Locked;
+
     }
 
     // attempt to use the primary ability if button pressed

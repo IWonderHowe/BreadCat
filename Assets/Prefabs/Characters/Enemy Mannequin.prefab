@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 3776438594317971842}
   - component: {fileID: 6650319059290398661}
   - component: {fileID: 2871182585610716268}
+  - component: {fileID: 4558376085065766376}
   m_Layer: 6
   m_Name: Enemy Mannequin
   m_TagString: Enemy
@@ -327,6 +328,14 @@ MonoBehaviour:
   _healthSlider: {fileID: 7561122756815491630}
   _dotSlider: {fileID: 5665938803554765788}
   _onDeath: {fileID: 11400000, guid: 9c17a3d0625473640b03b86b9b4595d9, type: 2}
+  _levelManagerResponse: {fileID: 11400000, guid: b2645445ed3bb3e4f937090a57da6ef7, type: 2}
+  _groundCheckOffset: 0.1
+  _groundCheckDistance: 0.4
+  _groundedFudgeTime: 0.25
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 1
+  _isGrounded: 0
 --- !u!114 &3776438594317971842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -344,13 +353,14 @@ MonoBehaviour:
     m_Bits: 128
   _visionLayers:
     serializedVersion: 2
-    m_Bits: 193
+    m_Bits: 129
   _timeBetweenShots: 2.5
   _gun: {fileID: 1739263275838395084}
-  _sightRange: 40
+  _sightRange: 100
   _bulletOrigin: {fileID: 5964415605181369951}
   _canMove: 0
   _strafeDistance: 1
+  _currentState: 
 --- !u!195 &6650319059290398661
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -393,6 +403,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: EnemyCombat, Assembly-CSharp
         m_MethodName: GetTargetObject
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &4558376085065766376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384127060668224527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbcc5463afaf3224aba97183c7e6a941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameEvent: {fileID: 11400000, guid: 20d22a09ccda79a4a83a634f8229d981, type: 2}
+  OnInvoke:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3857783435249643978}
+        m_TargetAssemblyTypeName: Enemy, Assembly-CSharp
+        m_MethodName: RespondToLevelManager
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

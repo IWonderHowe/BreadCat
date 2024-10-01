@@ -11,6 +11,9 @@ public class OnBulletShotDoTRoFIncrease : OnBulletShotUpgrade
 
     public override Patron UpgradePatron => throw new System.NotImplementedException();
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 1;
+
     public OnBulletShotDoTRoFIncrease(float multiplierPerEnemyAffected)
     {
         _multiplierPerEnemy = multiplierPerEnemyAffected;

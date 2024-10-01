@@ -8,6 +8,9 @@ public class ArmorOnBulletHit : OnBulletHitUpgrade
 
     public override Patron UpgradePatron => throw new System.NotImplementedException();
 
+    public override int UpgradeDependencies { get { return _upgradeDependencies; } }
+    private int _upgradeDependencies = 0;
+
     public ArmorOnBulletHit() { }
 
     public override void ApplyOnHit(Enemy enemy, GameObject player, float bulletDamage)
