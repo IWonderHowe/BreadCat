@@ -63,6 +63,7 @@ public class Gun : MonoBehaviour
     
     // space for the bullet tracers
     [SerializeField] private TrailRenderer _trailRenderer;
+    [SerializeField] private float _bulletSpeed = 1;
     private Camera _playerCam => Camera.main;
 
     // spaces to store gameobjects related to the gun
@@ -257,11 +258,15 @@ public class Gun : MonoBehaviour
         }
 
         //_debugRay = new Ray(_playerCam.gameObject.transform.position, _playerCam.gameObject.transform.forward);
-        
 
+        // set a bool to decide 
+        bool bulletHitObject = false;
+        
         // check to see if the player hits anything with a raycast based on gun properties
         if (Physics.Raycast(_playerCam.gameObject.transform.position, shotDirection, out hit, _range, _shootableLayers))
         {
+            bulletHitObject = true;
+
             // get on shot effect, apply it to this raycast hit
             if (_onShotActive)
             {
@@ -300,17 +305,20 @@ public class Gun : MonoBehaviour
                 }
             }
 
-            
-
             // Create a trail to show where the shot actually went (expose recoil)
-            TrailRenderer bulletTrail = Instantiate(_trailRenderer, _bulletOrigin.transform.position, Quaternion.identity);
-            StartCoroutine(SpawnBulletTrail(bulletTrail, _bulletOrigin.transform.position, hit.point));
+            if (bulletHitObject) SpawnBulletFrom(_bulletOrigin.transform.position, hit.point);
+        }
+
+        if (!bulletHitObject)
+        {
+            SpawnBulletFrom(_bulletOrigin.transform.position, shotDirection * 100);
+            Debug.Log("MissedObject");
         }
 
         // do this on a miss
         else
         {
-            
+
         }
 
         // set the time of the last shot to now, for fire rate allowance
@@ -358,6 +366,9 @@ public class Gun : MonoBehaviour
     public void SpawnBulletFrom(Vector3 origin, Vector3 destination)
     {
         TrailRenderer bulletTrail = Instantiate(_trailRenderer, origin, Quaternion.identity);
+        bulletTrail.time = Vector3.Distance(origin, destination) / _bulletSpeed;
+        Debug.Log("bullet tracer time " + bulletTrail.time);
+
         StartCoroutine(SpawnBulletTrail(bulletTrail, origin, destination));
         
     }
