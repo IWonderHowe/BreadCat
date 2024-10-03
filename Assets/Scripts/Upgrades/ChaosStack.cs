@@ -10,7 +10,7 @@ public static class ChaosStack
     private static int _baseMaxStacks = 150;
     private static float _stacksMultiplier = 0.25f;
     private static int _maxStacks = _baseMaxStacks;
-    private static float _perStackAccuracyPenalty = 0.05f;
+    private static float _perStackAccuracyPenalty = 0.0005f;
     public static float AccuracyPenalty => _perStackAccuracyPenalty * _stacks;
 
     public static int MaxStacks => _maxStacks;

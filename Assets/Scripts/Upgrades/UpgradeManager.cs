@@ -330,6 +330,7 @@ public class UpgradeManager : MonoBehaviour
 
 
     }
+
     private void RemoveTypeAvailable(string upgradeType)
     {
         // remove this slot for available upgrades
@@ -371,6 +372,7 @@ public class UpgradeManager : MonoBehaviour
                 break;
         }
     }
+
     private void AddUpgradeToLists(string upgradeName)
     {
         // find the upgrade with this name, add it to current upgrades

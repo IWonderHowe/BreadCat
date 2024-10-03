@@ -311,7 +311,7 @@ public class Gun : MonoBehaviour
 
         if (!bulletHitObject)
         {
-            SpawnBulletFrom(_bulletOrigin.transform.position, shotDirection * 100);
+            SpawnBulletFrom(_bulletOrigin.transform.position, _bulletOrigin.transform.position + shotDirection * 100);
             Debug.Log("MissedObject");
         }
 
