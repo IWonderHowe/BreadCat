@@ -57,7 +57,7 @@ public class Grenade : MonoBehaviour
                 // add the enemy gameobject to the list
                 enemiesHit.Add(hitObject);
                 // allow physics to affect the enemy
-                hitObject.GetComponent<Enemy>().PauseEnemyAgent(3f);
+                //hitObject.GetComponent<Enemy>().PauseEnemyAgent(3f);
 
                 //damage enemy
                 hitObject.GetComponent<Enemy>().TakeDamage(damage);
@@ -78,7 +78,7 @@ public class Grenade : MonoBehaviour
             }
             
             // send the hit object outwards from grenade
-            else hitObject.GetComponent<Rigidbody>().AddForce((hit.transform.position - transform.position).normalized * _explosionForce, ForceMode.Impulse);
+            //else hitObject.GetComponent<Rigidbody>().AddForce((hit.transform.position - transform.position).normalized * _explosionForce, ForceMode.Impulse);
 
             // apply upgrade to enemies hit
             if (_hasUpgrade) _upgrade.GetComponent<OnDamageAbilityUpgrade>().InvokeUpgrade(enemiesHit.ToArray());

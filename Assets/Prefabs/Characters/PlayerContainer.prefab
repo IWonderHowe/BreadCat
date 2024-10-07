@@ -5034,7 +5034,7 @@ MonoBehaviour:
   _gunObject1: {fileID: 3022448815719259862}
   _gunObject2: {fileID: 8772881913618780387}
   _currentGun: {fileID: 2401889792872204632}
-  _ability1Object: {fileID: 0}
+  _ability1Object: {fileID: 4563870185849957091}
   _ability2Object: {fileID: 8992758855603826943}
   _playerPing: {fileID: 11400000, guid: bd83857282204de42b88ccb2caad8765, type: 2}
   _debug: {fileID: 4006656016061708359}
@@ -5361,7 +5361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d836001d2eae4914d8fbf935961352d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 15
+  _damage: 100
   _range: 1000
   _baseRateOfFire: 4.5
   _baseCritMultiplier: 2
@@ -5374,7 +5374,7 @@ MonoBehaviour:
   _shootableLayers:
     serializedVersion: 2
     m_Bits: 65
-  _baseAccuracy: 0.98
+  _baseAccuracy: 1
   _minAccuracySpread: 1
   _effectiveAccuracySpread: 0
   _isShooting: 0
@@ -8158,7 +8158,7 @@ Transform:
   m_GameObject: {fileID: 4521315298757798856}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.9998999, z: 0}
+  m_LocalPosition: {x: -0.0000014305115, y: 0.9998999, z: -0.0000011920929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15877,5 +15877,10 @@ PrefabInstance:
 --- !u!4 &1876552995211703582 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6090261880371511856, guid: 37f2cbe70ec5585429603a11f7822745, type: 3}
+  m_PrefabInstance: {fileID: 5660514455556749102}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4563870185849957091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8203359673738943949, guid: 37f2cbe70ec5585429603a11f7822745, type: 3}
   m_PrefabInstance: {fileID: 5660514455556749102}
   m_PrefabAsset: {fileID: 0}

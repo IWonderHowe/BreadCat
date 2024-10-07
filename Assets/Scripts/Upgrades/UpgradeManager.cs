@@ -195,7 +195,7 @@ public class UpgradeManager : MonoBehaviour
 
     private GameObject AquireRandomUpgrade()
     {
-        int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 3);
+        int upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count);
 
         if (_availableUpgrades.Count <= 0)
         {

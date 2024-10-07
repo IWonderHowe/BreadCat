@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
     {
         // take damage if the enemy isn't dead. Set the enemy to dead if the current health drops to 0
         if (!_isDead) _currentHealth -= damage;
-        if (_currentHealth <= 0) OnDeath();
+        if (_currentHealth <= 0 && !_isDead) OnDeath();
     }
 
     private void UpdateHealthBar()
@@ -182,14 +182,17 @@ public class Enemy : MonoBehaviour
 
     private void OnDeath()
     {
+        if(_isDead) return;
+        
+        // set the enemy to being dead
+        _isDead = true;
+
         // call the death event
         _onDeath.Invoke(this.gameObject);
 
         // remove the enemy from the list of enemies in the room
         _roomResided?.RemoveFromEnemyList(this.gameObject);
         
-        // set the enemy to being dead
-        _isDead = true;
 
 
         // destroy this enemy
