@@ -283,7 +283,7 @@ public class UpgradeManager : MonoBehaviour
             Debug.Log("potential dependent");
 
             // add upgrades if player has the required base upgrades and it isnt already in the available upgrades
-            if (dependentUpgrade.UpgradeDependencies <= playerUpgradesOfPatron && !_playerCombat.AqcuiredUpgrades.Contains(dependentUpgrade))
+            if (dependentUpgrade.UpgradeDependencies <= playerUpgradesOfPatron && !_playerCombat.AqcuiredUpgrades.Contains(dependentUpgrade) && !_availableUpgrades.Contains(potentialDependent))
             {
                 Debug.Log("dependent added");
                 _availableUpgrades.Add(potentialDependent);
