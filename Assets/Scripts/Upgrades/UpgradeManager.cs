@@ -205,12 +205,7 @@ public class UpgradeManager : MonoBehaviour
         
         if(_availableUpgrades.Count > 3)
         {
-            /*while(_upgradeButton1.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
-                  _upgradeButton2.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex] ||
-                  _upgradeButton3.gameObject.GetComponent<UpgradeAquisitionButton>().CurrentUpgrade == _availableUpgrades[upgradeIndex])
-            {
-            }*/
-            upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count - 1);
+            upgradeIndex = UnityEngine.Random.Range(0, _availableUpgrades.Count);
         }
 
 
@@ -236,7 +231,6 @@ public class UpgradeManager : MonoBehaviour
 
         return null;
     }
-
 
     public void AquireUpgrade(GameObject upgradeObject)
     {
@@ -279,11 +273,11 @@ public class UpgradeManager : MonoBehaviour
             Upgrade dependentUpgrade = potentialDependent.GetComponent<Upgrade>();
 
             // ignore if not of type or requires no upgrade
-            if (dependentUpgrade.UpgradePatron != upgrade.UpgradePatron || dependentUpgrade.UpgradeDependencies == 0) continue;
+            if (dependentUpgrade.UpgradePatron != upgrade.UpgradePatron || dependentUpgrade.UpgradeDependencies == 0 || _playerCombat.AqcuiredUpgrades.Contains(dependentUpgrade)) continue;
             Debug.Log("potential dependent");
 
             // add upgrades if player has the required base upgrades and it isnt already in the available upgrades
-            if (dependentUpgrade.UpgradeDependencies <= playerUpgradesOfPatron && !_playerCombat.AqcuiredUpgrades.Contains(dependentUpgrade) && !_availableUpgrades.Contains(potentialDependent))
+            if (dependentUpgrade.UpgradeDependencies <= playerUpgradesOfPatron && !_currentUpgrades.Contains(potentialDependent) && !_availableUpgrades.Contains(potentialDependent))
             {
                 Debug.Log("dependent added");
                 _availableUpgrades.Add(potentialDependent);
