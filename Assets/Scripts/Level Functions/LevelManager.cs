@@ -13,6 +13,8 @@ public class LevelManager : MonoBehaviour
 
     [SerializeField] private BoolEvent _openExit;
 
+    [SerializeField] private Canvas _winCanvas;
+
     private void Start()
     {
         // ping all enemies to populate the enemies in level list
@@ -41,5 +43,11 @@ public class LevelManager : MonoBehaviour
     private void EnableLevelExit()
     {
         _openExit.Invoke(this.gameObject);
+    }
+
+    public void WinGame()
+    {
+        _winCanvas.gameObject.SetActive(true);
+        Time.timeScale = 0;
     }
 }

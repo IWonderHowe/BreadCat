@@ -5361,13 +5361,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d836001d2eae4914d8fbf935961352d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damage: 100
-  _range: 1000
+  _damage: 30
+  _range: 75
   _baseRateOfFire: 4.5
   _baseCritMultiplier: 2
   _magSize: 36
   _currentAmmo: 60
-  _reloadSpeed: 1.5
+  _reloadSpeed: 0.75
   _usesProjectile: 0
   _projectile: {fileID: 0}
   _player: {fileID: 2875605358490019309}

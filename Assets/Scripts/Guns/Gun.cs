@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using Palmmedia.ReportGenerator.Core.Reporting.Builders;
+#endif
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

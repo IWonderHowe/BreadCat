@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+#if UNITY_EDITOR
 using TMPro.EditorUtilities;
 using UnityEditor.Build;
+#endif
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.SceneManagement;

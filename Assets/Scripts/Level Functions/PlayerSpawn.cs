@@ -1,13 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class PlayerSpawn : MonoBehaviour
 {
-    [SerializeField] GameObject _playerContainer;
+    private GameObject _player; 
 
-    private void Awake()
+    // upon being pinged by the player object, set the player to the positon of this object
+    public void SetPlayerPosition(GameObject player)
     {
-        Instantiate(_playerContainer, this.transform);
+        player.transform.position = this.gameObject.transform.position;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.blue;
+        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), 1f);
     }
 }

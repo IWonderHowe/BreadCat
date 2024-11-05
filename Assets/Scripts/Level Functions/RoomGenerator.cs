@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using Unity.VisualScripting;
+#if UNITY_EDITOR
 using UnityEditor.ProBuilder;
+#endif
 using UnityEngine;
 using UnityEngine.ProBuilder;
 using UnityEngine.ProBuilder.MeshOperations;
